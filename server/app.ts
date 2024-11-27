@@ -1,13 +1,20 @@
+import { HTTPException } from 'hono/http-exception';
 import { landing } from './routes/landing';
 import { serveStatic } from 'hono/bun'
 import { Hono } from 'hono';
 
-const app = new Hono();
+export const app = new Hono()
+  .basePath('/api')
+  .route('/landing', landing)
+  .get('*', serveStatic({ root: './frontend/dist' }))
+  .get('*', serveStatic({ path: './frontend/dist/index.html' }));
 
-app.route('/api/landing', landing);
-app.get('/api', (c) => c.text('Hello Bun!'));
+app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    return err.getResponse();
+  }
+  return c.json({ message: err.message }, 500);
+});
 
-app.get('*', serveStatic({ root: './frontend/dist' }));
-app.get('*', serveStatic({ path: './frontend/dist/index.html' }));
+export type ApiRoutes = typeof app;
 
-export default app;

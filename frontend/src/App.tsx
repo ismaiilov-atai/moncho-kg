@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
+import { api } from '@/lib/api';
+import { useQuery } from '@tanstack/react-query';
+
 function App() {
   const [count, setCount] = useState(0);
 
