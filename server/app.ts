@@ -6,8 +6,8 @@ import { Hono } from 'hono';
 export const app = new Hono()
   .basePath('/api')
   .route('/landing', landing)
-  .get('*', serveStatic({ root: './frontend/dist' }))
-  .get('*', serveStatic({ path: './frontend/dist/index.html' }));
+  .get('*', serveStatic({ root: '/frontend/dist' }))
+  .get('*', serveStatic({ path: '/index.html' }));
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
