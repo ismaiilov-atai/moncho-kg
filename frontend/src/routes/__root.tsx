@@ -1,8 +1,9 @@
+import { NavBar } from '@/components/custom/NavBar';
 import { QueryClient } from '@tanstack/react-query';
 import {
   createRootRouteWithContext,
-  Link,
   Outlet,
+  useLocation,
 } from '@tanstack/react-router';
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
@@ -15,17 +16,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 });
 
 function Root() {
+  const location = useLocation();
   return (
     <>
-      <div className='p-2 flex gap-2'>
-        <Link to='/' className='[&.active]:font-bold'>
-          Home
-        </Link>
-        <Link to='/about' className='[&.active]:font-bold'>
-          About
-        </Link>
-      </div>
-      <hr />
+      {location.pathname.startsWith('/auth') || <NavBar />} 
       <Outlet />
       {/* <TanStackRouterDevtools /> */}
     </>
