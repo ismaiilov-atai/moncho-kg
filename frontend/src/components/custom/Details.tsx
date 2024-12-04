@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Card,
   CardContent,
@@ -13,17 +12,9 @@ import { z } from 'zod';
 import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useTranslation } from 'react-i18next';
-
-const validatorsCreator = (fieldName: string): ValidatorsType => {
-  return {
-    onChange:
-      fieldName === 'name' ? userSchema.shape.name : userSchema.shape.lastName,
-    onChangeAsyncDebounceMs: 500,
-    onChangeAsync: z.string().refine(resolveSleeper, {
-      message: "No 'error' allowed in first name",
-    }),
-  };
-};
+import { User, userInfoSchema } from '@/types/form-types';
+import { onFormSubmit } from '@/lib/utils';
+import { AuthPageProps } from '@/types/shared-types';
 
 interface ValidatorsType {
   onChange: z.ZodString;
@@ -31,23 +22,25 @@ interface ValidatorsType {
   onChangeAsync: z.ZodEffects<z.ZodString>;
 }
 
+const createValidators = (fieldName: string): ValidatorsType => {
+  return {
+    onChange:
+      fieldName === 'name'
+        ? userInfoSchema.shape.name
+        : userInfoSchema.shape.lastName,
+    onChangeAsyncDebounceMs: 500,
+    onChangeAsync: z.string().refine(resolveSleeper, {
+      message: `Please provide valid input.`,
+    }),
+  };
+};
+
 const resolveSleeper = async (value: string): Promise<boolean> => {
   await new Promise((resolve) => setTimeout(resolve, 100));
   return !value.includes('error');
 };
 
-const userSchema = z.object({
-  name: z.string().min(3, 'Name should at least be 3 characters long'),
-  lastName: z.string().min(3, 'Last name must be at least 3 characters'),
-});
-type User = z.infer<typeof userSchema>;
-
-interface DetailsProps {
-  page: number;
-  setPage: (state: number) => void;
-}
-
-function Details({ page, setPage }: DetailsProps) {
+function Details({ page, setPage }: AuthPageProps) {
   const { t } = useTranslation();
   const form = useForm({
     defaultValues: {
@@ -61,15 +54,10 @@ function Details({ page, setPage }: DetailsProps) {
     },
     validatorAdapter: zodValidator(),
     validators: {
-      onChange: userSchema,
+      onChange: userInfoSchema,
     },
   });
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    form.handleSubmit();
-  };
   return (
     <Card className='w-3/4 lg:max-2xl:w-1/2 h-3/4 '>
       <CardHeader>
@@ -81,16 +69,16 @@ function Details({ page, setPage }: DetailsProps) {
       <CardContent className='place-self-center h-2/3 w-full md:max-2xl:w-3/4 '>
         <form
           className='flex flex-col justify-between h-full'
-          onSubmit={onSubmit}>
+          onSubmit={(e) => onFormSubmit(e, form)}>
           <div className='flex flex-col space-y-6 mt-auto mb-auto'>
             <form.Field
               name='name'
-              validators={validatorsCreator('name')}
+              validators={createValidators('name')}
               children={(field) => <InputWithIcon field={field} />}
             />
             <form.Field
               name='lastName'
-              validators={validatorsCreator('lastName')}
+              validators={createValidators('lastName')}
               children={(field) => <InputWithIcon field={field} />}
             />
           </div>
