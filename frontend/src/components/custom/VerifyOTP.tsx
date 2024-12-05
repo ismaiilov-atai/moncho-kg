@@ -11,17 +11,37 @@ import {
 } from '@/components/ui/input-otp';
 import { onFormSubmit } from '@/lib/utils';
 import { OTP_CODE, otpSchema } from '@/types/form-types';
-import { AuthPageProps } from '@/types/shared-types';
+import { useAuthStore } from '@/routes/auth/route';
+import clientApi from '@/lib/clientApi';
+import { toast } from '@/hooks/use-toast';
+import { useNavigate } from '@tanstack/react-router';
 
-function VerifyOTP({ page, setPage }: AuthPageProps) {
+function VerifyOTP() {
+  const { lastName, name, phoneNumber } = useAuthStore((state) => state);
+  const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
       otpCode: '',
     } as OTP_CODE,
     onSubmit: async ({ value }) => {
-      // Do something with form data
-      console.log(value);
-      setPage(page + 1);
+      const resp = await clientApi.verifyOtpCode(value.otpCode, phoneNumber);
+      if ('errorCode' in resp) {
+        toast({
+          title: 'OOOPS!',
+          description: resp.message,
+          duration: 2000,
+          variant: 'destructive',
+        });
+        return;
+      }
+      navigate({
+        to: '/',
+      });
+      toast({
+        title: `${name} Access Granted!`,
+        description: 'You are set to go.',
+        duration: 2000,
+      });
     },
     validatorAdapter: zodValidator(),
     validators: {
@@ -53,11 +73,6 @@ function VerifyOTP({ page, setPage }: AuthPageProps) {
               <InputOTPGroup>
                 <InputOTPSlot index={2} />
                 <InputOTPSlot index={3} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
               </InputOTPGroup>
             </InputOTP>
           )}

@@ -1,11 +1,12 @@
 import { HTTPException } from 'hono/http-exception';
-import { landing } from './routes/landing';
+// import { landing } from './routes/landing';
 import { serveStatic } from 'hono/bun'
 import { Hono } from 'hono';
+import { auth } from './routes/auth';
 
 export const app = new Hono()
   .basePath('/api')
-  .route('/landing', landing)
+  .route('/auth', auth)
   .get('*', serveStatic({ root: '/frontend/dist' }))
   .get('*', serveStatic({ path: '/index.html' }));
 

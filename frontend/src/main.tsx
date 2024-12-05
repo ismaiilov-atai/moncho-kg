@@ -8,7 +8,6 @@ import i18n from './i18n';
 import { I18nextProvider } from 'react-i18next';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
-import { Toaster } from './components/ui/toaster';
 // Create a client
 const queryClient = new QueryClient(); //?
 

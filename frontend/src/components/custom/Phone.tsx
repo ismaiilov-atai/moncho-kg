@@ -7,27 +7,50 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { toast } from '@/hooks/use-toast';
 import { onFormSubmit } from '@/lib/utils';
 import { numberSchema, PhoneType } from '@/types/form-types';
-import { AuthPageProps } from '@/types/shared-types';
+import { useAuthStore } from '@/routes/auth/route';
+import clientApi from '@/lib/clientApi';
 
-function Phone({ page, setPage }: AuthPageProps) {
+const filterNumber = (phoneNumber: string): string => {
+  const filteredNumber = phoneNumber
+    .replaceAll(' ', '')
+    .replaceAll('(', '')
+    .replaceAll(')', '')
+    .replaceAll('-', '');
+  return filteredNumber;
+};
+
+function Phone() {
+  const { updatePhoneNumber, pageCount, forwardAuthPage } = useAuthStore(
+    (state) => state
+  );
+
+  const inputRef = useMask({
+    mask: '+996(___) __-__-__',
+    replacement: { _: /\d/ },
+  });
+
   const form = useForm({
     defaultValues: {
       phoneNumber: '',
     } as PhoneType,
     onSubmit: async ({ value }) => {
-      // Do something with form data
-      console.log(value);
-      setPage(page + 1);
+      const filteredPhoneNumber = filterNumber(value.phoneNumber);
+      updatePhoneNumber(filteredPhoneNumber);
+      const resp = await clientApi.initOtpCode(filteredPhoneNumber);
+      if ('errorCode' in resp) {
+        toast({
+          title: 'OOOPS!',
+          description: resp.message,
+          duration: 2000,
+        });
+        return;
+      }
+      forwardAuthPage(pageCount);
     },
     validatorAdapter: zodValidator(),
     validators: {
       onChange: numberSchema,
     },
-  });
-
-  const inputRef = useMask({
-    mask: '+996(___) __-__-__',
-    replacement: { _: /\d/ },
   });
 
   const regionClick = () => {

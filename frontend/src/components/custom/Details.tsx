@@ -14,7 +14,7 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useTranslation } from 'react-i18next';
 import { User, userInfoSchema } from '@/types/form-types';
 import { onFormSubmit } from '@/lib/utils';
-import { AuthPageProps } from '@/types/shared-types';
+import { useAuthStore } from '@/routes/auth/route';
 
 interface ValidatorsType {
   onChange: z.ZodString;
@@ -40,8 +40,10 @@ const resolveSleeper = async (value: string): Promise<boolean> => {
   return !value.includes('error');
 };
 
-function Details({ page, setPage }: AuthPageProps) {
+function Details() {
   const { t } = useTranslation();
+  const { pageCount, forwardAuthPage, updateFirstName, updateLastName } =
+    useAuthStore((state) => state);
   const form = useForm({
     defaultValues: {
       name: '',
@@ -49,8 +51,9 @@ function Details({ page, setPage }: AuthPageProps) {
       phone: '',
     } as User,
     onSubmit: async ({ value }) => {
-      // do sumbit here
-      setPage(page + 1);
+      updateFirstName(value.name);
+      updateLastName(value.lastName);
+      forwardAuthPage(pageCount);
     },
     validatorAdapter: zodValidator(),
     validators: {
