@@ -1,3 +1,13 @@
+import { z } from 'zod';
+import { Button } from '../ui/button';
+import InputWithIcon from './InputWithIcon';
+import { useForm } from '@tanstack/react-form';
+import { zodValidator } from '@tanstack/zod-form-adapter';
+import { useTranslation } from 'react-i18next';
+import { User, userInfoSchema } from '@/types/form-types';
+import { onFormSubmit } from '@/lib/utils';
+import { useAuthStore } from '@/stores/auth-store';
+import { ValidatorsType } from '@/types/auth-types';
 import {
   Card,
   CardContent,
@@ -5,22 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { Button } from '../ui/button';
-import InputWithIcon from './InputWithIcon';
-
-import { z } from 'zod';
-import { useForm } from '@tanstack/react-form';
-import { zodValidator } from '@tanstack/zod-form-adapter';
-import { useTranslation } from 'react-i18next';
-import { User, userInfoSchema } from '@/types/form-types';
-import { onFormSubmit } from '@/lib/utils';
-import { useAuthStore } from '@/routes/auth/route';
-
-interface ValidatorsType {
-  onChange: z.ZodString;
-  onChangeAsyncDebounceMs: number;
-  onChangeAsync: z.ZodEffects<z.ZodString>;
-}
 
 const createValidators = (fieldName: string): ValidatorsType => {
   return {

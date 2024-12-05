@@ -1,5 +1,4 @@
 import { HTTPException } from 'hono/http-exception';
-// import { landing } from './routes/landing';
 import { serveStatic } from 'hono/bun'
 import { Hono } from 'hono';
 import { auth } from './routes/auth';

@@ -1,7 +1,13 @@
+import { OTP_CODE, otpSchema } from '@/types/form-types';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { Button } from '../ui/button';
+import { onFormSubmit } from '@/lib/utils';
+import clientApi from '@/lib/clientApi';
+import { toast } from '@/hooks/use-toast';
+import { useNavigate } from '@tanstack/react-router';
+import { useAuthStore } from '@/stores/auth-store';
 
 import {
   InputOTP,
@@ -9,12 +15,6 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { onFormSubmit } from '@/lib/utils';
-import { OTP_CODE, otpSchema } from '@/types/form-types';
-import { useAuthStore } from '@/routes/auth/route';
-import clientApi from '@/lib/clientApi';
-import { toast } from '@/hooks/use-toast';
-import { useNavigate } from '@tanstack/react-router';
 
 function VerifyOTP() {
   const { lastName, name, phoneNumber } = useAuthStore((state) => state);
@@ -29,7 +29,7 @@ function VerifyOTP() {
         toast({
           title: 'OOOPS!',
           description: resp.message,
-          duration: 2000,
+          duration: 1500,
           variant: 'destructive',
         });
         return;

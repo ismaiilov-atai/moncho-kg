@@ -7,7 +7,7 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { toast } from '@/hooks/use-toast';
 import { onFormSubmit } from '@/lib/utils';
 import { numberSchema, PhoneType } from '@/types/form-types';
-import { useAuthStore } from '@/routes/auth/route';
+import { useAuthStore } from '@/stores/auth-store';
 import clientApi from '@/lib/clientApi';
 
 const filterNumber = (phoneNumber: string): string => {
