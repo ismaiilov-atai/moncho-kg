@@ -1,6 +1,6 @@
 import { OTP_CODE, otpSchema } from '@/types/form-types';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
-import { useForm } from '@tanstack/react-form';
+
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { Button } from '../ui/button';
 import { onFormSubmit } from '@/lib/utils';
@@ -15,33 +15,32 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+import { useForm } from '@/hooks/useForm';
+import { useMutation } from '@tanstack/react-query';
 
 function VerifyOTP() {
-  const { lastName, name, phoneNumber } = useAuthStore((state) => state);
+  const { mutate, isSuccess, error } = useMutation({
+    mutationFn: clientApi.verifyOtpCode,
+  });
+  const { name, phoneNumber } = useAuthStore((state) => state);
+
   const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
       otpCode: '',
     } as OTP_CODE,
-    onSubmit: async ({ value }) => {
-      const resp = await clientApi.verifyOtpCode(value.otpCode, phoneNumber);
-      if ('errorCode' in resp) {
-        toast({
-          title: 'OOOPS!',
-          description: resp.message,
-          duration: 1500,
-          variant: 'destructive',
+    onSubmit: async ({ otpCode }) => {
+      mutate({ code: otpCode, phoneNumber });
+      if (isSuccess) {
+        
+        navigate({
+          to: '/',
         });
-        return;
-      }
-      navigate({
-        to: '/',
-      });
-      toast({
-        title: `${name} Access Granted!`,
-        description: 'You are set to go.',
-        duration: 2000,
-      });
+        toast({
+          title: `Welcome to Moncho-KG, ${name}`,
+          description: 'All good, all well',
+        });
+      } else throw error;
     },
     validatorAdapter: zodValidator(),
     validators: {

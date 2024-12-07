@@ -1,18 +1,18 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 export const usersTable = pgTable("users", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: uuid('user_id').defaultRandom().notNull(),
   name: varchar({ length: 255 }).notNull(),
-  lastName: varchar({ length: 255 }).notNull(),
-  phoneNumber: integer().notNull().unique(),
+  lastName: varchar('last_name', { length: 255 }).notNull(),
+  phoneNumber: varchar('phone_number').notNull().unique(),
 });
 
 export const insertUserSchema = createInsertSchema(usersTable, {
-  id: z.number(),
   name: z.string(),
   lastName: z.string(),
-  phoneNumber: z.number()
+  phoneNumber: z.string()
 })
 

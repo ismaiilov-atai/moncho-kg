@@ -22,14 +22,15 @@ const initOtpCode = async (phoneNumber: string): Promise<InitOtpType | VerifyErr
         method: 'sms'
       })
     });
-    const data: InitOtpType = await resp.json();
-    return data;
+    const data = await resp.json();
+    if ('errorCode' in data) throw data as VerifyError
+    return data as InitOtpType;
   } catch (error) {
-    return error as VerifyError
+    throw error as VerifyError;
   }
 }
 
-const verifyOtpCode = async (code: string, phoneNumber: string): Promise<VerificationReport | VerifyError> => {
+const verifyOtpCode = async ({ code, phoneNumber }: { code: string, phoneNumber: string }): Promise<VerificationReport | VerifyError> => {
   try {
     const resp = await fetch(`${URL}/number/${phoneNumber}`, {
       method: 'PUT',
@@ -41,10 +42,11 @@ const verifyOtpCode = async (code: string, phoneNumber: string): Promise<Verific
         }
       })
     })
-    const result: VerificationReport = await resp.json();
-    return result;
+    const result = await resp.json();
+    if ('errorCode' in result) throw result as VerifyError
+    return result as VerificationReport;
   } catch (error) {
-    return error as VerifyError;
+    throw error as VerifyError;
   }
 }
 

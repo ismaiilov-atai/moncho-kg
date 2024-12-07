@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { Button } from '../ui/button';
 import InputWithIcon from './InputWithIcon';
-import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useTranslation } from 'react-i18next';
 import { User, userInfoSchema } from '@/types/form-types';
 import { onFormSubmit } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
 import { ValidatorsType } from '@/types/auth-types';
+import { useForm } from '@/hooks/useForm';
 import {
   Card,
   CardContent,
@@ -42,9 +42,8 @@ function Details() {
     defaultValues: {
       name: '',
       lastName: '',
-      phone: '',
     } as User,
-    onSubmit: async ({ value }) => {
+    onSubmit: async (value) => {
       updateFirstName(value.name);
       updateLastName(value.lastName);
       forwardAuthPage(pageCount);

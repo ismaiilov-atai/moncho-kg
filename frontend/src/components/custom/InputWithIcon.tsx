@@ -8,7 +8,7 @@ interface InputWithIconProps {
   field: FieldApi<any, any, any, any>;
 }
 
-function FieldInfo({ field }: InputWithIconProps) {
+export function FieldInfo({ field }: InputWithIconProps) {
   return (
     <div className='h-2 p-1'>
       <em className={`text-red-600 font-thin text-[10px]`}>

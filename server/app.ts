@@ -11,7 +11,7 @@ export const app = new Hono()
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
-    return err.getResponse();
+    return c.json({ message: err.message }, err.status);
   }
   return c.json({ message: err.message }, 500);
 });
