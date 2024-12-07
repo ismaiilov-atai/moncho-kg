@@ -10,6 +10,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import clientApi from '@/lib/clientApi';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from '@/hooks/useForm';
+import SubmitButton from './SubmitButton';
 
 const filterNumber = (phoneNumber: string): string => {
   const filteredNumber = phoneNumber.replaceAll(/[()-]/g, '');
@@ -95,9 +96,11 @@ function Phone() {
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
-            <Button type='submit' disabled={!canSubmit}>
-              {isSubmitting ? '...' : 'Submit'}
-            </Button>
+            <SubmitButton
+              title='Submit'
+              disabled={!canSubmit}
+              loading={isSubmitting}
+            />
           )}
         />
       </form>

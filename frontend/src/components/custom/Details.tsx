@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { Button } from '../ui/button';
 import InputWithIcon from './InputWithIcon';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +7,7 @@ import { onFormSubmit } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
 import { ValidatorsType } from '@/types/auth-types';
 import { useForm } from '@/hooks/useForm';
+import SubmitButton from './SubmitButton';
 import {
   Card,
   CardContent,
@@ -85,12 +85,11 @@ function Details() {
               state.isFieldsValid,
             ]}
             children={([canSubmit, isSubmitting, isFieldsValid]) => (
-              <Button
-                type='submit'
+              <SubmitButton
+                title='Submit'
                 disabled={!isFieldsValid || !canSubmit}
-                className=' '>
-                {isSubmitting ? '...' : 'Submit'}
-              </Button>
+                loading={isSubmitting}
+              />
             )}
           />
         </form>

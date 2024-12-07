@@ -11,8 +11,7 @@ export const usersTable = pgTable("users", {
 });
 
 export const insertUserSchema = createInsertSchema(usersTable, {
-  name: z.string(),
-  lastName: z.string(),
-  phoneNumber: z.string()
+  name: z.string().min(3),
+  lastName: z.string().min(3),
+  phoneNumber: z.string().min(13)
 })
-

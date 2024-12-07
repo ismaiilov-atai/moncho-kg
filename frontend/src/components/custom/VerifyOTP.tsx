@@ -1,38 +1,53 @@
 import { OTP_CODE, otpSchema } from '@/types/form-types';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
-
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { Button } from '../ui/button';
 import { onFormSubmit } from '@/lib/utils';
 import clientApi from '@/lib/clientApi';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/stores/auth-store';
-
+import { useForm } from '@/hooks/useForm';
+import { useMutation } from '@tanstack/react-query';
+import SubmitButton from './SubmitButton';
+import { api } from '@/lib/api';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { useForm } from '@/hooks/useForm';
-import { useMutation } from '@tanstack/react-query';
 
 function VerifyOTP() {
-  const { mutate, isSuccess, error } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: clientApi.verifyOtpCode,
   });
-  const { name, phoneNumber } = useAuthStore((state) => state);
+  const { mutateAsync: insertUserMutate } = useMutation({
+    mutationFn: api.auth.$post,
+  });
 
+  const { name, phoneNumber, lastName } = useAuthStore((state) => state);
   const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
       otpCode: '',
     } as OTP_CODE,
     onSubmit: async ({ otpCode }) => {
-      mutate({ code: otpCode, phoneNumber });
-      if (isSuccess) {
-        
+      try {
+        const resp = await mutateAsync({
+          code: otpCode,
+          phoneNumber,
+        });
+        if ('errorCode' in resp) throw resp;
+        const insertResponse = await insertUserMutate({
+          json: {
+            name,
+            lastName,
+            phoneNumber,
+          },
+        });
+        const data = await insertResponse.json();
+        if (!data.isSuccess) throw insertResponse;
+        localStorage.setItem('access_token', data.token as string);
         navigate({
           to: '/',
         });
@@ -40,7 +55,9 @@ function VerifyOTP() {
           title: `Welcome to Moncho-KG, ${name}`,
           description: 'All good, all well',
         });
-      } else throw error;
+      } catch (error) {
+        throw error;
+      }
     },
     validatorAdapter: zodValidator(),
     validators: {
@@ -79,12 +96,12 @@ function VerifyOTP() {
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
-            <Button
-              type='submit'
+            <SubmitButton
+              title='Verify'
               disabled={!canSubmit}
-              className=' bg-green-500 hover:bg-green-400'>
-              {isSubmitting ? '...' : 'Verify'}
-            </Button>
+              loading={isSubmitting || isPending}
+              className='bg-green-500 hover:bg-green-400'
+            />
           )}
         />
       </form>
