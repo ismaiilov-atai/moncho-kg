@@ -10,8 +10,10 @@
 
 // Import Routes
 
+import { Route as ProtectedTestImport } from './routes/_protected/test'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
+import { Route as ProtectedImport } from './routes/_protected'
 import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
 
@@ -20,6 +22,11 @@ import { Route as IndexImport } from './routes/index'
 const AboutRoute = AboutImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProtectedRoute = ProtectedImport.update({
+  id: '/_protected',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -33,6 +40,12 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const ProtectedTestRoute = ProtectedTestImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => ProtectedRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -53,6 +66,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRoute
     }
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedImport
+      parentRoute: typeof rootRoute
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -60,48 +80,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/_protected/test': {
+      id: '/_protected/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof ProtectedTestImport
+      parentRoute: typeof ProtectedImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface ProtectedRouteChildren {
+  ProtectedTestRoute: typeof ProtectedTestRoute
+}
+
+const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedTestRoute: ProtectedTestRoute,
+}
+
+const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
+  ProtectedRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
+  '': typeof ProtectedRouteWithChildren
   '/about': typeof AboutRoute
+  '/test': typeof ProtectedTestRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
+  '': typeof ProtectedRouteWithChildren
   '/about': typeof AboutRoute
+  '/test': typeof ProtectedTestRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
+  '/_protected': typeof ProtectedRouteWithChildren
   '/about': typeof AboutRoute
+  '/_protected/test': typeof ProtectedTestRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/about'
+  fullPaths: '/' | '/auth' | '' | '/about' | '/test'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/about'
-  id: '__root__' | '/' | '/auth' | '/about'
+  to: '/' | '/auth' | '' | '/about' | '/test'
+  id: '__root__' | '/' | '/auth' | '/_protected' | '/about' | '/_protected/test'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRoute
+  ProtectedRoute: typeof ProtectedRouteWithChildren
   AboutRoute: typeof AboutRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRoute,
+  ProtectedRoute: ProtectedRouteWithChildren,
   AboutRoute: AboutRoute,
 }
 
@@ -117,6 +164,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/auth",
+        "/_protected",
         "/about"
       ]
     },
@@ -126,8 +174,18 @@ export const routeTree = rootRoute
     "/auth": {
       "filePath": "auth/route.tsx"
     },
+    "/_protected": {
+      "filePath": "_protected.tsx",
+      "children": [
+        "/_protected/test"
+      ]
+    },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/_protected/test": {
+      "filePath": "_protected/test.tsx",
+      "parent": "/_protected"
     }
   }
 }

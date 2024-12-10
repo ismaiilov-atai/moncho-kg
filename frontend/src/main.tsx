@@ -1,11 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
-import './index.css';
-import i18n from './i18n';
-
 import { I18nextProvider } from 'react-i18next';
+import ReactDOM from 'react-dom/client';
+import i18n from './i18n';
+import React from 'react';
+import './index.css';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 // Create a client

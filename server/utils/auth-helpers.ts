@@ -1,7 +1,8 @@
+import { usersTable } from '../db/schema/user_schema';
 import { sign } from 'hono/jwt';
 import { db } from '../db';
-import { usersTable } from '../db/schema/user_schema';
-import type { InsertUserResponseType, NewUser } from '../types/auth-types';
+
+import type { AccessTokenUserType, InsertUserResponseType, NewUser, RefreshTokenUserType } from '../types/auth-types';
 
 export const insertUser = async (user: NewUser): Promise<NewUser> => {
   const newUser = await db
@@ -13,15 +14,12 @@ export const insertUser = async (user: NewUser): Promise<NewUser> => {
   return newUser[0];
 }
 
-export const JWTify = async (createdUser: NewUser): Promise<InsertUserResponseType> => {
+export const JWTify = async (user: AccessTokenUserType | RefreshTokenUserType, expiresIn: number = Math.floor(Date.now() / 1000) + 60 * 1): Promise<InsertUserResponseType> => {
   const payload = {
-    sub: createdUser.userId,
-    exp: Math.floor(Date.now() / 1000) + 60 * 5,
+    sub: user.userId,
+    exp: expiresIn,
     user: {
-      userId: createdUser.userId,
-      name: createdUser.name,
-      lastName: createdUser.lastName,
-      phoneNumber: createdUser.phoneNumber,
+      ...user,
       role: 'user'
     }
   }

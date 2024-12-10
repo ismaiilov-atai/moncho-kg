@@ -1,0 +1,29 @@
+import type { Decoded } from '../types/auth-types'
+import { REFRESH_TOKEN } from '../types/constants'
+import { createMiddleware } from 'hono/factory'
+import { JWTify } from '../utils/auth-helpers'
+import type { Context, Next } from 'hono'
+import { decode, verify } from 'hono/jwt'
+import { getCookie } from 'hono/cookie'
+
+export const refreshToken = createMiddleware(async (c: Context, next: Next) => {
+  const auth = c.req.header('Authorization');
+  const refreshRawToken = getCookie(c, REFRESH_TOKEN);
+  try {
+    const resp = await verify(auth || '', process.env.JWT_SECRET!);
+    if (resp.exp || 1000 < Date.now() + 1000)
+      throw Error('Token has expired!')
+  } catch (error) {
+    if (refreshRawToken) {
+      const req = new Request(c.req.raw)
+      const { payload } = decode(auth?.replace(/^Bearer\s/, '') || '') as Decoded;
+      const newAccessToken = await JWTify({
+        ...payload.user
+      });
+
+      req.headers.set('Authorization', `Bearer ${newAccessToken.token}`)
+      c.req.raw = req
+    }
+  }
+  await next();
+})

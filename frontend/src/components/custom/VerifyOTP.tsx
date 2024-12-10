@@ -1,14 +1,15 @@
-import { OTP_CODE, otpSchema } from '@/types/form-types';
-import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { onFormSubmit } from '@/lib/utils';
-import clientApi from '@/lib/clientApi';
-import { toast } from '@/hooks/use-toast';
+import { OTP_CODE, otpSchema } from '@/types/form-types';
+import { ACCESS_TOKEN } from '@server/types/constants';
 import { useNavigate } from '@tanstack/react-router';
-import { useAuthStore } from '@/stores/auth-store';
-import { useForm } from '@/hooks/useForm';
 import { useMutation } from '@tanstack/react-query';
+import { useAuthStore } from '@/stores/auth-store';
+import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { onFormSubmit } from '@/lib/utils';
+import { useForm } from '@/hooks/useForm';
 import SubmitButton from './SubmitButton';
+import { toast } from '@/hooks/use-toast';
+import clientApi from '@/lib/clientApi';
 import { api } from '@/lib/api';
 import {
   InputOTP,
@@ -21,7 +22,7 @@ function VerifyOTP() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: clientApi.verifyOtpCode,
   });
-  const { mutateAsync: insertUserMutate } = useMutation({
+  const { mutateAsync: insertUserMutation } = useMutation({
     mutationFn: api.auth.$post,
   });
 
@@ -38,16 +39,16 @@ function VerifyOTP() {
           phoneNumber,
         });
         if ('errorCode' in resp) throw resp;
-        const insertResponse = await insertUserMutate({
+        const insertUserResponse = await insertUserMutation({
           json: {
             name,
             lastName,
             phoneNumber,
           },
         });
-        const data = await insertResponse.json();
-        if (!data.isSuccess) throw insertResponse;
-        localStorage.setItem('access_token', data.token as string);
+        const data = await insertUserResponse.json();
+        if (!data.isSuccess) throw insertUserResponse;
+        sessionStorage.setItem(ACCESS_TOKEN, data.token);
         navigate({
           to: '/',
         });
