@@ -1,3 +1,13 @@
+import { z } from 'zod';
+import InputWithIcon from './InputWithIcon';
+import { zodValidator } from '@tanstack/zod-form-adapter';
+import { useTranslation } from 'react-i18next';
+import { User, userInfoSchema } from '@/types/form-types';
+import { onFormSubmit } from '@/lib/utils';
+import { useAuthStore } from '@/stores/auth-store';
+import { ValidatorsType } from '@/types/auth-types';
+import { useForm } from '@/hooks/useForm';
+import SubmitButton from './SubmitButton';
 import {
   Card,
   CardContent,
@@ -5,22 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { Button } from '../ui/button';
-import InputWithIcon from './InputWithIcon';
-
-import { z } from 'zod';
-import { useForm } from '@tanstack/react-form';
-import { zodValidator } from '@tanstack/zod-form-adapter';
-import { useTranslation } from 'react-i18next';
-import { User, userInfoSchema } from '@/types/form-types';
-import { onFormSubmit } from '@/lib/utils';
-import { AuthPageProps } from '@/types/shared-types';
-
-interface ValidatorsType {
-  onChange: z.ZodString;
-  onChangeAsyncDebounceMs: number;
-  onChangeAsync: z.ZodEffects<z.ZodString>;
-}
 
 const createValidators = (fieldName: string): ValidatorsType => {
   return {
@@ -40,17 +34,19 @@ const resolveSleeper = async (value: string): Promise<boolean> => {
   return !value.includes('error');
 };
 
-function Details({ page, setPage }: AuthPageProps) {
+function Details() {
   const { t } = useTranslation();
+  const { pageCount, forwardAuthPage, updateFirstName, updateLastName } =
+    useAuthStore((state) => state);
   const form = useForm({
     defaultValues: {
       name: '',
       lastName: '',
-      phone: '',
     } as User,
-    onSubmit: async ({ value }) => {
-      // do sumbit here
-      setPage(page + 1);
+    onSubmit: async (value) => {
+      updateFirstName(value.name);
+      updateLastName(value.lastName);
+      forwardAuthPage(pageCount);
     },
     validatorAdapter: zodValidator(),
     validators: {
@@ -89,12 +85,11 @@ function Details({ page, setPage }: AuthPageProps) {
               state.isFieldsValid,
             ]}
             children={([canSubmit, isSubmitting, isFieldsValid]) => (
-              <Button
-                type='submit'
+              <SubmitButton
+                title='Submit'
                 disabled={!isFieldsValid || !canSubmit}
-                className=' '>
-                {isSubmitting ? '...' : 'Submit'}
-              </Button>
+                loading={isSubmitting}
+              />
             )}
           />
         </form>

@@ -5,5 +5,6 @@ import 'dotenv/config';
 export const db = drizzle({
   connection: {
     connectionString: process.env.DATABASE_URL!,
-  }
+  },
+  casing: 'snake_case'
 });

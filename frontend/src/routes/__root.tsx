@@ -1,12 +1,11 @@
 import { NavBar } from '@/components/custom/NavBar';
-import { Toaster } from '@/components/ui/toaster';
 import { QueryClient } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/toaster';
 import {
   createRootRouteWithContext,
   Outlet,
   useLocation,
 } from '@tanstack/react-router';
-// import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -23,7 +22,6 @@ function Root() {
       {location.pathname.startsWith('/auth') || <NavBar />}
       <Outlet />
       <Toaster />
-      {/* <TanStackRouterDevtools /> */}
     </>
   );
 }

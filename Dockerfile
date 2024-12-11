@@ -28,7 +28,7 @@ COPY --link frontend/bun.lockb frontend/package.json ./frontend/
 RUN cd frontend && bun install --ci
 
 # Copy application code
-COPY . .
+COPY --link . .
 
 # Change to frontend directory and build the frontend app
 WORKDIR /app/frontend

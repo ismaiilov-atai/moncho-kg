@@ -1,14 +1,13 @@
-import { Label } from '@radix-ui/react-label';
-
-import { Input } from '../ui/input';
-import { LoaderCircle } from 'lucide-react';
 import { FieldApi } from '@tanstack/react-form';
+import { Label } from '@radix-ui/react-label';
+import { LoaderCircle } from 'lucide-react';
+import { Input } from '../ui/input';
 
 interface InputWithIconProps {
   field: FieldApi<any, any, any, any>;
 }
 
-function FieldInfo({ field }: InputWithIconProps) {
+export function FieldInfo({ field }: InputWithIconProps) {
   return (
     <div className='h-2 p-1'>
       <em className={`text-red-600 font-thin text-[10px]`}>

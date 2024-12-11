@@ -7,7 +7,7 @@ export const userInfoSchema = z.object({
 export type User = z.infer<typeof userInfoSchema>;
 
 export const otpSchema = z.object({
-  otpCode: z.string().min(6, 'Should be 6 digits'),
+  otpCode: z.string().min(4, 'Should be 4 digits'),
 });
 export type OTP_CODE = z.infer<typeof otpSchema>;
 

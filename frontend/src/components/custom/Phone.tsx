@@ -1,33 +1,52 @@
+import { numberSchema, PhoneType } from '@/types/form-types';
+import { zodValidator } from '@tanstack/zod-form-adapter';
+import { useAuthStore } from '@/stores/auth-store';
+import { useMutation } from '@tanstack/react-query';
+import { useMask } from '@react-input/mask';
+import { ChevronDown } from 'lucide-react';
+import { onFormSubmit } from '@/lib/utils';
+import { toast } from '@/hooks/use-toast';
+import { useForm } from '@/hooks/useForm';
+import SubmitButton from './SubmitButton';
+import clientApi from '@/lib/clientApi';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { ChevronDown } from 'lucide-react';
-import { useMask } from '@react-input/mask';
-import { useForm } from '@tanstack/react-form';
-import { zodValidator } from '@tanstack/zod-form-adapter';
-import { toast } from '@/hooks/use-toast';
-import { onFormSubmit } from '@/lib/utils';
-import { numberSchema, PhoneType } from '@/types/form-types';
-import { AuthPageProps } from '@/types/shared-types';
 
-function Phone({ page, setPage }: AuthPageProps) {
+const filterNumber = (phoneNumber: string): string => {
+  const filteredNumber = phoneNumber.replaceAll(/[()-]/g, '');
+  return filteredNumber;
+};
+
+function Phone() {
+  const { updatePhoneNumber, pageCount, forwardAuthPage } = useAuthStore(
+    (state) => state
+  );
+
+  const inputRef = useMask({
+    mask: '+996(___) __-__-__',
+    replacement: { _: /\d/ },
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: clientApi.initOtpCode,
+  });
+
   const form = useForm({
     defaultValues: {
       phoneNumber: '',
     } as PhoneType,
-    onSubmit: async ({ value }) => {
-      // Do something with form data
-      console.log(value);
-      setPage(page + 1);
+    onSubmit: async (value) => {
+      const filteredPhoneNumber = filterNumber(value.phoneNumber);
+      updatePhoneNumber(filteredPhoneNumber);
+
+      const response = await mutateAsync(filteredPhoneNumber);
+      if ('errorCode' in response) throw response;
+      else forwardAuthPage(pageCount);
     },
     validatorAdapter: zodValidator(),
     validators: {
       onChange: numberSchema,
     },
-  });
-
-  const inputRef = useMask({
-    mask: '+996(___) __-__-__',
-    replacement: { _: /\d/ },
   });
 
   const regionClick = () => {
@@ -59,7 +78,6 @@ function Phone({ page, setPage }: AuthPageProps) {
                   🇰🇬
                   <ChevronDown />
                 </Button>
-
                 <Input
                   id={field.name}
                   name={field.name}
@@ -78,9 +96,11 @@ function Phone({ page, setPage }: AuthPageProps) {
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
-            <Button type='submit' disabled={!canSubmit}>
-              {isSubmitting ? '...' : 'Submit'}
-            </Button>
+            <SubmitButton
+              title='Submit'
+              disabled={!canSubmit}
+              loading={isSubmitting}
+            />
           )}
         />
       </form>
