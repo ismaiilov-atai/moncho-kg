@@ -13,8 +13,9 @@ import 'dotenv/config'
 
 type Variables = JwtVariables
 
-export const app = new Hono<{ Variables: Variables }>()
-  .basePath('/api')
+const app = new Hono<{ Variables: Variables }>()
+
+const apiRoutes = app.basePath('/api')
   .all(logger())
   .use('/*', except('/api/auth', refreshToken, (c, next) => {
     const jwtMiddleware = jwt({
@@ -24,8 +25,9 @@ export const app = new Hono<{ Variables: Variables }>()
   }))
   .route('/user', user)
   .route('/auth', auth)
-  .get('*', serveStatic({ root: '/frontend/dist' }))
-  .get('*', serveStatic({ path: '/index.html' }));
+
+app.get('*', serveStatic({ root: './frontend/dist' }))
+app.get('*', serveStatic({ path: './frontend/dist/index.html' }));
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
@@ -34,5 +36,6 @@ app.onError((err, c) => {
   return c.json({ message: err.message }, 500);
 });
 
-export type ApiRoutes = typeof app;
+export default app;
+export type ApiRoutes = typeof apiRoutes;
 
