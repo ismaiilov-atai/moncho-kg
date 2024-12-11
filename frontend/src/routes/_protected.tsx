@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_protected')({
     if ('message' in user) {
       toast({
         title: 'Unauthorized',
-        description: 'Please authorize in order to use!',
+        description: 'Please sign-up or sign-in in order to use the app!',
         variant: 'destructive',
       });
       throw redirect({

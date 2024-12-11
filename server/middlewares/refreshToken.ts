@@ -14,7 +14,8 @@ export const refreshToken = createMiddleware(async (c: Context, next: Next) => {
     if (resp.exp || 1000 < Date.now() + 1000)
       throw Error('Token has expired!')
   } catch (error) {
-    if (refreshRawToken) {
+    const refreshValid = await verify(refreshRawToken || '', process.env.JWT_SECRET || '')
+    if (refreshValid.exp || 1000 > Date.now() + 1000) {
       const req = new Request(c.req.raw)
       const { payload } = decode(auth?.replace(/^Bearer\s/, '') || '') as Decoded;
       const newAccessToken = await JWTify({

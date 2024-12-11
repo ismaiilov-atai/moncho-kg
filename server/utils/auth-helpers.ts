@@ -14,7 +14,7 @@ export const insertUser = async (user: NewUser): Promise<NewUser> => {
   return newUser[0];
 }
 
-export const JWTify = async (user: AccessTokenUserType | RefreshTokenUserType, expiresIn: number = Math.floor(Date.now() / 1000) + 60 * 1): Promise<InsertUserResponseType> => {
+export const JWTify = async (user: AccessTokenUserType | RefreshTokenUserType, expiresIn: number = Math.floor(Date.now() / 1000) + 60 * 5): Promise<InsertUserResponseType> => {
   const payload = {
     sub: user.userId,
     exp: expiresIn,

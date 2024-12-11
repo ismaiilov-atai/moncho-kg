@@ -17,11 +17,6 @@ export type Decoded = {
   payload: Payload
 }
 
-export interface RefreshCookie {
-  token: string,
-  isSuccess: true
-}
-
 export interface InsertUserResponseType {
   token: string, isSuccess: boolean
 }

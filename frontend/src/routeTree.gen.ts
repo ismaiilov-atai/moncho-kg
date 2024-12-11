@@ -10,12 +10,12 @@
 
 // Import Routes
 
-import { Route as ProtectedTestImport } from './routes/_protected/test'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProtectedTestImport } from './routes/_protected/test'
 
 // Create/Update Routes
 
