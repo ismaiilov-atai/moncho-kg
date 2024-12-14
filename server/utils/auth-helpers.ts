@@ -1,4 +1,4 @@
-import { usersTable } from '../db/schema/user_schema';
+import { users } from '../db/schema/user.sch';
 import { sign } from 'hono/jwt';
 import { db } from '../db';
 
@@ -6,9 +6,9 @@ import type { AccessTokenUserType, InsertUserResponseType, NewUser, RefreshToken
 
 export const insertUser = async (user: NewUser): Promise<NewUser> => {
   const newUser = await db
-    .insert(usersTable)
+    .insert(users)
     .values(user)
-    .onConflictDoUpdate({ target: usersTable.phoneNumber, set: user })
+    .onConflictDoUpdate({ target: users.phoneNumber, set: user })
     .returning();
 
   return newUser[0];

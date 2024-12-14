@@ -6,6 +6,8 @@ import type { Context, Next } from 'hono'
 import { decode, verify } from 'hono/jwt'
 import { getCookie } from 'hono/cookie'
 
+
+
 export const refreshToken = createMiddleware(async (c: Context, next: Next) => {
   const auth = c.req.header('Authorization');
   const refreshRawToken = getCookie(c, REFRESH_TOKEN);
@@ -26,5 +28,13 @@ export const refreshToken = createMiddleware(async (c: Context, next: Next) => {
       c.req.raw = req
     }
   }
+  await next();
+})
+
+
+const dayGenerator = createMiddleware(async (c: Context, next: Next) => {
+
+  
+
   await next();
 })

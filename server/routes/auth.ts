@@ -1,4 +1,4 @@
-import { insertUserSchema } from '../db/schema/user_schema'
+import { insertUserSchema } from '../db/schema/user.sch'
 import { insertUser, JWTify } from '../utils/auth-helpers'
 import { createUserSchema } from '../types/auth-types'
 import { REFRESH_TOKEN } from '../types/constants'
