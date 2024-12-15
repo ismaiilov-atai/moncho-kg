@@ -20,7 +20,7 @@ const app = new Hono<{ Variables: Variables }>()
 
 const apiRoutes = app.basePath('/api')
   .all(logger())
-  .use('/*', except('/api/auth', refreshToken, (c, next) => {
+  .use('/*', except(['/api/auth', '/api/days'], refreshToken, (c, next) => {
     const jwtMiddleware = jwt({
       secret: process.env.JWT_SECRET || '',
     })
@@ -40,9 +40,9 @@ cronerJobCreator('0 0 * * * *', async () => {
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
-    return c.json({ message: err.message }, err.status);
+    return c.json({ success: false, message: err.message }, err.status);
   }
-  return c.json({ message: err.message }, 500);
+  return c.json({ success: false, message: err.message }, 500);
 });
 
 export default app;

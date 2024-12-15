@@ -30,11 +30,3 @@ export const refreshToken = createMiddleware(async (c: Context, next: Next) => {
   }
   await next();
 })
-
-
-const dayGenerator = createMiddleware(async (c: Context, next: Next) => {
-
-  
-
-  await next();
-})

@@ -16,9 +16,7 @@ export const getUser = async (): Promise<JWT_FAILURE | JWT_Payload> => {
       headers: authHeader,
     })
     const result = await resp.json();
-    if ('message' in result) {
-
-    }
+    if ('message' in result) throw new Error(result.message)
     return result as JWT_Payload;
   } catch (error) {
     throw error;
