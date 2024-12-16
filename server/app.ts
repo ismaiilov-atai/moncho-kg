@@ -2,7 +2,7 @@ import { JwtTokenExpired, JwtTokenInvalid } from 'hono/utils/jwt/types'
 import { refreshToken } from './middlewares/refreshToken'
 import { cronerJobCreator } from './utils/croner-job'
 import { HTTPException } from 'hono/http-exception'
-import { feedDayWithSlots } from './utils/feed-day'
+import { feedDayWithSlots } from './utils/day'
 import type { JwtVariables } from 'hono/jwt'
 import { serveStatic } from 'hono/bun'
 import { except } from 'hono/combine'
@@ -32,21 +32,21 @@ const apiRoutes = app.basePath('/api')
   .route('/days', home)
 
 app.get('*', serveStatic({ root: './frontend/dist' }))
-app.get('*', serveStatic({ path: './frontend/dist/index.html' }));
+app.get('*', serveStatic({ path: './frontend/dist/index.html' }))
 
 cronerJobCreator('0 0 * * * *', async () => {
   await feedDayWithSlots()
-  console.log('here croner at 00:00');
+  console.log('here croner at 00:00')
 })
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
-    return c.json({ success: false, err }, err.status);
+    return c.json({ success: false, err }, err.status)
   }
-  if (err instanceof JwtTokenInvalid || JwtTokenExpired) return c.json({ success: false, err }, 401);
-  return c.json({ success: false, err }, 500);
-});
+  if (err instanceof JwtTokenInvalid || JwtTokenExpired) return c.json({ success: false, err }, 401)
+  return c.json({ success: false, err }, 500)
+})
 
-export default app;
+export default app
 export type ApiRoutes = typeof apiRoutes;
 

@@ -1,5 +1,4 @@
 import { JwtTokenExpired, JwtTokenInvalid } from 'hono/utils/jwt/types';
-import { QueryClient } from '@tanstack/react-query';
 import { NavBar } from '@/components/custom/NavBar';
 import { Toaster } from '@/components/ui/toaster';
 import { toast } from '@/hooks/use-toast';
@@ -11,11 +10,9 @@ import {
   useLocation,
 } from '@tanstack/react-router';
 
-interface MyRouterContext {
-  queryClient: QueryClient;
-}
+import type { RouterContext } from '@/routerContext';
 
-export const Route = createRootRouteWithContext<MyRouterContext>()({
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: Root,
   notFoundComponent: () => <>404 not found</>,
   pendingComponent: () => <>Loading default... </>,

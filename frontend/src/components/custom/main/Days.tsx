@@ -1,16 +1,15 @@
 import { Button, buttonVariants } from '../../ui/button';
 import { useSlotsStore } from '@/stores/slots-store';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Outlet } from '@tanstack/react-router';
 import { DayType } from '@/types/day-types';
 import moment from 'moment';
 
 interface Props {
   days: DayType[];
-  isPanding: boolean;
+  isPending: boolean;
 }
 
-const Days = ({ days, isPanding }: Props) => {
+const Days = ({ days, isPending }: Props) => {
   const { updateSlots, updateSelectedDayId, selectedDayId } = useSlotsStore(
     (state) => state
   );
@@ -28,10 +27,10 @@ const Days = ({ days, isPanding }: Props) => {
     <div className='flex w-24'>
       <div className='w-20 justify-between gap-2 flex flex-col border-r-2 pl-2 pr-2 '>
         {days.map((day, index) => {
-          return isPanding ? (
+          return isPending ? (
             <Skeleton
               className={buttonVariants({ variant: 'secondary' })}
-              key={`${day.dayId}${index}`}
+              key={`${index}-${day.dayId}`}
             />
           ) : (
             <Button
@@ -43,7 +42,6 @@ const Days = ({ days, isPanding }: Props) => {
           );
         })}
       </div>
-      <Outlet />
     </div>
   );
 };

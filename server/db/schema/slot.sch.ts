@@ -1,7 +1,7 @@
-import { boolean, date, integer, pgTable, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { usersToSlots } from './users_to_slots';
-import { relations } from 'drizzle-orm';
-import { days } from './day.sch';
+import { boolean, integer, pgTable, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { usersToSlots } from './users_to_slots'
+import { relations } from 'drizzle-orm'
+import { days } from './day.sch'
 
 export const slots = pgTable('slots', {
   id: integer().generatedAlwaysAsIdentity(),
@@ -18,4 +18,4 @@ export const slotsRelations = relations(slots, ({ one, many }) => ({
     references: [days.dayId],
   }),
   userToSlots: many(usersToSlots)
-}));
+}))

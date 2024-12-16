@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import Home from '@/components/custom/main/Home';
+import NoData from '@/components/custom/NoData';
 
 export const Route = createLazyFileRoute('/')({
   component: RouteComponent,
@@ -7,5 +8,8 @@ export const Route = createLazyFileRoute('/')({
 
 function RouteComponent() {
   const days = Route.useLoaderData();
-  return <Home days={days} isPanding={false} />;
+
+  if (days.length <= 0) return <NoData />;
+
+  return <Home days={days} isPending={false} />;
 }

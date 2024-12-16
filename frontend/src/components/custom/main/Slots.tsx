@@ -1,21 +1,21 @@
-import { SlotType } from '@/types/day-types';
 import { Button, buttonVariants } from '../../ui/button';
-import moment from 'moment';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SlotType } from '@/types/day-types';
+import moment from 'moment';
 
 interface Props {
   slots: SlotType[];
-  isPanding: boolean;
+  isPending: boolean;
 }
 
-const Slots = ({ slots, isPanding }: Props) => {
+const Slots = ({ slots, isPending }: Props) => {
   return (
     <div className=' pl-2 pr-2 grid grid-cols-3 md:grid-cols-4 gap-5 justify-between w-full '>
       {slots.map((slot, index) => {
-        return isPanding ? (
+        return isPending ? (
           <Skeleton
             className={buttonVariants({ variant: 'secondary' })}
-            key={`${slot.slotId}${index}`}
+            key={`${slot.slotId}-${index}`}
           />
         ) : (
           <Button key={slot.slotId} className=' text-wrap'>

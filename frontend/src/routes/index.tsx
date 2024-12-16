@@ -10,7 +10,7 @@ const findSlotsByDayId = (dayId: string, days: DayType[]): SlotType[] => {
 };
 
 export const Route = createFileRoute('/')({
-  pendingComponent: () => <Home days={fakeDays} isPanding={true} />,
+  pendingComponent: () => <Home days={fakeDays} isPending />,
   loader: async ({ context: { queryClient } }) => {
     const { days } = await queryClient.ensureQueryData(daysQueryOptions);
     const { updateSelectedDayId, updateSlots, selectedDayId } =
