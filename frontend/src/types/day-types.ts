@@ -6,7 +6,7 @@ export interface DayType {
   "slots": SlotType[]
 }
 
-interface SlotType {
+export interface SlotType {
   "slotId": string,
   "isFull": boolean,
   "spaceLeft": number,

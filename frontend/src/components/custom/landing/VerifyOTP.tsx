@@ -7,7 +7,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { onFormSubmit } from '@/lib/utils';
 import { useForm } from '@/hooks/useForm';
-import SubmitButton from './SubmitButton';
+import SubmitButton from '../SubmitButton';
 import { toast } from '@/hooks/use-toast';
 import clientApi from '@/lib/clientApi';
 import { api } from '@/lib/api';

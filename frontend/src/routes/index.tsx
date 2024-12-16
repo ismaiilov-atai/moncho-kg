@@ -1,22 +1,23 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { DayType, SlotType } from '@/types/day-types';
 import { useSlotsStore } from '@/stores/slots-store';
-import { Button } from '@/components/ui/button';
-import moment from 'moment';
+import Home from '@/components/custom/main/Home';
+import { daysQueryOptions } from '@/lib/api';
+import { fakeDays } from '@/lib/fakers';
+
+const findSlotsByDayId = (dayId: string, days: DayType[]): SlotType[] => {
+  return days.find((day) => day.dayId === dayId)?.slots || days[0].slots;
+};
 
 export const Route = createFileRoute('/')({
-  component: Index,
+  pendingComponent: () => <Home days={fakeDays} isPanding={true} />,
+  loader: async ({ context: { queryClient } }) => {
+    const { days } = await queryClient.ensureQueryData(daysQueryOptions);
+    const { updateSelectedDayId, updateSlots, selectedDayId } =
+      useSlotsStore.getState();
+
+    updateSelectedDayId(selectedDayId || days[0].dayId);
+    updateSlots(findSlotsByDayId(selectedDayId, days));
+    return days;
+  },
 });
-
-function Index() {
-  const { slots } = useSlotsStore((state) => state);
-
-  return (
-    <div className=' pl-2 pr-2 grid grid-cols-3 md:grid-cols-4 gap-5 justify-between w-full '>
-      {slots.map((slot) => (
-        <Button key={slot.slotId} className=' text-wrap'>
-          {moment(slot.time).utcOffset(0).format('HH:mm DD')}
-        </Button>
-      ))}
-    </div>
-  );
-}

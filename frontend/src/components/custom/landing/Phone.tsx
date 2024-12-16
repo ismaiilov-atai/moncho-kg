@@ -7,10 +7,10 @@ import { ChevronDown } from 'lucide-react';
 import { onFormSubmit } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { useForm } from '@/hooks/useForm';
-import SubmitButton from './SubmitButton';
+import SubmitButton from '../SubmitButton';
 import clientApi from '@/lib/clientApi';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
 
 const filterNumber = (phoneNumber: string): string => {
   const filteredNumber = phoneNumber.replaceAll(/[()-]/g, '');

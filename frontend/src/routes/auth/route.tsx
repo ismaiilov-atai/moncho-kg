@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import Details from '@/components/custom/Details';
-import Phone from '@/components/custom/Phone';
-import VerifyOTP from '@/components/custom/VerifyOTP';
+import Details from '@/components/custom/landing/Details';
+import Phone from '@/components/custom/landing/Phone';
+import VerifyOTP from '@/components/custom/landing/VerifyOTP';
 import { useAuthStore } from '@/stores/auth-store';
 
 export const Route = createFileRoute('/auth')({

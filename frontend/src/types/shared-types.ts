@@ -1,7 +1,7 @@
 import { Payload } from '@server/types/auth-types'
 
 export interface JWT_FAILURE {
-  message: string
+  err: Error
 }
 
 export interface JWT_Payload {
