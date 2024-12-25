@@ -1,30 +1,16 @@
+import { $day } from '@/lib/api'
+import { InferResponseType } from 'hono/client'
 
-export interface DayType {
-  "dayId": string,
-  "passed": boolean,
-  "day": string,
-  "slots": SlotType[]
-}
-
-export interface SlotType {
-  "slotId": string,
-  "isFull": boolean,
-  "spaceLeft": number,
-  "time": string,
-  "dayBelongsTo"?: string
-}
-
-export interface DayResponse {
-  success: boolean,
-  days: DayType[];
-}
+export type DaysResponse = InferResponseType<typeof $day.$get>
+export type DaysType = DaysResponse['days'][0]
+export type SlotsType = DaysType['slots'][0]
 
 export type HomeState = {
-  slots: SlotType[]
+  slots: SlotsType[]
   selectedDayId: string
 }
 
 export type HomeActions = {
-  updateSlots: (slots: HomeState['slots']) => void;
-  updateSelectedDayId: (dayId: HomeState['selectedDayId']) => void;
-};
+  updateSlots: (slots: HomeState['slots']) => void
+  updateSelectedDayId: (dayId: HomeState['selectedDayId']) => void
+}

@@ -1,7 +1,9 @@
-import { pgTable, primaryKey, uuid } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
-import { users } from './user.sch';
-import { slots } from './slot.sch';
+import { pgTable, primaryKey, uuid } from 'drizzle-orm/pg-core'
+import { createInsertSchema } from 'drizzle-zod'
+import { relations } from 'drizzle-orm'
+import { users } from './user.sch'
+import { slots } from './slot.sch'
+import { z } from 'zod'
 
 
 export const usersToSlots = pgTable(
@@ -17,7 +19,7 @@ export const usersToSlots = pgTable(
   (t) => ({
     pk: primaryKey({ columns: [t.userId, t.slotId] })
   })
-);
+)
 
 
 export const usersToGroupsRelations = relations(usersToSlots, ({ one }) => ({
@@ -29,4 +31,9 @@ export const usersToGroupsRelations = relations(usersToSlots, ({ one }) => ({
     fields: [usersToSlots.userId],
     references: [users.userId],
   }),
-}));
+}))
+
+export const createReservationSchema = createInsertSchema(usersToSlots, {
+  slotId: z.string(),
+  userId: z.string()
+})

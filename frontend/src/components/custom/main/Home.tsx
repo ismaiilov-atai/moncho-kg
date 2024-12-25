@@ -1,12 +1,12 @@
 import { useSlotsStore } from '@/stores/slots-store';
-import { DayType } from '@/types/day-types';
+import { DaysType } from '@/types/day-types';
 import { fakeSlots } from '@/lib/fakers';
 import Slots from './Slots';
 import Days from './Days';
 
 interface Props {
-  days: DayType[];
-  isPending: boolean
+  days: DaysType[];
+  isPending: boolean;
 }
 
 const Home = ({ days, isPending }: Props) => {
@@ -14,7 +14,7 @@ const Home = ({ days, isPending }: Props) => {
   return (
     <div className='flex justify-around pt-2'>
       <Days days={days} isPending={isPending} />
-      <Slots slots={isPending ? fakeSlots : slots} isPending={isPending}/>
+      <Slots slots={isPending ? fakeSlots : slots} isPending={isPending} />
     </div>
   );
 };

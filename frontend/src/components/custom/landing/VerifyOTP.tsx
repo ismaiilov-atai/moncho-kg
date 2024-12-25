@@ -3,14 +3,13 @@ import { OTP_CODE, otpSchema } from '@/types/form-types';
 import { ACCESS_TOKEN } from '@server/types/constants';
 import { useNavigate } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
-import { useAuthStore } from '@/stores/auth-store';
+import { useUserStore } from '@/stores/user-store';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { onFormSubmit } from '@/lib/utils';
-import { useForm } from '@/hooks/useForm';
 import SubmitButton from '../SubmitButton';
-import { toast } from '@/hooks/use-toast';
-import clientApi from '@/lib/clientApi';
-import { api } from '@/lib/api';
+import { useForm } from '@/hooks/useForm';
+import { api, authApi } from '@/lib/api';
+
 import {
   InputOTP,
   InputOTPGroup,
@@ -20,13 +19,15 @@ import {
 
 function VerifyOTP() {
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: clientApi.verifyOtpCode,
+    mutationFn: authApi.verifyOtpCode,
   });
   const { mutateAsync: insertUserMutation } = useMutation({
     mutationFn: api.auth.$post,
   });
 
-  const { name, phoneNumber, lastName } = useAuthStore((state) => state);
+  const { name, phoneNumber, lastName, updateUserId } = useUserStore(
+    (state) => state
+  );
   const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
@@ -48,13 +49,11 @@ function VerifyOTP() {
         });
         const data = await insertUserResponse.json();
         if (!data.isSuccess) throw insertUserResponse;
-        sessionStorage.setItem(ACCESS_TOKEN, data.token);
+        sessionStorage.setItem(ACCESS_TOKEN, data.accessToken);
+
+        updateUserId(data.userId || '');
         navigate({
           to: '/',
-        });
-        toast({
-          title: `Welcome to Moncho-KG, ${name}`,
-          description: 'All good, all well',
         });
       } catch (error) {
         throw error;

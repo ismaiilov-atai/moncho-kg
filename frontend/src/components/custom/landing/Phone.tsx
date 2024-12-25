@@ -1,16 +1,16 @@
 import { numberSchema, PhoneType } from '@/types/form-types';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { useAuthStore } from '@/stores/auth-store';
+import { useUserStore } from '@/stores/user-store';
 import { useMutation } from '@tanstack/react-query';
 import { useMask } from '@react-input/mask';
 import { ChevronDown } from 'lucide-react';
+import SubmitButton from '../SubmitButton';
 import { onFormSubmit } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { useForm } from '@/hooks/useForm';
-import SubmitButton from '../SubmitButton';
-import clientApi from '@/lib/clientApi';
 import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
+import { authApi } from '@/lib/api';
 
 const filterNumber = (phoneNumber: string): string => {
   const filteredNumber = phoneNumber.replaceAll(/[()-]/g, '');
@@ -18,7 +18,7 @@ const filterNumber = (phoneNumber: string): string => {
 };
 
 function Phone() {
-  const { updatePhoneNumber, pageCount, forwardAuthPage } = useAuthStore(
+  const { updatePhoneNumber, pageCount, forwardAuthPage } = useUserStore(
     (state) => state
   );
 
@@ -28,7 +28,7 @@ function Phone() {
   });
 
   const { mutateAsync } = useMutation({
-    mutationFn: clientApi.initOtpCode,
+    mutationFn: authApi.initOtpCode,
   });
 
   const form = useForm({

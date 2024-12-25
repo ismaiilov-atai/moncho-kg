@@ -17,10 +17,6 @@ export type Decoded = {
   payload: Payload
 }
 
-export interface InsertUserResponseType {
-  token: string, isSuccess: boolean
-}
-
 export const createUserSchema = insertUserSchema.omit({
   userId: true,
   id: true

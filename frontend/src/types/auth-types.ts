@@ -31,23 +31,8 @@ export interface VerificationReport {
   reason: string
 }
 
-export type AuthState = {
-  name: string;
-  lastName: string;
-  phoneNumber: string;
-  pageCount: number;
-}
-
-export type AuthActions = {
-  updateFirstName: (name: AuthState['name']) => void;
-  updateLastName: (lastName: AuthState['lastName']) => void;
-  updatePhoneNumber: (phoneNumber: AuthState['phoneNumber']) => void;
-  forwardAuthPage: (pageCount: AuthState['pageCount']) => void;
-  backwardsAuthPage: (pageCount: AuthState['pageCount']) => void;
-};
-
 export interface ValidatorsType {
-  onChange: z.ZodString;
-  onChangeAsyncDebounceMs: number;
-  onChangeAsync: z.ZodEffects<z.ZodString>;
+  onChange: z.ZodString
+  onChangeAsyncDebounceMs: number
+  onChangeAsync: z.ZodEffects<z.ZodString>
 }

@@ -1,11 +1,11 @@
 import { Button, buttonVariants } from '../../ui/button';
 import { useSlotsStore } from '@/stores/slots-store';
 import { Skeleton } from '@/components/ui/skeleton';
-import { DayType } from '@/types/day-types';
+import { DaysType } from '@/types/day-types';
 import moment from 'moment';
 
 interface Props {
-  days: DayType[];
+  days: DaysType[];
   isPending: boolean;
 }
 
@@ -14,7 +14,7 @@ const Days = ({ days, isPending }: Props) => {
     (state) => state
   );
 
-  const onClick = (day: DayType) => {
+  const onClick = (day: DaysType) => {
     updateSlots(day.slots);
     updateSelectedDayId(day.dayId);
   };

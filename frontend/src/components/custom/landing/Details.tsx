@@ -4,7 +4,7 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useTranslation } from 'react-i18next';
 import { User, userInfoSchema } from '@/types/form-types';
 import { onFormSubmit } from '@/lib/utils';
-import { useAuthStore } from '@/stores/auth-store';
+import { useUserStore } from '@/stores/user-store';
 import { ValidatorsType } from '@/types/auth-types';
 import { useForm } from '@/hooks/useForm';
 import SubmitButton from '../SubmitButton';
@@ -37,7 +37,7 @@ const resolveSleeper = async (value: string): Promise<boolean> => {
 function Details() {
   const { t } = useTranslation();
   const { pageCount, forwardAuthPage, updateFirstName, updateLastName } =
-    useAuthStore((state) => state);
+    useUserStore((state) => state);
   const form = useForm({
     defaultValues: {
       name: '',
