@@ -8,7 +8,13 @@ import './index.css';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 // Create a client
-const queryClient = new QueryClient(); //?
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
 
 // Create a new router instance
 const router = createRouter({

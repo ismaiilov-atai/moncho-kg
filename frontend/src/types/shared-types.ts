@@ -1,7 +1,12 @@
 import { Payload } from '@server/types/auth-types'
 
-export interface JWT_FAILURE {
+export interface GenaralError {
+  success: boolean,
   message: string
+}
+
+export interface JWT_FAILURE {
+  err: Error
 }
 
 export interface JWT_Payload {
