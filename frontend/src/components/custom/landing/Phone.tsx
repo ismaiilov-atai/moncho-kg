@@ -1,4 +1,4 @@
-import { numberSchema, PhoneType } from '@/types/form-types';
+import { numberSchema, PhoneType } from '@/types/form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useUserStore } from '@/stores/user-store';
 import { useMutation } from '@tanstack/react-query';

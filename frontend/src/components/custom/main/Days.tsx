@@ -1,7 +1,7 @@
 import { Button, buttonVariants } from '../../ui/button';
 import { useSlotsStore } from '@/stores/slots-store';
 import { Skeleton } from '@/components/ui/skeleton';
-import { DaysType } from '@/types/day-types';
+import { DaysType } from '@/types/day';
 import moment from 'moment';
 
 interface Props {

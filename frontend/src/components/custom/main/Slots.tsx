@@ -5,8 +5,8 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
-import { SlotsType } from '@/types/day-types';
 import { useEffect, useState } from 'react';
+import { SlotsType } from '@/types/day';
 import moment from 'moment';
 
 import {
@@ -15,8 +15,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog';
-import { DialogTrigger } from '@radix-ui/react-dialog';
 
 interface Props {
   slots: SlotsType[];
@@ -39,9 +39,9 @@ const Slots = ({ slots, isPending }: Props) => {
   );
   const [timeSlot, setTimeSlot] = useState<SlotsType>({} as SlotsType);
   const [reserveDialogOpen, setReserveDialog] = useState(false);
-
   const [guest, setGuest] = useState(0);
   useEffect(() => reset(), [timeSlot]);
+
   const guestNumberClick = (action: 'up' | 'down') => {
     if (action === 'up') setGuest((prev) => (prev < 9 ? (prev += 1) : prev));
     else setGuest((prev) => (prev > 0 ? (prev -= 1) : prev));
@@ -89,7 +89,7 @@ const Slots = ({ slots, isPending }: Props) => {
               </Button>
             </DialogTrigger>
 
-            <DialogContent className='w-3/4 max-h-fit rounded-sm h-1/2'>
+            <DialogContent className={`w-3/4 max-h-fit rounded-sm h-1/2 `}>
               <DialogHeader className='pt-2'>
                 <DialogTitle>Complete your reservation</DialogTitle>
                 <DialogDescription>
@@ -100,9 +100,9 @@ const Slots = ({ slots, isPending }: Props) => {
                 <div className='w-full flex flex-col items-center gap-6'>
                   <TriangleAlert className=' w-10 h-10 text-red-500' />
                   <span>Failed with reservation</span>
-                  <text className=' font-extralight text-xs text-pretty text-center'>
+                  <span className=' font-extralight text-xs text-pretty text-center'>
                     contact with support team or try to book different time
-                  </text>
+                  </span>
                 </div>
               ) : (
                 <>
@@ -144,8 +144,14 @@ const Slots = ({ slots, isPending }: Props) => {
                       </div>
 
                       <div className='w-full flex justify-end gap-2'>
-                        <Button variant={'destructive'}>Cancel</Button>
-                        <Button onClick={onClickBook}>
+                        <Button
+                          variant={'destructive'}
+                          onClick={() => setReserveDialog(false)}>
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={onClickBook}
+                          disabled={isPendingMutation}>
                           {isPendingMutation && (
                             <LoaderIcon className='w-4 h-4 animate-spin' />
                           )}

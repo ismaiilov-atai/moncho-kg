@@ -1,5 +1,5 @@
 import { JwtTokenInvalid } from 'hono/utils/jwt/types'
-import type { Payload } from '../types/auth-types'
+import type { Payload } from '../types/auth'
 import { Hono } from 'hono'
 import { db } from '../db'
 

@@ -1,5 +1,5 @@
 import { $day } from '@/lib/api'
-import { DaysType } from '@/types/day-types'
+import { DaysType } from '@/types/day'
 
 export const getDays = async (): Promise<DaysType[]> => {
   try {

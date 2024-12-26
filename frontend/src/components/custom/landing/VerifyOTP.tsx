@@ -1,5 +1,5 @@
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { OTP_CODE, otpSchema } from '@/types/form-types';
+import { OTP_CODE, otpSchema } from '@/types/form';
 import { ACCESS_TOKEN } from '@server/types/constants';
 import { useNavigate } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';

@@ -20,10 +20,10 @@ function Root() {
   const location = useLocation();
 
   return (
-    <>
+    <div className=' space-y-16'>
       {location.pathname.startsWith('/auth') || <NavBar />}
       <Outlet />
       <Toaster />
-    </>
+    </div>
   );
 }

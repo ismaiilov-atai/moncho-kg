@@ -1,4 +1,4 @@
-import type { Decoded } from '../types/auth-types'
+import type { Decoded } from '../types/auth'
 import { REFRESH_TOKEN } from '../types/constants'
 import { createMiddleware } from 'hono/factory'
 import { JWTify } from '../utils/auth-helpers'

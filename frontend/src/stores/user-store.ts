@@ -1,4 +1,4 @@
-import { UserActions, UserState } from '@/types/user-types'
+import { UserActions, UserState } from '@/types/user'
 import { create } from 'zustand/react'
 
 export const useUserStore = create<UserState & UserActions>((set) => ({

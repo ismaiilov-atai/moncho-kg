@@ -2,10 +2,10 @@ import { z } from 'zod';
 import InputWithIcon from '../InputWithIcon';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useTranslation } from 'react-i18next';
-import { User, userInfoSchema } from '@/types/form-types';
+import { User, userInfoSchema } from '@/types/form';
 import { onFormSubmit } from '@/lib/utils';
 import { useUserStore } from '@/stores/user-store';
-import { ValidatorsType } from '@/types/auth-types';
+import { ValidatorsType } from '@/types/auth';
 import { useForm } from '@/hooks/useForm';
 import SubmitButton from '../SubmitButton';
 import {

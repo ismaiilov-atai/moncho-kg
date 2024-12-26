@@ -1,8 +1,8 @@
+import type { AccessTokenUserType, NewUser, RefreshTokenUserType } from '../types/auth'
 import { users } from '../db/schema/user.sch'
 import { sign } from 'hono/jwt'
 import { db } from '../db'
 
-import type { AccessTokenUserType, NewUser, RefreshTokenUserType } from '../types/auth-types'
 
 export const insertUser = async (user: NewUser): Promise<NewUser> => {
   const newUser = await db

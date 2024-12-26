@@ -1,6 +1,6 @@
 import { insertUserSchema } from '../db/schema/user.sch'
 import { insertUser, JWTify } from '../utils/auth-helpers'
-import { createUserSchema } from '../types/auth-types'
+import { createUserSchema } from '../types/auth'
 import { REFRESH_TOKEN } from '../types/constants'
 import { zValidator } from '@hono/zod-validator'
 import { setCookie } from 'hono/cookie'

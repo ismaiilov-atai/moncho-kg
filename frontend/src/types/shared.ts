@@ -1,4 +1,4 @@
-import { Payload } from '@server/types/auth-types'
+import { Payload } from '@server/types/auth'
 
 export interface GenaralError {
   success: boolean,

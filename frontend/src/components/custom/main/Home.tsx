@@ -1,5 +1,5 @@
 import { useSlotsStore } from '@/stores/slots-store';
-import { DaysType } from '@/types/day-types';
+import { DaysType } from '@/types/day';
 import { fakeSlots } from '@/lib/fakers';
 import Slots from './Slots';
 import Days from './Days';

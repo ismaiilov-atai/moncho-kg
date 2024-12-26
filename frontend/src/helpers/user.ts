@@ -1,6 +1,6 @@
 
-import { User } from '@/types/user-types'
-import { JWT_FAILURE } from '@/types/shared-types'
+import { User } from '@/types/user'
+import { JWT_FAILURE } from '@/types/shared'
 import { $user } from '@/lib/api'
 
 /**

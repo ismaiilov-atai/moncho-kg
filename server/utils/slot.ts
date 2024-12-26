@@ -10,10 +10,11 @@ export const feedSlotsTo = async (dayId: string, date: Date) => {
       await db.insert(slots).values({
         isFull: false,
         spaceLeft: 10,
-        time: timeSlot.toDate(),
+        time: timeSlot.toISOString(false),
         dayBelongsTo: dayId,
       })
       timeSlot = timeSlot.add('1:30', 'hours')
+
     }
   } catch (error) {
     throw error
