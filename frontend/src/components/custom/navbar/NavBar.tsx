@@ -1,5 +1,6 @@
-import { DetectOnScroll } from './DetectOnScrollHOC';
+import { DetectOnScroll } from '../DetectOnScrollHOC';
 import { useUserStore } from '@/stores/user-store';
+import { useTranslation } from 'react-i18next';
 import { MenuIcon } from 'lucide-react';
 import { greeting } from '@/lib/utils';
 import { useState } from 'react';
@@ -8,6 +9,7 @@ import Menu from './Menu';
 export const NavBar = () => {
   const { name } = useUserStore((state) => state);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useTranslation();
   return (
     <>
       <div className='p-2 flex gap-2 justify-between h-full '>
@@ -15,7 +17,7 @@ export const NavBar = () => {
           <DetectOnScroll>
             <div className=' flex justify-between pl-2 pr-2 h-full items-center'>
               <span className=' font-extrabold tracking-wide text-lg font-mono ease-in'>
-                {greeting()} {name}
+                {t(greeting())} {name}
               </span>
               <MenuIcon
                 onClick={() => setMenuOpen(true)}

@@ -37,7 +37,7 @@ const Days = ({ days, isPending }: Props) => {
               variant={selectDay(day.dayId) ? 'default' : 'secondary'}
               key={day.dayId}
               onClick={() => onClick(day)}>
-              {moment(day.day).utcOffset(0).format('DD MMM')}
+              {moment(day.day).format('DD MMM')}
             </Button>
           );
         })}

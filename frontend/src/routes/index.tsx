@@ -4,14 +4,11 @@ import { daysQueryOptions, userQueryOptions } from '@/lib/api';
 import { ACCESS_TOKEN } from '@server/types/constants';
 import { useSlotsStore } from '@/stores/slots-store';
 import { useUserStore } from '@/stores/user-store';
-import { DaysType, SlotsType } from '@/types/day';
 import Home from '@/components/custom/main/Home';
+import { findSlotsByDayId } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { fakeDays } from '@/lib/fakers';
-
-const findSlotsByDayId = (dayId: string, days: DaysType[]): SlotsType[] => {
-  return days.find((day) => day.dayId === dayId)?.slots || days[0].slots;
-};
+import { DaysType } from '@/types/day';
 
 export const Route = createFileRoute('/')({
   pendingComponent: () => <Home days={fakeDays} isPending />,

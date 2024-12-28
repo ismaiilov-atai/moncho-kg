@@ -1,9 +1,9 @@
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { OTP_CODE, otpSchema } from '@/types/form';
 import { ACCESS_TOKEN } from '@server/types/constants';
 import { useNavigate } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
+import { OTP_CODE, otpSchema } from '@/types/form';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { onFormSubmit } from '@/lib/utils';
 import SubmitButton from '../SubmitButton';

@@ -1,3 +1,6 @@
 {
-  "title": "Welcome!"
+  "title": "Welcome",
+  "evening": "Good evening",
+  "afternoon": "Good afternoon",
+  "morning": "Good morning"
 }

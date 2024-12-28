@@ -1,6 +1,8 @@
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Link, useRouter } from '@tanstack/react-router';
-import { Separator } from '../ui/separator';
-import { Button } from '../ui/button';
+import { Separator } from '../../ui/separator';
+import { useTranslation } from 'react-i18next';
+import { Button } from '../../ui/button';
 import { LogOut } from 'lucide-react';
 import {
   Sheet,
@@ -12,6 +14,11 @@ import {
 } from '@/components/ui/sheet';
 
 const paths = [{ pathName: '' }];
+const locals = [
+  { key: 'ky', flag: '🇰🇬' },
+  { key: 'en', flag: '🇺🇸' },
+  { key: 'ru', flag: '🇷🇺' },
+];
 
 interface Props {
   showMenu: boolean;
@@ -20,6 +27,10 @@ interface Props {
 
 const Menu = ({ showMenu, setShowMenu }: Props) => {
   const { navigate } = useRouter();
+  const { i18n } = useTranslation();
+
+  const onlanguagechange = (lang: string) => i18n.changeLanguage(lang);
+
   return (
     <Sheet open={showMenu} onOpenChange={() => setShowMenu(!showMenu)}>
       <SheetTrigger></SheetTrigger>
@@ -41,6 +52,26 @@ const Menu = ({ showMenu, setShowMenu }: Props) => {
                 : 'Home'}
             </Link>
           ))}
+        </div>
+        <div className=' rounded-sm  pb-2'>
+          <h2>Languages</h2>
+
+          <ToggleGroup
+            type='single'
+            className=' flex justify-between'
+            onValueChange={(e) => onlanguagechange(e)}
+            defaultValue={i18n.language}>
+            {locals.map((lang) => (
+              <ToggleGroupItem
+                key={lang.key}
+                value={lang.key}
+                variant={'outline'}
+                size={'sm'}
+                className='text-4xl p-0 border-0'>
+                {lang.flag}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
         </div>
         <Button
           variant={'outline'}

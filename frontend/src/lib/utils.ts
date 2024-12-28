@@ -1,7 +1,8 @@
 import { ReactFormExtendedApi, Validator } from '@tanstack/react-form'
+import { DaysType, SlotsType } from '@/types/day'
 import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
 import { ZodType, ZodTypeDef } from 'zod'
+import { twMerge } from "tailwind-merge"
 import moment from 'moment'
 
 
@@ -18,14 +19,16 @@ export const onFormSubmit = <T>(
   form.handleSubmit()
 }
 
-export const greeting = () => {
-  const hour = moment().hour()
+export const greeting = (hour = moment().hour()) => {
   if (hour > 16) {
-    return 'Good evening'
+    return 'evening'
   } else if (hour > 11) {
-    return 'Good afternoon'
+    return 'afternoon'
   }
-  return 'Good morning'
+  return 'morning'
 }
 
+export const findSlotsByDayId = (dayId: string, days: DaysType[]): SlotsType[] => {
+  return days.find((day) => day.dayId === dayId)?.slots || days[0].slots
+};
 
