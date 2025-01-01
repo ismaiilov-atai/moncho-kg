@@ -4,10 +4,14 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      screens: {
+        desktop: '1280px',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        xs: 'calc(var(--radius) - 8px)',
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -51,14 +55,45 @@ export default {
           5: 'hsl(var(--chart-5))',
         },
       },
+      animation: {
+        'caret-blink': 'caret-blink 1.25s ease-out infinite',
+        'slide-up-and-show': 'slide-up-and-show 200ms liner',
+        'slide-down-and-hide': 'slide-down-and-hide 100ms ease-out',
+        'slide-down-and-appear': 'slide-down-and-appear 200ms ease-in',
+        'slide-up-and-disappear': 'slide-up-and-disappear 100ms ease-out',
+        'quote-slide-down': 'quote-slide-down 400ms ease-in',
+        'spin-once': 'spin-once linear infinite',
+      },
       keyframes: {
         'caret-blink': {
           '0%,70%,100%': { opacity: '1' },
           '20%,50%': { opacity: '0' },
         },
-      },
-      animation: {
-        'caret-blink': 'caret-blink 1.25s ease-out infinite',
+        'slide-up-and-show': {
+          from: { opacity: '0', height: '0', width: '0' },
+          to: { opacity: '1', height: '400px', width: '200px' },
+        },
+        'slide-down-and-hide': {
+          from: { opacity: '1', height: '400px', width: '200px' },
+          to: { opacity: '0', height: '0px', width: '0' },
+        },
+        'slide-down-and-appear': {
+          from: { opacity: '0', height: '100px', width: '8rem' },
+          to: { opacity: '1', height: '450px', width: '11rem' },
+        },
+        'slide-up-and-disappear': {
+          from: { opacity: '1', height: '450px', width: '11rem' },
+          to: { opacity: '0', height: '0', width: '8rem' },
+        },
+        'quote-slide-down': {
+          from: { opacity: '0', height: '0' },
+          '50%': { opacity: '0.5', height: '10px' },
+          to: { opacity: '1', height: '40px' },
+        },
+        'spin-once': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(180deg)' },
+        },
       },
     },
   },

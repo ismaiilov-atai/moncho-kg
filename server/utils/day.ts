@@ -14,6 +14,7 @@ export const getDaysStartingFromTodayASC = async () => {
       },
       with: {
         slots: {
+          orderBy: (slots, { asc }) => [asc(slots.time)],
           columns: {
             id: false,
             dayBelongsTo: false
@@ -43,7 +44,6 @@ export const feedDayWithSlots = async () => {
         passed: false,
         day: oneDayAhead.toDate()
       }).returning()
-
       const newDayID = newDay[0].dayId
       if (!newDay[0].day) throw new Error('Failed to create a day!')
 

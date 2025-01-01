@@ -1,14 +1,15 @@
 import { NavBar } from '@/components/custom/navbar/NavBar';
 import type { RouterContext } from '@/routerContext';
 import { Toaster } from '@/components/ui/toaster';
+import FAB from '@/components/custom/main/FAB';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment-timezone';
 import '@/lib/moment_locals';
-import moment from 'moment';
+
 import {
   createRootRouteWithContext,
   Outlet,
   useLocation,
-  useRouter,
 } from '@tanstack/react-router';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -25,18 +26,20 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function Root() {
-  const { invalidate } = useRouter();
-  const { i18n } = useTranslation();
   const location = useLocation();
-  if (i18n.language === 'ru' || 'ky') {
-    moment.locale(i18n.language);
-    invalidate();
-  }
+  const { i18n } = useTranslation();
+  moment.locale(i18n.language);
+
   return (
-    <div className=' space-y-16'>
-      {location.pathname.startsWith('/auth') || <NavBar />}
-      <Outlet />
-      <Toaster />
+    <div className='space-y-16 relative flex flex-col items-center'>
+      <header>{location.pathname.startsWith('/auth') || <NavBar />}</header>
+      <main className='w-full desktop:max-w-[60%]'>
+        <Outlet />
+        <aside className='fixed bottom-8 left-0 ml-[80%] lg:ml-[90%]'>
+          <FAB />
+        </aside>
+        <Toaster />
+      </main>
     </div>
   );
 }

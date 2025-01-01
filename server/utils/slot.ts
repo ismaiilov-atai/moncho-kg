@@ -1,4 +1,6 @@
+import type { SlotType } from '../types/reservation'
 import { slots } from '../db/schema/slot.sch'
+import { eq } from 'drizzle-orm'
 import moment from 'moment'
 import { db } from '../db'
 
@@ -19,4 +21,22 @@ export const feedSlotsTo = async (dayId: string, date: Date) => {
   } catch (error) {
     throw error
   }
+}
+
+export const updateSlotsAvailability = async ({ slotId, newAvailability }: { slotId: string, newAvailability: number }) => {
+  try {
+    await db.update(slots).set({
+      spaceLeft: newAvailability
+    }).where(eq(slots.slotId, slotId))
+  } catch (error) {
+    throw new Error('Failed to update slots availability!')
+  }
+}
+
+export const findSlotById = async (slotId: string): Promise<SlotType> => {
+  const slot = await db.query.slots.findFirst({
+    where: eq(slots.slotId, slotId),
+  })
+  if (!slot) throw new Error(`Failed to find slot: ${slotId} `)
+  return slot
 }

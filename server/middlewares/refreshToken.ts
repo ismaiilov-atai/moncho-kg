@@ -1,10 +1,12 @@
-import type { Decoded } from '../types/auth'
 import { REFRESH_TOKEN } from '../types/constants'
 import { createMiddleware } from 'hono/factory'
 import { JWTify } from '../utils/auth-helpers'
+import { findUserWithId } from '../utils/user'
+import type { Decoded } from '../types/auth'
 import type { Context, Next } from 'hono'
 import { decode, verify } from 'hono/jwt'
 import { getCookie } from 'hono/cookie'
+
 
 
 export const refreshToken = createMiddleware(async (c: Context, next: Next) => {
@@ -20,7 +22,8 @@ export const refreshToken = createMiddleware(async (c: Context, next: Next) => {
     if (refreshValid.exp || 1000 > Date.now() + 1000) {
       const req = new Request(c.req.raw)
       const { payload } = decode(refreshRawToken || '') as Decoded
-
+      const user = await findUserWithId(payload.sub)
+      if (!user) throw error
       const newAccessToken = await JWTify({
         ...payload.user
       })

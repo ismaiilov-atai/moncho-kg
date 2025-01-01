@@ -3,7 +3,7 @@ import { DaysType, SlotsType } from '@/types/day'
 import { clsx, type ClassValue } from "clsx"
 import { ZodType, ZodTypeDef } from 'zod'
 import { twMerge } from "tailwind-merge"
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 
 export function cn(...inputs: ClassValue[]) {

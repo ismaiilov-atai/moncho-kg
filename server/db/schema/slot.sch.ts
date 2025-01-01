@@ -1,10 +1,9 @@
 import { boolean, foreignKey, integer, pgTable, timestamp, uuid } from 'drizzle-orm/pg-core'
-import { number, string, z, boolean as zBoolean } from 'zod'
+import { number, string, boolean as zBoolean } from 'zod'
+import { bookingsToSlots } from './bookings_to_slots'
 import { createInsertSchema } from 'drizzle-zod'
-import { usersToSlots } from './users_to_slots'
 import { relations } from 'drizzle-orm'
 import { days } from './day.sch'
-
 
 
 export const slots = pgTable('slots', {
@@ -29,12 +28,13 @@ export const slotsRelations = relations(slots, ({ one, many }) => ({
     fields: [slots.dayBelongsTo],
     references: [days.dayId],
   }),
-  userToSlots: many(usersToSlots)
+  bookingsToSlots: many(bookingsToSlots)
+  // userToSlots: many(usersToSlots)
 }))
 
 export const insertSlot = createInsertSchema(slots, {
   slotId: string(),
   isFull: zBoolean(),
   spaceLeft: number(),
-  time: z.string(),
+  time: string(),
 })

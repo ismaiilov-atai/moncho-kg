@@ -1,5 +1,5 @@
-import moment from 'moment'
-
+import moment from 'moment-timezone'
+moment.tz.setDefault('Asia/Bishkek')
 const months = [
   "Январь",
   "Февраль",
@@ -80,7 +80,7 @@ const helpers = {
   },
 }
 
-moment.locale('ky', {
+moment.updateLocale('ky', {
   months,
   monthsShort,
   monthsParseExact: true,
@@ -115,7 +115,7 @@ moment.locale('ky', {
   ...helpers
 })
 
-moment.locale('ru', {
+moment.updateLocale('ru', {
   months,
   monthsShort,
   monthsParseExact: true,
@@ -146,6 +146,92 @@ moment.locale('ru', {
     MM: '%d месяцев',
     y: 'год',
     yy: '%d лет'
+  },
+  ...helpers
+})
+
+
+moment.updateLocale('en', {
+  months: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ],
+  monthsShort: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ],
+  monthsParseExact: true,
+  weekdays: [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ],
+  weekdaysShort: [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun"
+  ],
+  weekdaysMin: [
+    "M",
+    "T",
+    "W",
+    "T",
+    "F",
+    "S",
+    "S"
+  ],
+  weekdaysParseExact: true,
+  longDateFormat,
+  calendar: {
+    sameDay: '[Today at] LT',
+    nextDay: '[Tomorrow at] LT',
+    nextWeek: 'dddd [at] LT',
+    lastDay: '[Yesterday at] LT',
+    lastWeek: 'dddd [last week at] LT',
+    sameElse: 'L'
+  },
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: 'a few seconds',
+    m: 'a minute',
+    mm: '%d minutes',
+    h: 'an hour',
+    hh: '%d hours',
+    d: 'a day',
+    dd: '%d days',
+    M: 'a month',
+    MM: '%d months',
+    y: 'a year',
+    yy: '%d years'
   },
   ...helpers
 })

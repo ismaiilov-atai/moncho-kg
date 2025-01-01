@@ -7,6 +7,7 @@ import React from 'react';
 import './index.css';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
+import { ThemeProvider } from './components/theme-provider';
 // Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,7 +34,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n} defaultNS={'translation'}>
-        <RouterProvider router={router} />
+        <ThemeProvider defaultTheme='system' storageKey='vite-ui-theme'>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </I18nextProvider>
     </QueryClientProvider>
   </React.StrictMode>

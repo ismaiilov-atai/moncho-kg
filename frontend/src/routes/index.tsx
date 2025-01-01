@@ -21,17 +21,21 @@ export const Route = createFileRoute('/')({
         updateFirstName,
         updatePhoneNumber,
         updateLastName,
+        updateBeenTimes,
       } = useUserStore.getState();
       if (!userId) {
         const result = await queryClient.ensureQueryData(userQueryOptions);
         if ('err' in result) throw result.err;
         sessionStorage.setItem(ACCESS_TOKEN, result.token!);
         updateUserId(result.user?.userId!);
-        const reservations = result.user?.usersToSlots.map((item) => item.slot);
+        const { reservations, name, lastName, phoneNumber, beenTimes } =
+          result.user;
+
         updateReservations(reservations || []);
-        updateFirstName(result.user?.name!);
-        updateLastName(result.user?.lastName!);
-        updatePhoneNumber(result.user?.phoneNumber!);
+        updateFirstName(name!);
+        updateLastName(lastName!);
+        updatePhoneNumber(phoneNumber!);
+        updateBeenTimes(beenTimes!);
       }
     } catch (error) {
       throw error;

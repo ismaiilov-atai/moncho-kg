@@ -2,7 +2,7 @@ import { Button, buttonVariants } from '../../ui/button';
 import { useSlotsStore } from '@/stores/slots-store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DaysType } from '@/types/day';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 interface Props {
   days: DaysType[];
@@ -37,7 +37,7 @@ const Days = ({ days, isPending }: Props) => {
               variant={selectDay(day.dayId) ? 'default' : 'secondary'}
               key={day.dayId}
               onClick={() => onClick(day)}>
-              {moment(day.day).format('DD MMM')}
+              {moment(day.day).utcOffset(0).format('DD MMM')}
             </Button>
           );
         })}

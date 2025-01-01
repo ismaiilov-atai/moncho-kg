@@ -1,7 +1,6 @@
+import { BookingType } from '@server/types/reservation'
 import { InferResponseType } from 'hono/client'
-// import { SlotsType } from './day-types'
 import { $user } from '@/lib/api'
-import { SlotType } from '@server/types/reservation'
 
 export type User = InferResponseType<typeof $user.$get>
 
@@ -11,7 +10,8 @@ export type UserState = {
   lastName: string
   phoneNumber: string
   pageCount: number
-  reservations:  SlotType[]
+  reservations: BookingType[]
+  beenTimes: number
 }
 
 export type UserActions = {
@@ -22,4 +22,5 @@ export type UserActions = {
   forwardAuthPage: (pageCount: UserState['pageCount']) => void
   backwardsAuthPage: (pageCount: UserState['pageCount']) => void
   updateReservations: (slot: UserState['reservations']) => void
+  updateBeenTimes: (number: UserState['beenTimes']) => void
 }

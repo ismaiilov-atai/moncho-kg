@@ -8,12 +8,14 @@ export const useUserStore = create<UserState & UserActions>((set) => ({
   phoneNumber: '',
   pageCount: 0,
   reservations: [],
+  beenTimes: 0,
   updateUserId: (userId) => set(() => ({ userId })),
   updateFirstName: (name) => set(() => ({ name })),
   updateLastName: (lastName) => set(() => ({ lastName })),
   updatePhoneNumber: (phoneNumber) => set(() => ({ phoneNumber })),
   forwardAuthPage: (authPage) => set(() => ({ pageCount: authPage + 1 })),
   backwardsAuthPage: (authPage) => set(() => ({ pageCount: authPage - 1 })),
-  updateReservations: (reservations) => set(() => ({ reservations }))
+  updateReservations: (reservations) => set(() => ({ reservations })),
+  updateBeenTimes: (number) => set(() => ({ beenTimes: number }))
 }))
 

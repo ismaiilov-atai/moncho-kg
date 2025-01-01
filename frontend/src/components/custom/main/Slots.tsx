@@ -7,7 +7,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
 import { useEffect, useState } from 'react';
 import { SlotsType } from '@/types/day';
-import moment from 'moment';
+import moment from 'moment-timezone';
+import { cn } from '@/lib/utils';
 
 import {
   Dialog,
@@ -40,11 +41,17 @@ const Slots = ({ slots, isPending }: Props) => {
   const [timeSlot, setTimeSlot] = useState<SlotsType>({} as SlotsType);
   const [reserveDialogOpen, setReserveDialog] = useState(false);
   const [guest, setGuest] = useState(0);
-  useEffect(() => reset(), [timeSlot]);
+  useEffect(() => {
+    setGuest(0);
+    reset();
+  }, [timeSlot]);
 
   const guestNumberClick = (action: 'up' | 'down') => {
-    if (action === 'up') setGuest((prev) => (prev < 9 ? (prev += 1) : prev));
-    else setGuest((prev) => (prev > 0 ? (prev -= 1) : prev));
+    if (action === 'up' && guest < 9 && timeSlot.spaceLeft - 1 > guest) {
+      setGuest((prev) => (prev += 1));
+    } else if (action === 'down' && guest > 0) {
+      setGuest((prev) => (prev -= 1));
+    }
   };
 
   const onClickTimeSlot = (slot: SlotsType) => {
@@ -52,9 +59,18 @@ const Slots = ({ slots, isPending }: Props) => {
     setTimeSlot(slot);
   };
 
+  const timePassed = (time: string): boolean => {
+    return moment(time).isBefore(moment(), 'hour');
+  };
+
   const onClickBook = async () => {
-    const data = await mutateAsync({ userId, slotId: timeSlot.slotId });
-    const newReservation = data.reservedSlot;
+    const data = await mutateAsync({
+      userId,
+      slotId: timeSlot.slotId,
+      withYou: guest,
+    });
+
+    const newReservation = data.reservation;
 
     if (data.isSuccess) {
       updateReservations([...reservations, newReservation]);
@@ -81,7 +97,11 @@ const Slots = ({ slots, isPending }: Props) => {
             <DialogTrigger asChild>
               <Button
                 key={slot.slotId}
-                className=' text-wrap'
+                className={cn(`text-wrap`, {
+                  'pointer-events-none bg-secondary text-gray-300': timePassed(
+                    slot.time
+                  ),
+                })}
                 onClick={() => {
                   onClickTimeSlot(slot);
                 }}>
@@ -113,8 +133,13 @@ const Slots = ({ slots, isPending }: Props) => {
                     </div>
                   ) : (
                     <div className='flex flex-col gap-5 h-full justify-between '>
+                      <div className=' flex justify-between'>
+                        <span className='font-serif'>Space left:</span>
+                        <span>{timeSlot.spaceLeft - (guest + 1)}</span>
+                      </div>
+                      <Separator />
                       <div className='flex w-full justify-between'>
-                        <span className=' font-bold'>Time:</span>
+                        <span className=' font-semibold'>Time:</span>
                         <span>
                           {moment(timeSlot.time).format('HH:mm DD MMM')}
                         </span>
@@ -127,7 +152,7 @@ const Slots = ({ slots, isPending }: Props) => {
                         <div className=' flex gap-2 justify-around items-center w-1/2'>
                           <Button
                             variant={'outline'}
-                            className='h-4 w-1'
+                            className='h-4 w-1 rounded-xs'
                             onClick={() => guestNumberClick('down')}>
                             -
                           </Button>
@@ -136,7 +161,7 @@ const Slots = ({ slots, isPending }: Props) => {
                           </span>
                           <Button
                             variant={'outline'}
-                            className='h-4 w-1'
+                            className='h-4 w-1 rounded-xs'
                             onClick={() => guestNumberClick('up')}>
                             +
                           </Button>

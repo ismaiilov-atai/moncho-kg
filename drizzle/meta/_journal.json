@@ -36,6 +36,20 @@
       "when": 1734108392171,
       "tag": "0004_supreme_shen",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1735408191426,
+      "tag": "0005_broken_moon_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1735591447732,
+      "tag": "0006_plain_imperial_guard",
+      "breakpoints": true
     }
   ]
 }
