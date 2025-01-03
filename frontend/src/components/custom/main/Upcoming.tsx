@@ -8,7 +8,7 @@ const Upcoming = () => {
       <div className=' text-xl font-extrabold'>
         {reservations.length > 0 && reservations.length} Reservations
       </div>
-      <div className='h-[350px] overflow-scroll'>
+      <div className='h-[400px] overflow-scroll'>
         {reservations.length ? (
           reservations.map((slot, index) => (
             <div
