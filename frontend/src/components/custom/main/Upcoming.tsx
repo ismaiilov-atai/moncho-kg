@@ -1,4 +1,4 @@
-import { Edit2, MoreHorizontalIcon, X } from 'lucide-react';
+import { Edit2, MoreHorizontalIcon, MoreVertical, X } from 'lucide-react';
 import { useUserStore } from '@/stores/user-store';
 import moment from 'moment-timezone';
 
@@ -36,7 +36,7 @@ const Upcoming = () => {
                 <PopoverTrigger
                   asChild
                   className=' absolute right-2 top-2 bg-secondary/10 rounded-xs hover:bg-secondary h-5'>
-                  <MoreHorizontalIcon />
+                  <MoreVertical />
                 </PopoverTrigger>
                 <PopoverContent
                   className=' flex flex-col w-40 space-y-3 p-2'
