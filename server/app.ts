@@ -5,6 +5,7 @@ import { cronerJobCreator } from './utils/croner-job'
 import { HTTPException } from 'hono/http-exception'
 import { feedDayWithSlots } from './utils/day'
 import type { JwtVariables } from 'hono/jwt'
+import { checkout } from './routes/checkout'
 import { reserve } from './routes/reserve'
 import { serveStatic } from 'hono/bun'
 import { except } from 'hono/combine'
@@ -22,10 +23,11 @@ const app = new Hono<{ Variables: Variables }>()
 
 const apiRoutes = app.basePath('/api')
   .all(logger())
-  .use('/*', except('/api/auth', refreshToken, jwtMiddleware))
+  .use('/*', except(['/api/auth', 'api/checkout-session'], refreshToken, jwtMiddleware))
   .route('/auth', auth)
   .route('/user', user)
   .route('/days', home)
+  .route('/checkout-session', checkout)
   .route('/reserve', reserve)
 
 app.get('*', serveStatic({ root: './frontend/dist' }))

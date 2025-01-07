@@ -11,6 +11,7 @@ interface Props {
 
 const Home = ({ days, isPending }: Props) => {
   const { slots } = useSlotsStore((state) => state);
+
   return (
     <div className='flex justify-around pt-2'>
       <Days days={days} isPending={isPending} />
