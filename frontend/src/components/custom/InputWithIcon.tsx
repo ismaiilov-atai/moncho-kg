@@ -5,6 +5,7 @@ import { Input } from '../ui/input';
 
 interface InputWithIconProps {
   field: FieldApi<any, any, any, any>;
+  lableText?: string;
 }
 
 export function FieldInfo({ field }: InputWithIconProps) {
@@ -19,10 +20,10 @@ export function FieldInfo({ field }: InputWithIconProps) {
   );
 }
 
-function InputWithIcon({ field }: InputWithIconProps) {
+function InputWithIcon({ field, lableText }: InputWithIconProps) {
   return (
     <div>
-      <Label htmlFor={field.name}>First Name:</Label>
+      <Label htmlFor={field.name}>{lableText}</Label>
       <div className='relative'>
         <Input
           id={field.name}

@@ -12,7 +12,7 @@ export const bookings = pgTable('bookings', {
   bookingId: uuid('booking_id').defaultRandom().primaryKey().notNull(),
   withYou: integer('with_you').$default(() => 0).notNull(),
   status: statusEnum(),
-  when: timestamp('time', { mode: 'string' }).notNull(),
+  when: timestamp({ mode: 'string' }).notNull(),
   slotBelongsTo: uuid('slot_belongs_to').notNull(),
   userBelongsTo: uuid('user_belongs_to').notNull()
 })

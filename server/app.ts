@@ -23,7 +23,7 @@ const app = new Hono<{ Variables: Variables }>()
 
 const apiRoutes = app.basePath('/api')
   .all(logger())
-  .use('/*', except(['/api/auth', 'api/checkout-session'], refreshToken, jwtMiddleware))
+  .use('/*', except(['/api/auth'], refreshToken, jwtMiddleware))
   .route('/auth', auth)
   .route('/user', user)
   .route('/days', home)

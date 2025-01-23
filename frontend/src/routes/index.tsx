@@ -34,6 +34,7 @@ export const Route = createFileRoute('/')({
       const { updateStripeStatus } = useStripeStore.getState();
       if (!userId) {
         const result = await queryClient.ensureQueryData(userQueryOptions);
+
         if (search.session_id) {
           const resp = await api['checkout-session'].$get({
             query: {

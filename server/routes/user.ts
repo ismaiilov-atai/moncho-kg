@@ -2,6 +2,7 @@ import { JwtTokenInvalid } from 'hono/utils/jwt/types'
 import { findUserWithId } from '../utils/user'
 import type { Payload } from '../types/auth'
 import { Hono } from 'hono'
+import moment from 'moment'
 
 
 export const user = new Hono()
@@ -10,7 +11,9 @@ export const user = new Hono()
       const auth = c.req.header('Authorization')
       const payload = c.get('jwtPayload') as Payload
       const user = await findUserWithId(payload.sub)
-      const flattenedBookings = user?.usersToBookings.map(item => item.bookings)
+      const flattenedBookings = user?.usersToBookings
+        .map(item => item.bookings)
+        .filter(booking => moment(booking.when).isAfter(moment()) && booking)
 
       const { usersToBookings, ...rest } = { ...user }
       const mappedUser = {

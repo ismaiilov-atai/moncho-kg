@@ -1,22 +1,20 @@
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import ReservationDialogActions from '@/components/custom/resorvations/ReservationDialogActions';
+import ReservationDialogHeader from '@/components/custom/resorvations/ReservationDialogHeader';
+import { useRescheduleStore } from '@/stores/reschedule-store';
+import { rescheduleReservation } from '@/helpers/resorvation';
 import { Button, buttonVariants } from '../../ui/button';
 import CheckoutStatus from '@/components/CheckoutStatus';
 import { FormEvent, useEffect, useState } from 'react';
 import { useStripeStore } from '@/stores/stripe-store';
-import { Separator } from '@/components/ui/separator';
+import { useMutation } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useUserStore } from '@/stores/user-store';
+import { useToast } from '@/hooks/use-toast';
 import { SlotsType } from '@/types/day';
 import moment from 'moment-timezone';
 import { cn } from '@/lib/utils';
 import { api } from '@/lib/api';
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 
 interface Props {
   slots: SlotsType[];
@@ -25,13 +23,33 @@ interface Props {
 
 const Slots = ({ slots, isPending }: Props) => {
   const { stripeStatus, updateClientSecret } = useStripeStore((state) => state);
-  const [timeSlot, setTimeSlot] = useState<SlotsType>({} as SlotsType);
+  const [selectedTimeSlot, setselectedTimeSlot] = useState<SlotsType>(
+    {} as SlotsType
+  );
+
+  const { bookingToReschedule, isRescheduling, updateIsRescheduling } =
+    useRescheduleStore((state) => state);
+  const { updateRescheduledResorvation } = useUserStore((state) => state);
+
+  const {
+    mutateAsync,
+    isPending: mutationPending,
+    isError,
+    isSuccess,
+  } = useMutation({
+    mutationFn: rescheduleReservation,
+  });
+  const { toast } = useToast();
   const [reserveDialogOpen, setReserveDialog] = useState(false);
   const [guest, setGuest] = useState(0);
-  useEffect(() => setGuest(0), [timeSlot]);
+  useEffect(() => setGuest(0), [selectedTimeSlot]);
 
   const guestNumberClick = (action: 'up' | 'down') => {
-    if (action === 'up' && guest < 9 && timeSlot.spaceLeft - 1 > guest) {
+    if (
+      action === 'up' &&
+      guest < 9 &&
+      selectedTimeSlot.spaceLeft - 1 > guest
+    ) {
       setGuest((prev) => (prev += 1));
     } else if (action === 'down' && guest > 0) {
       setGuest((prev) => (prev -= 1));
@@ -40,7 +58,7 @@ const Slots = ({ slots, isPending }: Props) => {
 
   const onClickTimeSlot = (slot: SlotsType) => {
     setReserveDialog(true);
-    setTimeSlot(slot);
+    setselectedTimeSlot(slot);
   };
 
   const timePassed = (time: string): boolean => {
@@ -51,13 +69,41 @@ const Slots = ({ slots, isPending }: Props) => {
     e.preventDefault();
     const resp = await api['checkout-session'].$post({
       query: {
-        slotId: timeSlot.slotId,
+        slotId: selectedTimeSlot.slotId,
         guest,
       },
     });
     const data = await resp.json();
 
     if (data.clientSecret) updateClientSecret(data.clientSecret);
+  };
+
+  const onRescheduleAction = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = await mutateAsync({
+      bookingId: bookingToReschedule.bookingId!,
+      selectedTimeSlotId: selectedTimeSlot.slotId,
+    });
+    if (isError) {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to reschedul',
+        description: `please try again`,
+      });
+    }
+    updateRescheduledResorvation(data.reservation!);
+    setReserveDialog(false);
+    updateIsRescheduling(false);
+    if (isSuccess)
+      toast({
+        title: 'Successfully rescheduled',
+        description: `changed to: ${moment(data.reservation.when).format('MMM DD HH:mm')}`,
+      });
+  };
+
+  const onCancel = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setReserveDialog(false);
   };
 
   return (
@@ -86,61 +132,21 @@ const Slots = ({ slots, isPending }: Props) => {
               </Button>
             </DialogTrigger>
 
-            <DialogContent className={`w-3/4 max-h-fit rounded-sm h-1/2 `}>
-              <DialogHeader className='pt-2'>
-                <DialogTitle>Complete your reservation</DialogTitle>
-                <DialogDescription>
-                  Please complete your reservation
-                </DialogDescription>
-              </DialogHeader>
+            <DialogContent className='w-3/4 max-h-fit rounded-sm h-1/2 '>
+              <ReservationDialogHeader />
               {stripeStatus ? (
                 <CheckoutStatus />
               ) : (
-                <div className='flex flex-col gap-5 h-full justify-between '>
-                  <div className=' flex justify-between'>
-                    <span className='font-serif'>Space left:</span>
-                    <span>{timeSlot.spaceLeft - (guest + 1)}</span>
-                  </div>
-                  <Separator />
-                  <div className='flex w-full justify-between'>
-                    <span className=' font-semibold'>Time:</span>
-                    <span>{moment(timeSlot.time).format('HH:mm DD MMM')}</span>
-                  </div>
-                  <Separator />
-                  <div className=' flex items-center h-9 justify-between w-full '>
-                    <span className='text-pretty font-bold text-xs w-1/2 '>
-                      How many with you?
-                    </span>
-                    <div className=' flex gap-2 justify-around items-center w-1/2'>
-                      <Button
-                        variant={'outline'}
-                        className='h-4 w-1 rounded-xs'
-                        onClick={() => guestNumberClick('down')}>
-                        -
-                      </Button>
-                      <span className='font-semibold w-1 text-left'>
-                        {guest}
-                      </span>
-                      <Button
-                        variant={'outline'}
-                        className='h-4 w-1 rounded-xs'
-                        onClick={() => guestNumberClick('up')}>
-                        +
-                      </Button>
-                    </div>
-                  </div>
-                  <form
-                    onSubmit={(e) => onBoookAction(e)}
-                    className='w-full flex justify-end gap-2'>
-                    {/* <div className=''> */}
-                    <Button
-                      variant={'destructive'}
-                      onClick={() => setReserveDialog(false)}>
-                      Cancel
-                    </Button>
-                    <Button type='submit'>Book</Button>
-                  </form>
-                </div>
+                <ReservationDialogActions
+                  onSubmitAction={
+                    isRescheduling ? onRescheduleAction : onBoookAction
+                  }
+                  onCancel={onCancel}
+                  guest={guest}
+                  guestNumberClick={guestNumberClick}
+                  selectedTimeSlot={selectedTimeSlot}
+                  isPending={mutationPending}
+                />
               )}
             </DialogContent>
           </Dialog>
