@@ -1,12 +1,13 @@
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import ReservationDialogActions from '@/components/custom/resorvations/ReservationDialogActions';
 import ReservationDialogHeader from '@/components/custom/resorvations/ReservationDialogHeader';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useRescheduleStore } from '@/stores/reschedule-store';
 import { rescheduleReservation } from '@/helpers/resorvation';
 import { Button, buttonVariants } from '../../ui/button';
 import CheckoutStatus from '@/components/CheckoutStatus';
 import { FormEvent, useEffect, useState } from 'react';
 import { useStripeStore } from '@/stores/stripe-store';
+import { useSlotsStore } from '@/stores/slots-store';
 import { useMutation } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useUserStore } from '@/stores/user-store';
@@ -23,9 +24,7 @@ interface Props {
 
 const Slots = ({ slots, isPending }: Props) => {
   const { stripeStatus, updateClientSecret } = useStripeStore((state) => state);
-  const [selectedTimeSlot, setselectedTimeSlot] = useState<SlotsType>(
-    {} as SlotsType
-  );
+  const { selectedSlot, updateSelectedSlot } = useSlotsStore((state) => state);
 
   const { bookingToReschedule, isRescheduling, updateIsRescheduling } =
     useRescheduleStore((state) => state);
@@ -39,17 +38,14 @@ const Slots = ({ slots, isPending }: Props) => {
   } = useMutation({
     mutationFn: rescheduleReservation,
   });
+
   const { toast } = useToast();
   const [reserveDialogOpen, setReserveDialog] = useState(false);
   const [guest, setGuest] = useState(0);
-  useEffect(() => setGuest(0), [selectedTimeSlot]);
+  useEffect(() => setGuest(0), [selectedSlot]);
 
   const guestNumberClick = (action: 'up' | 'down') => {
-    if (
-      action === 'up' &&
-      guest < 9 &&
-      selectedTimeSlot.spaceLeft - 1 > guest
-    ) {
+    if (action === 'up' && guest < 9 && selectedSlot.spaceLeft - 1 > guest) {
       setGuest((prev) => (prev += 1));
     } else if (action === 'down' && guest > 0) {
       setGuest((prev) => (prev -= 1));
@@ -58,7 +54,7 @@ const Slots = ({ slots, isPending }: Props) => {
 
   const onClickTimeSlot = (slot: SlotsType) => {
     setReserveDialog(true);
-    setselectedTimeSlot(slot);
+    updateSelectedSlot(slot);
   };
 
   const timePassed = (time: string): boolean => {
@@ -69,7 +65,7 @@ const Slots = ({ slots, isPending }: Props) => {
     e.preventDefault();
     const resp = await api['checkout-session'].$post({
       query: {
-        slotId: selectedTimeSlot.slotId,
+        slotId: selectedSlot.slotId,
         guest,
       },
     });
@@ -82,7 +78,7 @@ const Slots = ({ slots, isPending }: Props) => {
     e.preventDefault();
     const data = await mutateAsync({
       bookingId: bookingToReschedule.bookingId!,
-      selectedTimeSlotId: selectedTimeSlot.slotId,
+      selectedTimeSlotId: selectedSlot.slotId,
     });
     if (isError) {
       toast({
@@ -90,6 +86,7 @@ const Slots = ({ slots, isPending }: Props) => {
         title: 'Failed to reschedul',
         description: `please try again`,
       });
+      return;
     }
     updateRescheduledResorvation(data.reservation!);
     setReserveDialog(false);
@@ -121,7 +118,8 @@ const Slots = ({ slots, isPending }: Props) => {
             open={reserveDialogOpen || stripeStatus.length > 0}>
             <DialogTrigger asChild>
               <Button
-                key={slot.slotId}
+                key={`_${slot.slotId}`}
+                id={`_${slot.slotId}`}
                 className={cn(`text-wrap`, {
                   'pointer-events-none bg-secondary text-gray-300': timePassed(
                     slot.time
@@ -144,7 +142,7 @@ const Slots = ({ slots, isPending }: Props) => {
                   onCancel={onCancel}
                   guest={guest}
                   guestNumberClick={guestNumberClick}
-                  selectedTimeSlot={selectedTimeSlot}
+                  selectedTimeSlot={selectedSlot}
                   isPending={mutationPending}
                 />
               )}

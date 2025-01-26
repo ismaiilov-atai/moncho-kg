@@ -1,6 +1,7 @@
 import { useRescheduleStore } from '@/stores/reschedule-store';
+import { Calendar, MoreVertical, X } from 'lucide-react';
 import { BookingType } from '@server/types/reservation';
-import { Edit2, MoreVertical, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import moment from 'moment';
 
 import {
@@ -9,7 +10,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@radix-ui/react-popover';
-import { cn } from '@/lib/utils';
 
 interface Props {
   booking: BookingType;
@@ -39,7 +39,8 @@ const UpcomingCard = ({ booking, onReschedule }: Props) => {
         ' p-3 h-16 bg-secondary/60 rounded-sm flex flex-col relative animate-quote-slide-down',
         {
           'invisible translate-y-10':
-            isRescheduling && booking.bookingId !== bookingToReschedule.bookingId,
+            isRescheduling &&
+            booking.bookingId !== bookingToReschedule.bookingId,
           'translate-y-1 ease-in duration-75':
             booking.bookingId === bookingToReschedule.bookingId,
         }
@@ -59,20 +60,22 @@ const UpcomingCard = ({ booking, onReschedule }: Props) => {
             <MoreVertical />
           )}
         </PopoverTrigger>
-        <PopoverContent className='w-40' side='left'>
-          <PopoverClose className=' flex flex-col  space-y-3 p-2 bg-primary/50 rounded-sm'>
+        <PopoverContent
+          className=' z-10 border border-secondary rounded-sm'
+          side='left'>
+          <PopoverClose className=' flex flex-col space-y-3 p-2 bg-white rounded-sm'>
             <div
               onClick={() => onReschedule(booking)}
-              className=' flex w-full space-x-2 items-center justify-between bg-secondary p-2 rounded-md hover:bg-secondary/70'>
-              <Edit2 width={18} height={18} />
+              className=' text-xs flex w-full space-x-2 items-center justify-between bg-secondary p-2 rounded-sm hover:bg-secondary/70'>
+              <Calendar width={12} height={12} />
               <span>Reschedule</span>
             </div>
 
             <div
-              className=' flex space-x-2 items-center justify-between bg-red-500 p-2 rounded-md hover:bg-red-500/70 w-full'
+              className=' text-xs flex space-x-2 items-center justify-between bg-red-500 p-2 rounded-sm hover:bg-red-500/70 w-full'
               onClick={() => updateIsRescheduling(false)}>
-              <X className=' text-white' />
-              <span className='w-full text-right text-pretty text-sm text-white'>
+              <X className=' text-white' width={12} height={12} />
+              <span className='w-full text-right text-pretty text-white'>
                 Cancel
               </span>
             </div>

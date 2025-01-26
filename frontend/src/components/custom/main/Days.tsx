@@ -19,9 +19,7 @@ const Days = ({ days, isPending }: Props) => {
     updateSelectedDayId(day.dayId);
   };
 
-  const selectDay = (dayId: string): boolean => {
-    return selectedDayId === dayId;
-  };
+  const selectDay = (dayId: string): boolean => selectedDayId === dayId;
 
   return (
     <div className='flex w-24'>
@@ -34,8 +32,9 @@ const Days = ({ days, isPending }: Props) => {
             />
           ) : (
             <Button
-              variant={selectDay(day.dayId) ? 'default' : 'secondary'}
+              id={`_${day.dayId}`}
               key={day.dayId}
+              variant={selectDay(day.dayId) ? 'default' : 'secondary'}
               onClick={() => onClick(day)}>
               {moment(day.day).utcOffset(0).format('DD MMM')}
             </Button>

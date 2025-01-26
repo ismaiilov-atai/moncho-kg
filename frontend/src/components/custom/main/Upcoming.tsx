@@ -1,18 +1,25 @@
 import { useRescheduleStore } from '@/stores/reschedule-store';
 import { BookingType } from '@server/types/reservation';
+import { useSlotsStore } from '@/stores/slots-store';
 import { useUserStore } from '@/stores/user-store';
+import { initDriverObj } from '@/lib/driver';
 import UpcomingCard from './UpcomingCard';
 import { cn } from '@/lib/utils';
 
 const Upcoming = () => {
   const { reservations } = useUserStore((state) => state);
-
+  const { selectedDayId, slots } = useSlotsStore((state) => state);
   const { isRescheduling, updateIsRescheduling, updateBookingToReschedule } =
     useRescheduleStore((state) => state);
 
   const onReschedule = (booking: BookingType) => {
     updateBookingToReschedule(booking);
     updateIsRescheduling(true);
+
+    initDriverObj([
+      selectedDayId,
+      slots[slots.length - 3 ? slots.length - 3 : 0].slotId,
+    ]).drive();
   };
 
   return (
@@ -22,7 +29,7 @@ const Upcoming = () => {
           'animate-shake': isRescheduling,
         })}>
         <span className={`${isRescheduling && ' text-red-400'}`}>
-          {isRescheduling ? 'Select the date to reschedule' : 'Reservations'}
+          {isRescheduling ? 'Rescheduling' : 'Reservations'}
         </span>
       </div>
       <div className='h-[400px] overflow-scroll space-y-2'>
