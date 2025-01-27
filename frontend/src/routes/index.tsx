@@ -1,18 +1,26 @@
 import { JwtTokenExpired, JwtTokenInvalid } from 'hono/utils/jwt/types';
-import { createFileRoute, Navigate } from '@tanstack/react-router';
-import { daysQueryOptions, userQueryOptions } from '@/lib/api';
+import { api, daysQueryOptions, userQueryOptions } from '@/lib/api';
+import { useStripeStore } from '@/stores/stripe-store';
 import { ACCESS_TOKEN } from '@server/types/constants';
 import { useSlotsStore } from '@/stores/slots-store';
 import { useUserStore } from '@/stores/user-store';
+import { StripeQueryResult } from '@/types/stripe';
 import Home from '@/components/custom/main/Home';
 import { findSlotsByDayId } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { fakeDays } from '@/lib/fakers';
 import { DaysType } from '@/types/day';
+import {
+  createFileRoute,
+  Navigate,
+  stripSearchParams,
+} from '@tanstack/react-router';
+
+const searchDefaultValues = { session_id: '', guest: 0, slotId: '' };
 
 export const Route = createFileRoute('/')({
   pendingComponent: () => <Home days={fakeDays} isPending />,
-  beforeLoad: async ({ context: { queryClient } }) => {
+  beforeLoad: async ({ context: { queryClient }, search }) => {
     try {
       const {
         updateUserId,
@@ -23,8 +31,19 @@ export const Route = createFileRoute('/')({
         updateLastName,
         updateBeenTimes,
       } = useUserStore.getState();
+      const { updateStripeStatus } = useStripeStore.getState();
       if (!userId) {
         const result = await queryClient.ensureQueryData(userQueryOptions);
+
+        if (search.session_id) {
+          const resp = await api['checkout-session'].$get({
+            query: {
+              session_id: search.session_id,
+            },
+          });
+          const payment = await resp.json();
+          updateStripeStatus(payment.status || '');
+        }
         if ('err' in result) throw result.err;
         sessionStorage.setItem(ACCESS_TOKEN, result.token!);
         updateUserId(result.user?.userId!);
@@ -61,5 +80,15 @@ export const Route = createFileRoute('/')({
     } else {
       throw error;
     }
+  },
+  validateSearch: (search: Record<string, unknown>): StripeQueryResult => {
+    return {
+      session_id: search.session_id as string,
+      guest: search.guest as number,
+      slotId: search.slotId as string,
+    };
+  },
+  search: {
+    middlewares: [stripSearchParams(searchDefaultValues)],
   },
 });

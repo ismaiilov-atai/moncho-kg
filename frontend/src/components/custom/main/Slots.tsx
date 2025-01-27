@@ -1,23 +1,21 @@
-import { CircleCheckBig, LoaderIcon, TriangleAlert } from 'lucide-react';
+import ReservationDialogActions from '@/components/custom/resorvations/ReservationDialogActions';
+import ReservationDialogHeader from '@/components/custom/resorvations/ReservationDialogHeader';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { useRescheduleStore } from '@/stores/reschedule-store';
+import { rescheduleReservation } from '@/helpers/resorvation';
 import { Button, buttonVariants } from '../../ui/button';
-import { createResevation } from '@/helpers/resorvation';
-import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
+import CheckoutStatus from '@/components/CheckoutStatus';
+import { FormEvent, useEffect, useState } from 'react';
+import { useStripeStore } from '@/stores/stripe-store';
+import { useSlotsStore } from '@/stores/slots-store';
 import { useMutation } from '@tanstack/react-query';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useUserStore } from '@/stores/user-store';
-import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import { SlotsType } from '@/types/day';
 import moment from 'moment-timezone';
 import { cn } from '@/lib/utils';
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { api } from '@/lib/api';
 
 interface Props {
   slots: SlotsType[];
@@ -25,29 +23,29 @@ interface Props {
 }
 
 const Slots = ({ slots, isPending }: Props) => {
+  const { stripeStatus, updateClientSecret } = useStripeStore((state) => state);
+  const { selectedSlot, updateSelectedSlot } = useSlotsStore((state) => state);
+
+  const { bookingToReschedule, isRescheduling, updateIsRescheduling } =
+    useRescheduleStore((state) => state);
+  const { updateRescheduledResorvation } = useUserStore((state) => state);
+
   const {
     mutateAsync,
-    isPending: isPendingMutation,
-    isSuccess,
+    isPending: mutationPending,
     isError,
-    reset,
+    isSuccess,
   } = useMutation({
-    mutationFn: createResevation,
+    mutationFn: rescheduleReservation,
   });
 
-  const { userId, updateReservations, reservations } = useUserStore(
-    (state) => state
-  );
-  const [timeSlot, setTimeSlot] = useState<SlotsType>({} as SlotsType);
+  const { toast } = useToast();
   const [reserveDialogOpen, setReserveDialog] = useState(false);
   const [guest, setGuest] = useState(0);
-  useEffect(() => {
-    setGuest(0);
-    reset();
-  }, [timeSlot]);
+  useEffect(() => setGuest(0), [selectedSlot]);
 
   const guestNumberClick = (action: 'up' | 'down') => {
-    if (action === 'up' && guest < 9 && timeSlot.spaceLeft - 1 > guest) {
+    if (action === 'up' && guest < 9 && selectedSlot.spaceLeft - 1 > guest) {
       setGuest((prev) => (prev += 1));
     } else if (action === 'down' && guest > 0) {
       setGuest((prev) => (prev -= 1));
@@ -56,29 +54,53 @@ const Slots = ({ slots, isPending }: Props) => {
 
   const onClickTimeSlot = (slot: SlotsType) => {
     setReserveDialog(true);
-    setTimeSlot(slot);
+    updateSelectedSlot(slot);
   };
 
   const timePassed = (time: string): boolean => {
     return moment(time).isBefore(moment(), 'hour');
   };
 
-  const onClickBook = async () => {
-    const data = await mutateAsync({
-      userId,
-      slotId: timeSlot.slotId,
-      withYou: guest,
+  const onBoookAction = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const resp = await api['checkout-session'].$post({
+      query: {
+        slotId: selectedSlot.slotId,
+        guest,
+      },
     });
+    const data = await resp.json();
 
-    const newReservation = data.reservation;
+    if (data.clientSecret) updateClientSecret(data.clientSecret);
+  };
 
-    if (data.isSuccess) {
-      updateReservations([...reservations, newReservation]);
-      setTimeout(() => {
-        setReserveDialog(false);
-        reset();
-      }, 1000);
+  const onRescheduleAction = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = await mutateAsync({
+      bookingId: bookingToReschedule.bookingId!,
+      selectedTimeSlotId: selectedSlot.slotId,
+    });
+    if (isError) {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to reschedul',
+        description: `please try again`,
+      });
+      return;
     }
+    updateRescheduledResorvation(data.reservation!);
+    setReserveDialog(false);
+    updateIsRescheduling(false);
+    if (isSuccess)
+      toast({
+        title: 'Successfully rescheduled',
+        description: `changed to: ${moment(data.reservation.when).format('MMM DD HH:mm')}`,
+      });
+  };
+
+  const onCancel = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setReserveDialog(false);
   };
 
   return (
@@ -87,105 +109,42 @@ const Slots = ({ slots, isPending }: Props) => {
         return isPending ? (
           <Skeleton
             className={buttonVariants({ variant: 'secondary' })}
-            key={`${slot.slotId}-${index}`}
+            key={`${slot.slotId} - ${index}`}
           />
         ) : (
           <Dialog
             key={slot.slotId}
             onOpenChange={setReserveDialog}
-            open={reserveDialogOpen}>
+            open={reserveDialogOpen || stripeStatus.length > 0}>
             <DialogTrigger asChild>
               <Button
-                key={slot.slotId}
+                key={`_${slot.slotId}`}
+                id={`_${slot.slotId}`}
                 className={cn(`text-wrap`, {
                   'pointer-events-none bg-secondary text-gray-300': timePassed(
                     slot.time
                   ),
                 })}
-                onClick={() => {
-                  onClickTimeSlot(slot);
-                }}>
+                onClick={() => onClickTimeSlot(slot)}>
                 {moment(slot.time).format('HH:mm DD')}
               </Button>
             </DialogTrigger>
 
-            <DialogContent className={`w-3/4 max-h-fit rounded-sm h-1/2 `}>
-              <DialogHeader className='pt-2'>
-                <DialogTitle>Complete your reservation</DialogTitle>
-                <DialogDescription>
-                  Please complete your reservation
-                </DialogDescription>
-              </DialogHeader>
-              {isError ? (
-                <div className='w-full flex flex-col items-center gap-6'>
-                  <TriangleAlert className=' w-10 h-10 text-red-500' />
-                  <span>Failed with reservation</span>
-                  <span className=' font-extralight text-xs text-pretty text-center'>
-                    contact with support team or try to book different time
-                  </span>
-                </div>
+            <DialogContent className='w-3/4 max-h-fit rounded-sm h-1/2 '>
+              <ReservationDialogHeader />
+              {stripeStatus ? (
+                <CheckoutStatus />
               ) : (
-                <>
-                  {isSuccess ? (
-                    <div className='w-full flex flex-col items-center gap-6'>
-                      <CircleCheckBig className=' w-10 h-10 text-green-500' />
-                      <span>Successfully completed!</span>
-                    </div>
-                  ) : (
-                    <div className='flex flex-col gap-5 h-full justify-between '>
-                      <div className=' flex justify-between'>
-                        <span className='font-serif'>Space left:</span>
-                        <span>{timeSlot.spaceLeft - (guest + 1)}</span>
-                      </div>
-                      <Separator />
-                      <div className='flex w-full justify-between'>
-                        <span className=' font-semibold'>Time:</span>
-                        <span>
-                          {moment(timeSlot.time).format('HH:mm DD MMM')}
-                        </span>
-                      </div>
-                      <Separator />
-                      <div className=' flex items-center h-9 justify-between w-full '>
-                        <span className='text-pretty font-bold text-xs w-1/2 '>
-                          How many with you?
-                        </span>
-                        <div className=' flex gap-2 justify-around items-center w-1/2'>
-                          <Button
-                            variant={'outline'}
-                            className='h-4 w-1 rounded-xs'
-                            onClick={() => guestNumberClick('down')}>
-                            -
-                          </Button>
-                          <span className='font-semibold w-1 text-left'>
-                            {guest}
-                          </span>
-                          <Button
-                            variant={'outline'}
-                            className='h-4 w-1 rounded-xs'
-                            onClick={() => guestNumberClick('up')}>
-                            +
-                          </Button>
-                        </div>
-                      </div>
-
-                      <div className='w-full flex justify-end gap-2'>
-                        <Button
-                          variant={'destructive'}
-                          onClick={() => setReserveDialog(false)}>
-                          Cancel
-                        </Button>
-                        <Button
-                          onClick={onClickBook}
-                          disabled={isPendingMutation}>
-                          {isPendingMutation && (
-                            <LoaderIcon className='w-4 h-4 animate-spin' />
-                          )}
-                          Book
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </>
+                <ReservationDialogActions
+                  onSubmitAction={
+                    isRescheduling ? onRescheduleAction : onBoookAction
+                  }
+                  onCancel={onCancel}
+                  guest={guest}
+                  guestNumberClick={guestNumberClick}
+                  selectedTimeSlot={selectedSlot}
+                  isPending={mutationPending}
+                />
               )}
             </DialogContent>
           </Dialog>

@@ -1,25 +1,45 @@
+import { useRescheduleStore } from '@/stores/reschedule-store';
+import { BookingType } from '@server/types/reservation';
+import { useSlotsStore } from '@/stores/slots-store';
 import { useUserStore } from '@/stores/user-store';
-import moment from 'moment-timezone';
+import { initDriverObj } from '@/lib/driver';
+import UpcomingCard from './UpcomingCard';
+import { cn } from '@/lib/utils';
 
 const Upcoming = () => {
   const { reservations } = useUserStore((state) => state);
+  const { selectedDayId, slots } = useSlotsStore((state) => state);
+  const { isRescheduling, updateIsRescheduling, updateBookingToReschedule } =
+    useRescheduleStore((state) => state);
+
+  const onReschedule = (booking: BookingType) => {
+    updateBookingToReschedule(booking);
+    updateIsRescheduling(true);
+
+    initDriverObj([
+      selectedDayId,
+      slots[slots.length - 3 ? slots.length - 3 : 0].slotId,
+    ]).drive();
+  };
+
   return (
-    <div className=' p-2'>
-      <div className=' text-xl font-extrabold'>
-        {reservations.length > 0 && reservations.length} Reservations
+    <div className=' p-2 space-y-3'>
+      <div
+        className={cn('text-xl font-extrabold', {
+          'animate-shake': isRescheduling,
+        })}>
+        <span className={`${isRescheduling && ' text-red-400'}`}>
+          {isRescheduling ? 'Rescheduling' : 'Reservations'}
+        </span>
       </div>
-      <div className='h-[400px] overflow-scroll'>
-        {reservations.length ? (
-          reservations.map((slot, index) => (
-            <div
-              key={slot.bookingId || '' + index}
-              className=' p-3 border-b-2 '>
-              {moment(slot.when).format('HH:mm MM/DD')}
-            </div>
-          ))
-        ) : (
-          <>No reservation</>
-        )}
+      <div className='h-[400px] overflow-scroll space-y-2'>
+        {reservations.map((booking) => (
+          <UpcomingCard
+            key={booking.bookingId}
+            booking={booking}
+            onReschedule={onReschedule}
+          />
+        ))}
       </div>
     </div>
   );

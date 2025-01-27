@@ -70,12 +70,12 @@ function Details() {
             <form.Field
               name='name'
               validators={createValidators('name')}
-              children={(field) => <InputWithIcon field={field} />}
+              children={(field) => <InputWithIcon field={field} lableText={'Name'}/>}
             />
             <form.Field
               name='lastName'
               validators={createValidators('lastName')}
-              children={(field) => <InputWithIcon field={field} />}
+              children={(field) => <InputWithIcon field={field} lableText={'Last name'}/>}
             />
           </div>
           <form.Subscribe

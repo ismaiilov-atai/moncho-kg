@@ -1,9 +1,9 @@
 import type { BookingType, SlotType, BookingIds } from '../types/reservation'
 import { bookingsToSlots } from '../db/schema/bookings_to_slots'
 import { bookingsToUsers } from '../db/schema/users_to_booking'
+import { findSlotById, updateSlotsAvailability } from './slot'
 import { bookings } from '../db/schema/booking.sch'
 import { slots } from '../db/schema/slot.sch'
-import { findSlotById, updateSlotsAvailability } from './slot'
 import { eq } from 'drizzle-orm'
 import { db } from '../db'
 
@@ -37,6 +37,36 @@ export const findReservationWithUserSlotId = async (reservedSlotId: string): Pro
     if (!slot) throw slot
     return slot
   } catch (error) {
+    throw error
+  }
+}
+
+export const findBookingById = async (bookingId: string): Promise<BookingType> => {
+  try {
+    const foundBooking = await db.query.bookings.findFirst({
+      where: eq(bookings.bookingId, bookingId),
+      columns: {
+        id: false
+      }
+    })
+    if (!foundBooking) throw foundBooking
+    return foundBooking
+  } catch (error) {
+    throw error
+  }
+}
+
+export const rescheduleBookingFromTo = async (fromId: string, toId: string): Promise<BookingType> => {
+  try {
+    const toReservation = await findSlotById(toId)
+    await db.update(bookings)
+      .set({ when: toReservation.time })
+      .where(eq(bookings.bookingId, fromId))
+
+    const updatedReso = await findBookingById(fromId)
+    return updatedReso
+  } catch (error) {
+    console.log(error)
     throw error
   }
 }

@@ -12,10 +12,10 @@ export const NavBar = () => {
 
   return (
     <>
-      <div className='p-2 flex gap-2 justify-between h-full '>
+      <div className='p-2 flex gap-2 justify-between h-full'>
         {
           <DetectOnScroll setScrolled={setScrolled}>
-            <div className=' flex justify-between items-center pl-2 pr-2 h-full desktop:w-[70%] desktop:place-self-center bg-secondary shadow-md'>
+            <div className=' flex justify-between items-center pl-2 pr-2 h-full bg-secondary shadow-md desktop:w-[70%] desktop:place-self-center desktop:bg-transparent desktop:shadow-none desktop:border-b-2 desktop:border-secondary'>
               <span
                 className={cn('flex flex-col ease-in ', {
                   'self-start': i18n.language === 'ky',

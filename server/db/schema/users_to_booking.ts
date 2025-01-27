@@ -32,6 +32,7 @@ export const bookingsToUsersRelations = relations(bookingsToUsers, ({ one }) => 
     references: [bookings.bookingId],
   })
 }))
+
 export const createBookingSchema = z.object({
   userId: string(),
   slotId: string(),

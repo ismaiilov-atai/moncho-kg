@@ -23,4 +23,5 @@ export type UserActions = {
   backwardsAuthPage: (pageCount: UserState['pageCount']) => void
   updateReservations: (slot: UserState['reservations']) => void
   updateBeenTimes: (number: UserState['beenTimes']) => void
+  updateRescheduledResorvation: (updatedBooking: BookingType) => void
 }
