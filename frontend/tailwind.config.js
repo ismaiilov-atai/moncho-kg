@@ -57,8 +57,6 @@ export default {
       },
       animation: {
         'caret-blink': 'caret-blink 1.25s ease-out infinite',
-        'slide-up-and-show': 'slide-up-and-show 200ms liner',
-        'slide-down-and-hide': 'slide-down-and-hide 100ms ease-out',
         'slide-down-and-appear': 'slide-down-and-appear 200ms ease-in',
         'slide-up-and-disappear': 'slide-up-and-disappear 100ms ease-out',
         'quote-slide-down': 'quote-slide-down 400ms ease-in',
@@ -69,14 +67,6 @@ export default {
         'caret-blink': {
           '0%,70%,100%': { opacity: '1' },
           '20%,50%': { opacity: '0' },
-        },
-        'slide-up-and-show': {
-          from: { opacity: '0', height: '0', width: '0' },
-          to: { opacity: '1', height: '400px', width: '200px' },
-        },
-        'slide-down-and-hide': {
-          from: { opacity: '1', height: '400px', width: '200px' },
-          to: { opacity: '0', height: '0px', width: '0' },
         },
         'slide-down-and-appear': {
           from: { opacity: '0', height: '100px', width: '8rem' },

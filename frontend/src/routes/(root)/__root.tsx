@@ -3,7 +3,7 @@ import { useStripeStore } from '@/stores/stripe-store';
 import type { RouterContext } from '@/routerContext';
 import StripeClient from '@/components/StripeClient';
 import { Toaster } from '@/components/ui/toaster';
-import FAB from '@/components/custom/main/FAB';
+import FAB from '@/components/custom/main/fab/FAB';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
 import '@/lib/moment_locals';

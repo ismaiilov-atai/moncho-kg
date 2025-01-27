@@ -6,6 +6,7 @@ import { PopoverClose } from '@radix-ui/react-popover';
 import { LogOut, MenuIcon, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../ui/button';
+import { motion } from 'motion/react';
 import moment from 'moment-timezone';
 
 import {
@@ -40,7 +41,16 @@ const Menu = () => {
         <div className=' flex justify-between pl-2'>
           <span className='font-extrabold text-2xl'>Menu</span>
           <PopoverClose>
-            <X className='w-7 h-7 bg-accent p-1 rounded-md' />
+            <motion.div
+              animate={{
+                rotate: -90,
+                transition: {
+                  delay: 0.14,
+                  duration: 0.1,
+                },
+              }}>
+              <X className='w-7 h-7 bg-accent p-1 rounded-md' />
+            </motion.div>
           </PopoverClose>
         </div>
         <div className='p-1 space-y-2'>

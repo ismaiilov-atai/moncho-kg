@@ -1,17 +1,19 @@
-import { getRouteApi, useNavigate } from '@tanstack/react-router';
 import { CircleCheckBig, TriangleAlert } from 'lucide-react';
 import { createResevation } from '@/helpers/resorvation';
 import { BookingType } from '@server/types/reservation';
 import { useStripeStore } from '@/stores/stripe-store';
+import { getRouteApi } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
+import { useNavHome } from '@/hooks/useNavHome';
 import { Button } from './ui/button';
 import moment from 'moment';
 
 const apiRoute = getRouteApi('/');
 
 const CheckoutStatus = () => {
-  const navigate = useNavigate();
+  const navigateHome = useNavHome();
+
   const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: createResevation,
   });
@@ -35,15 +37,7 @@ const CheckoutStatus = () => {
     });
 
     if (resp.isSuccess) {
-      navigate({
-        to: '/',
-        search: {
-          session_id: '',
-          guest: 0,
-          slotId: '',
-        },
-      });
-
+      navigateHome();
       updateReservations(updateAndSortResoLocally(resp.reservation));
     }
   };

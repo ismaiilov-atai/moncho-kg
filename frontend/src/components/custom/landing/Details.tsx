@@ -55,7 +55,7 @@ function Details() {
   });
 
   return (
-    <Card className='w-3/4 lg:max-2xl:w-1/2 h-3/4 '>
+    <Card className='w-full lg:max-2xl:w-1/2 h-3/4 '>
       <CardHeader>
         <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
@@ -70,12 +70,16 @@ function Details() {
             <form.Field
               name='name'
               validators={createValidators('name')}
-              children={(field) => <InputWithIcon field={field} lableText={'Name'}/>}
+              children={(field) => (
+                <InputWithIcon field={field} lableText={'Name'} />
+              )}
             />
             <form.Field
               name='lastName'
               validators={createValidators('lastName')}
-              children={(field) => <InputWithIcon field={field} lableText={'Last name'}/>}
+              children={(field) => (
+                <InputWithIcon field={field} lableText={'Last name'} />
+              )}
             />
           </div>
           <form.Subscribe

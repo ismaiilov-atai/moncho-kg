@@ -1,9 +1,9 @@
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { ACCESS_TOKEN } from '@server/types/constants';
-import { useNavigate } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
 import { OTP_CODE, otpSchema } from '@/types/form';
+import { useNavHome } from '@/hooks/useNavHome';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { onFormSubmit } from '@/lib/utils';
 import SubmitButton from '../SubmitButton';
@@ -28,7 +28,8 @@ function VerifyOTP() {
   const { name, phoneNumber, lastName, updateUserId } = useUserStore(
     (state) => state
   );
-  const navigate = useNavigate();
+  const navigateHome = useNavHome();
+
   const form = useForm({
     defaultValues: {
       otpCode: '',
@@ -52,9 +53,7 @@ function VerifyOTP() {
         sessionStorage.setItem(ACCESS_TOKEN, data.accessToken);
 
         updateUserId(data.userId || '');
-        navigate({
-          to: '/',
-        });
+        navigateHome();
       } catch (error) {
         throw error;
       }

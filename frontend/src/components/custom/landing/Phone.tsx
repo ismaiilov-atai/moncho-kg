@@ -58,12 +58,12 @@ function Phone() {
   };
 
   return (
-    <div className='  w-full h-full flex flex-col justify-center relative p-8 '>
+    <div className='  w-full h-full flex flex-col justify-center relative '>
       <h1 className=' absolute top-12 text-3xl tracking-wider font-extrabold'>
         Phone number
       </h1>
       <form
-        className='flex flex-col gap-4'
+        className=' w-full flex flex-col gap-4'
         onSubmit={(e) => onFormSubmit(e, form)}>
         <div>
           <form.Field
