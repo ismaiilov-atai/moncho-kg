@@ -1,6 +1,7 @@
 import { JwtTokenExpired, JwtTokenInvalid } from 'hono/utils/jwt/types'
 import { jwtMiddleware } from './middlewares/jwtMiddleware'
 import { refreshToken } from './middlewares/refreshToken'
+import type { StatusCode } from 'hono/utils/http-status'
 import { cronerJobCreator } from './utils/croner-job'
 import { HTTPException } from 'hono/http-exception'
 import { feedDayWithSlots } from './utils/day'
@@ -39,11 +40,12 @@ cronerJobCreator('0 0 * * * *', async () => {
 })
 
 app.onError((err, c) => {
-  if (err instanceof HTTPException) {
-    return c.json({ success: false, err }, err.status)
+  const initErrorJson = (statusCode: StatusCode = 500) => {
+    return c.json({ success: false, err }, statusCode)
   }
-  if (err instanceof JwtTokenInvalid || JwtTokenExpired) return c.json({ success: false, err }, 401)
-  return c.json({ success: false, err }, 500)
+  if (err instanceof HTTPException) return initErrorJson(err.status)
+  if (err instanceof JwtTokenInvalid || JwtTokenExpired) return initErrorJson(401)
+  return initErrorJson()
 })
 
 export default app

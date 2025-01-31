@@ -17,7 +17,9 @@ const FAB = () => {
         visible:
           reservations.length > 0 && !location.pathname.startsWith('/auth'),
       })}>
-      <Popover onOpenChange={(open) => setIsQR_Opened(open)} defaultOpen={isQR_Opened}>
+      <Popover
+        onOpenChange={(open) => setIsQR_Opened(open)}
+        defaultOpen={isQR_Opened}>
         <FABTrigger isQR_Opened={isQR_Opened} />
         <PopoverContent
           sideOffset={10}
@@ -37,14 +39,14 @@ const FAB = () => {
             <span className=' bg-gray-100 mx-auto -translate-y-16 rounded-xl border-gray-200 shadow-lg overflow-clip'>
               {reservations.length && (
                 <QRCode
-                  value={String(reservations[0].id)}
+                  value={String(reservations[0].bookingId)}
                   size={200}
                   quietZone={22}
                   qrStyle='dots'
                   logoImage={Logo}
                   logoHeight={180}
                   logoWidth={180}
-                  logoOpacity={0.2}
+                  logoOpacity={0.3}
                   eyeRadius={6}
                   eyeColor={{ outer: 'black', inner: '#a855f7' }}
                   ecLevel='M'

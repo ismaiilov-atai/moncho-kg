@@ -1,3 +1,4 @@
+import { JwtTokenExpired } from 'hono/utils/jwt/types'
 import { REFRESH_TOKEN } from '../types/constants'
 import { createMiddleware } from 'hono/factory'
 import { JWTify } from '../utils/auth-helpers'
@@ -15,8 +16,9 @@ export const refreshToken = createMiddleware(async (c: Context, next: Next) => {
 
   try {
     const resp = await verify(auth || '', process.env.JWT_SECRET!)
-    if (resp.exp || 1000 < Date.now() + 1000)
-      throw Error('Token has expired!')
+    if (resp.exp || 1000 < Date.now() + 1000) {
+      throw new JwtTokenExpired('')
+    }
   } catch (error) {
     const refreshValid = await verify(refreshRawToken || '', process.env.JWT_SECRET || '')
     if (refreshValid.exp || 1000 > Date.now() + 1000) {
@@ -30,7 +32,7 @@ export const refreshToken = createMiddleware(async (c: Context, next: Next) => {
 
       req.headers.set('Authorization', `Bearer ${newAccessToken}`)
       c.req.raw = req
-    }
+    } else throw new JwtTokenExpired('')
   }
   await next()
 })

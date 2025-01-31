@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.2",
+    "@types/jest": "^29.5.14",
     "croner": "^9.0.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.4",
