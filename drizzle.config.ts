@@ -6,6 +6,6 @@ export default defineConfig({
   schema: './server/db/schema',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env[process.env.NODE_ENV === 'test' ? 'TEST_DATABASE_URL' : 'DATABASE_URL']!,
+    url: process.env.DATABASE_URL!,
   },
 }) satisfies Config
