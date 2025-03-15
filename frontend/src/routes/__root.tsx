@@ -1,4 +1,5 @@
 import { NavBar } from '@/components/custom/navbar/NavBar';
+import RootPending from '@/components/custom/RootPending';
 import { useStripeStore } from '@/stores/stripe-store';
 import type { RouterContext } from '@/routerContext';
 import StripeClient from '@/components/StripeClient';
@@ -13,7 +14,7 @@ import {
   Outlet,
   useLocation,
 } from '@tanstack/react-router';
-import RootPending from '@/routes/(root)/RootPending';
+import { cn } from '@/lib/utils';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: Root,
@@ -30,9 +31,19 @@ function Root() {
   const { clientSecret } = useStripeStore((state) => state);
   if (clientSecret) return <StripeClient clientSecret={clientSecret} />;
 
+  const showNavbar = (): boolean => {
+    return (
+      location.pathname.startsWith('/auth') ||
+      location.pathname.startsWith('/onboarding')
+    );
+  };
+
   return (
-    <div className='space-y-16 relative flex flex-col items-center'>
-      <header>{location.pathname.startsWith('/auth') || <NavBar />}</header>
+    <div
+      className={cn(' relative flex flex-col items-center', {
+        'space-y-16': !showNavbar(),
+      })}>
+      <header>{showNavbar() || <NavBar />}</header>
       <main className='w-full desktop:max-w-[60%]'>
         <Outlet />
         <aside className='fixed bottom-8 left-0 ml-[80%] lg:ml-[90%]'>

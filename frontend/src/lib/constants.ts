@@ -12,3 +12,5 @@ export const themes = [
   { name: 'dark', icon: Moon },
   { name: 'system', icon: MonitorCog },
 ]
+
+export const ONBOARDING_COMPLETED = 'onboarding-completed'

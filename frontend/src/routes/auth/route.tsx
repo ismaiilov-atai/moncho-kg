@@ -1,8 +1,8 @@
-import VerifyOTP from '@/components/custom/landing/VerifyOTP';
-import Details from '@/components/custom/landing/Details';
+import VerifyOTP from '@/components/custom/signup/VerifyOTP';
+import Details from '@/components/custom/signup/Details';
 import { createFileRoute } from '@tanstack/react-router';
 import { AnimatePresence, motion } from 'motion/react';
-import Phone from '@/components/custom/landing/Phone';
+import Phone from '@/components/custom/signup/Phone';
 import { useUserStore } from '@/stores/user-store';
 
 export const Route = createFileRoute('/auth')({

@@ -2,5 +2,15 @@
   "title": "Kош келипсиз",
   "evening": "Кутман кеч",
   "afternoon": "Кутман күн",
-  "morning": "Кутман таң"
+  "morning": "Кутман таң",
+
+  "board-welcome-title": "MonchoKG-ге кош келиңиз",
+  "board-effortless-title": "Оңой брондоо",
+  "board-group-title": "Топтук жыйналыш",
+  "board-update-title": "Ыкчам жаңылоо",
+
+  "board-welcome-description": "Сауна брондоо боюнча эң мыкты тажрыйбаңыз. Бир эле баскыч менен убактыңызды брондоңуз",
+  "board-effortless-description": "Брондоонун жеңилдигин сезиңиз. Ыкчам, жөнөкөй жана түйшүксүз",
+  "board-group-description": "Баарын оңой топтогула. MonchoKG бардыгын бириктирүү үчүн жөнөкөй кылат",
+  "board-update-description": "Реалдуу убакытта жаңыланган маалымат, так ошол учурда керек болгондо"
 }

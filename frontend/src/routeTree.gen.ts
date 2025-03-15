@@ -8,13 +8,25 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
-import { Route as rootRoute } from './routes/(root)/__root'
+import { Route as rootRoute } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
 
+// Create Virtual Routes
+
+const OnboardingLazyImport = createFileRoute('/onboarding')()
+
 // Create/Update Routes
+
+const OnboardingLazyRoute = OnboardingLazyImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/onboarding.lazy').then((d) => d.Route))
 
 const AuthRouteRoute = AuthRouteImport.update({
   id: '/auth',
@@ -46,6 +58,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRoute
     }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +73,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
+  '/onboarding': typeof OnboardingLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
+  '/onboarding': typeof OnboardingLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
+  '/onboarding': typeof OnboardingLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth'
+  fullPaths: '/' | '/auth' | '/onboarding'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth'
-  id: '__root__' | '/' | '/auth'
+  to: '/' | '/auth' | '/onboarding'
+  id: '__root__' | '/' | '/auth' | '/onboarding'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRoute
+  OnboardingLazyRoute: typeof OnboardingLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRoute,
+  OnboardingLazyRoute: OnboardingLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +121,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/auth"
+        "/auth",
+        "/onboarding"
       ]
     },
     "/": {
@@ -105,6 +130,9 @@ export const routeTree = rootRoute
     },
     "/auth": {
       "filePath": "auth/route.tsx"
+    },
+    "/onboarding": {
+      "filePath": "onboarding.lazy.tsx"
     }
   }
 }
