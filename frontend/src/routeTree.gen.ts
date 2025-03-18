@@ -8,21 +8,16 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as OnboardingImport } from './routes/onboarding'
 import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
 
-// Create Virtual Routes
-
-const OnboardingLazyImport = createFileRoute('/onboarding')()
-
 // Create/Update Routes
 
-const OnboardingLazyRoute = OnboardingLazyImport.update({
+const OnboardingRoute = OnboardingImport.update({
   id: '/onboarding',
   path: '/onboarding',
   getParentRoute: () => rootRoute,
@@ -62,7 +57,7 @@ declare module '@tanstack/react-router' {
       id: '/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingLazyImport
+      preLoaderRoute: typeof OnboardingImport
       parentRoute: typeof rootRoute
     }
   }
@@ -73,20 +68,20 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
-  '/onboarding': typeof OnboardingLazyRoute
+  '/onboarding': typeof OnboardingRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
-  '/onboarding': typeof OnboardingLazyRoute
+  '/onboarding': typeof OnboardingRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
-  '/onboarding': typeof OnboardingLazyRoute
+  '/onboarding': typeof OnboardingRoute
 }
 
 export interface FileRouteTypes {
@@ -101,13 +96,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRoute
-  OnboardingLazyRoute: typeof OnboardingLazyRoute
+  OnboardingRoute: typeof OnboardingRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRoute,
-  OnboardingLazyRoute: OnboardingLazyRoute,
+  OnboardingRoute: OnboardingRoute,
 }
 
 export const routeTree = rootRoute
@@ -132,7 +127,7 @@ export const routeTree = rootRoute
       "filePath": "auth/route.tsx"
     },
     "/onboarding": {
-      "filePath": "onboarding.lazy.tsx"
+      "filePath": "onboarding.tsx"
     }
   }
 }

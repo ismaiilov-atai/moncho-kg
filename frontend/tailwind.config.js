@@ -11,6 +11,7 @@ export default {
     extend: {
       screens: {
         desktop: '1280px',
+        xs: '600px',
       },
       borderRadius: {
         lg: 'var(--radius)',

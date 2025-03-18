@@ -3,7 +3,7 @@
   "evening": "Good evening",
   "afternoon": "Good afternoon",
   "morning": "Good morning",
-  
+
   "board-welcome-title": "Welcome to MonchoKG",
   "board-effortless-title": "Effortless booking",
   "board-group-title": "Group gathering",
@@ -12,5 +12,9 @@
   "board-welcome-description": "Your ultimate sauna booking experience. Where you are one click away from booking the slot",
   "board-effortless-description": "Experience the ease of booking. Fast, simple, and stress-free reservations",
   "board-group-description": "Bring everyone together with ease. MonchoKG makes it simple to keep everyone on board",
-  "board-update-description": "Real-time updates, right when you need it"
+  "board-update-description": "Real-time updates, right when you need it",
+
+  "next": "NEXT",
+  "gotit": "GOT IT",
+  "skip": "SKIP"
 }

@@ -1,5 +1,6 @@
 import { NavBar } from '@/components/custom/navbar/NavBar';
 import RootPending from '@/components/custom/RootPending';
+import { useDeviceDetect } from '@/hooks/useDeviceDetect';
 import { useStripeStore } from '@/stores/stripe-store';
 import type { RouterContext } from '@/routerContext';
 import StripeClient from '@/components/StripeClient';
@@ -7,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster';
 import FAB from '@/components/custom/main/fab/FAB';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
+import { cn } from '@/lib/utils';
 import '@/lib/moment_locals';
 
 import {
@@ -14,7 +16,6 @@ import {
   Outlet,
   useLocation,
 } from '@tanstack/react-router';
-import { cn } from '@/lib/utils';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: Root,
@@ -30,6 +31,7 @@ function Root() {
   moment.locale(i18n.language);
   const { clientSecret } = useStripeStore((state) => state);
   if (clientSecret) return <StripeClient clientSecret={clientSecret} />;
+  useDeviceDetect();
 
   const showNavbar = (): boolean => {
     return (

@@ -4,6 +4,7 @@ import { useStripeStore } from '@/stores/stripe-store';
 import { ACCESS_TOKEN } from '@server/types/constants';
 import { useSlotsStore } from '@/stores/slots-store';
 import { useUserStore } from '@/stores/user-store';
+import { useDeviceStore } from '@/stores/device-store';
 import { StripeQueryResult } from '@/types/stripe';
 import Home from '@/components/custom/main/Home';
 import { findSlotsByDayId } from '@/lib/utils';
@@ -13,6 +14,7 @@ import { DaysType } from '@/types/day';
 import {
   createFileRoute,
   Navigate,
+  redirect,
   stripSearchParams,
 } from '@tanstack/react-router';
 import { ONBOARDING_COMPLETED } from '@/lib/constants';
@@ -33,13 +35,18 @@ export const Route = createFileRoute('/')({
         updateBeenTimes,
       } = useUserStore.getState();
 
+      const { updateStripeStatus } = useStripeStore.getState();
+      const { isMobile } = useDeviceStore.getState();
       const onboardingCompleted = localStorage.getItem(ONBOARDING_COMPLETED);
 
-      if (!onboardingCompleted) throw new Error('Onboarding');
+      if (!onboardingCompleted && isMobile) {
+        throw redirect({
+          to: '/onboarding',
+        });
+      }
 
-      const { updateStripeStatus } = useStripeStore.getState();
       if (!userId) {
-        // const result = await queryClient.ensureQueryData(userQueryOptions);
+        const result = await queryClient.ensureQueryData(userQueryOptions);
 
         if (search.session_id) {
           const resp = await api['checkout-session'].$get({
@@ -50,17 +57,17 @@ export const Route = createFileRoute('/')({
           const payment = await resp.json();
           updateStripeStatus(payment.status || '');
         }
-        // if ('err' in result) throw result.err;
-        // sessionStorage.setItem(ACCESS_TOKEN, result.token!);
-        // updateUserId(result.user?.userId!);
-        // const { reservations, name, lastName, phoneNumber, beenTimes } =
-        //   result.user;
+        if ('err' in result) throw result.err;
+        sessionStorage.setItem(ACCESS_TOKEN, result.token!);
+        updateUserId(result.user?.userId!);
+        const { reservations, name, lastName, phoneNumber, beenTimes } =
+          result.user;
 
-        // updateReservations(reservations || []);
-        // updateFirstName(name!);
-        // updateLastName(lastName!);
-        // updatePhoneNumber(phoneNumber!);
-        // updateBeenTimes(beenTimes!);
+        updateReservations(reservations || []);
+        updateFirstName(name!);
+        updateLastName(lastName!);
+        updatePhoneNumber(phoneNumber!);
+        updateBeenTimes(beenTimes!);
       }
     } catch (error) {
       throw error;
@@ -75,17 +82,16 @@ export const Route = createFileRoute('/')({
     return days;
   },
   errorComponent: ({ error }) => {
-    if (error.message === 'Onboarding') return Navigate({ to: '/onboarding' });
-    // if (error instanceof JwtTokenExpired || JwtTokenInvalid) {
-    //   toast({
-    //     title: 'Unauthorized',
-    //     description: 'Please sign-up or sign-in in order to use the app!',
-    //     variant: 'destructive',
-    //   });
-    //   return Navigate({ to: '/auth' });
-    // } else {
-    //   throw error;
-    // }
+    if (error instanceof JwtTokenExpired || JwtTokenInvalid) {
+      toast({
+        title: 'Unauthorized',
+        description: 'Please sign-up or sign-in in order to use the app!',
+        variant: 'destructive',
+      });
+      return Navigate({ to: '/auth' });
+    } else {
+      throw error;
+    }
   },
   validateSearch: (search: Record<string, unknown>): StripeQueryResult => {
     return {
