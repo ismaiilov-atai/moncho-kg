@@ -9,7 +9,6 @@ import type { JwtVariables } from 'hono/jwt'
 import { checkout } from './routes/checkout'
 import { reserve } from './routes/reserve'
 import { serveStatic } from 'hono/bun'
-import { except } from 'hono/combine'
 import { auth } from './routes/auth'
 import { logger } from 'hono/logger'
 import { user } from './routes/user'
@@ -24,7 +23,8 @@ const app = new Hono<{ Variables: Variables }>()
 
 const apiRoutes = app.basePath('/api')
   .all(logger())
-  .use('/*', except(['/api/auth'], refreshToken, jwtMiddleware))
+  // .use('/*', except(['/api/auth'], refreshToken, jwtMiddleware))
+  .use('/api/reserve', refreshToken, jwtMiddleware)
   .route('/auth', auth)
   .route('/user', user)
   .route('/days', home)
