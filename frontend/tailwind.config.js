@@ -6,7 +6,10 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     fontFamily: {
-      sans: ['Playfair', ...defaultTheme.fontFamily.sans],
+      default: [...defaultTheme.fontFamily.sans],
+      playfair: ['Playfair'],
+      arbutus: ['Arbutus'],
+      roboto: ['Roboto'],
     },
     extend: {
       screens: {
@@ -63,8 +66,8 @@ export default {
       },
       animation: {
         'caret-blink': 'caret-blink 1.25s ease-out infinite',
-        'slide-down-and-appear': 'slide-down-and-appear 200ms ease-in',
-        'slide-up-and-disappear': 'slide-up-and-disappear 100ms ease-out',
+        'slide-down-and-appear': 'slide-down-and-appear 80ms ease-in-out',
+        'slide-up-and-disappear': 'slide-up-and-disappear 50ms ease-out',
         'quote-slide-down': 'quote-slide-down 400ms ease-in',
         'spin-once': 'spin-once linear infinite',
         shake: 'shake 0.90s cubic-bezier(.36, .07, .19, .97) both',
@@ -75,12 +78,22 @@ export default {
           '20%,50%': { opacity: '0' },
         },
         'slide-down-and-appear': {
-          from: { opacity: '0', height: '100px', width: '8rem' },
+          from: { opacity: '0', height: '100px', width: '2rem' },
           to: { opacity: '1', height: '450px', width: '11rem' },
         },
         'slide-up-and-disappear': {
-          from: { opacity: '1', height: '450px', width: '11rem' },
-          to: { opacity: '0', height: '0', width: '8rem' },
+          from: {
+            opacity: '1',
+            height: '450px',
+            width: '11rem',
+            visibility: 'hidden',
+          },
+          to: {
+            opacity: '0',
+            height: '0',
+            width: '2rem',
+            visibility: 'hidden',
+          },
         },
         'quote-slide-down': {
           from: { opacity: '0', height: '0' },

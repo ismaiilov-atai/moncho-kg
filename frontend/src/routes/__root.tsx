@@ -41,11 +41,10 @@ function Root() {
   };
 
   return (
-    <div
-      className={cn(' relative flex flex-col items-center', {
-        'space-y-16': !showNavbar(),
-      })}>
-      <header>{showNavbar() || <NavBar />}</header>
+    <div className={cn(' relative flex flex-col items-center')}>
+      <header className='sticky top-0 w-screen'>
+        {showNavbar() || <NavBar />}
+      </header>
       <main className='w-full desktop:max-w-[60%]'>
         <Outlet />
         <aside className='fixed bottom-8 left-0 ml-[80%] lg:ml-[90%]'>

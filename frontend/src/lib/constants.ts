@@ -1,16 +1,21 @@
 import { MonitorCog, Moon, Sun } from 'lucide-react'
 
-export const paths = [{ pathName: '' }]
+export const paths = [
+  { displayName: 'Home', pathName: '' },
+  { displayName: 'Book a session', pathName: '/book-session' },
+  { displayName: 'Login', pathName: '/login' },
+  { displayName: 'Signup', pathName: '/signup' }
+]
 export const locals = [
-  { key: 'ky', flag: '🇰🇬' },
-  { key: 'en', flag: '🇺🇸' },
-  { key: 'ru', flag: '🇷🇺' },
+  { key: 'ky', flag: '🇰🇬', name: "Кыргыз" },
+  { key: 'en', flag: '🇺🇸', name: "English" },
+  { key: 'ru', flag: '🇷🇺', name: "Русский" },
 ]
 
 export const themes = [
-  { name: 'light', icon: Sun },
-  { name: 'dark', icon: Moon },
-  { name: 'system', icon: MonitorCog },
+  { name: 'system', icon: MonitorCog, displayName: 'Auto' },
+  { name: 'light', icon: Sun, displayName: 'Light' },
+  { name: 'dark', icon: Moon, displayName: 'Dark' },
 ]
 
 export const ONBOARDING_COMPLETED = 'onboarding-completed'

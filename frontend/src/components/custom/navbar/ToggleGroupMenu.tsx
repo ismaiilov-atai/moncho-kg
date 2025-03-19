@@ -15,7 +15,9 @@ const ToggleGroupMenu = ({
 }: Props) => {
   return (
     <div className='px-1 pb-1 rounded-sm space-y-2'>
-      <span className='font-mono text-xs'>{title}</span>
+      <span className='font-playfair font-extrabold text-sm tracking-wide'>
+        {title}
+      </span>
       <ToggleGroup
         type='single'
         className=' flex justify-evenly'
