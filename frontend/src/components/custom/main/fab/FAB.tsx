@@ -13,8 +13,8 @@ const FAB = () => {
 
   return (
     <div
-      className={cn('invisible right-1', {
-        visible:
+      className={cn('hidden right-1', {
+        'visible block':
           reservations.length > 0 && !location.pathname.startsWith('/auth'),
       })}>
       <Popover

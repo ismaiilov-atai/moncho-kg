@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [TanStackRouterVite(), react()],
+  plugins: [TanStackRouterVite({ target: 'react', autoCodeSplitting: true }), react()],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dir, "./src"),

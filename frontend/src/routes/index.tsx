@@ -4,6 +4,7 @@ import { useStripeStore } from '@/stores/stripe-store';
 import { ACCESS_TOKEN } from '@server/types/constants';
 import { useSlotsStore } from '@/stores/slots-store';
 import { useUserStore } from '@/stores/user-store';
+import { useDeviceStore } from '@/stores/device-store';
 import { StripeQueryResult } from '@/types/stripe';
 import Home from '@/components/custom/main/Home';
 import { findSlotsByDayId } from '@/lib/utils';
@@ -13,8 +14,10 @@ import { DaysType } from '@/types/day';
 import {
   createFileRoute,
   Navigate,
+  redirect,
   stripSearchParams,
 } from '@tanstack/react-router';
+import { ONBOARDING_COMPLETED } from '@/lib/constants';
 
 const searchDefaultValues = { session_id: '', guest: 0, slotId: '' };
 
@@ -31,7 +34,17 @@ export const Route = createFileRoute('/')({
         updateLastName,
         updateBeenTimes,
       } = useUserStore.getState();
+
       const { updateStripeStatus } = useStripeStore.getState();
+      const { isMobile } = useDeviceStore.getState();
+      const onboardingCompleted = localStorage.getItem(ONBOARDING_COMPLETED);
+
+      if (!onboardingCompleted && isMobile) {
+        throw redirect({
+          to: '/onboarding',
+        });
+      }
+
       if (!userId) {
         const result = await queryClient.ensureQueryData(userQueryOptions);
 
@@ -64,7 +77,6 @@ export const Route = createFileRoute('/')({
     const days = await queryClient.ensureQueryData(daysQueryOptions);
     const { updateSelectedDayId, updateSlots, selectedDayId } =
       useSlotsStore.getState();
-
     updateSelectedDayId(selectedDayId || days[0].dayId);
     updateSlots(findSlotsByDayId(selectedDayId, days as DaysType[]));
     return days;

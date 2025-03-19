@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,30 +6,30 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
+    --foreground: 26 26% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
+    --card-foreground: 26 26% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
+    --popover-foreground: 26 26% 11%;
+    --primary: 29 63% 44%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 27 100% 88%;
+    --secondary-foreground: 27 26% 36%;
+    --muted: 0 8% 94%;
+    --muted-foreground: 26 1% 50%;
+    --accent: 76 10% 92%;
+    --accent-foreground: 78 25% 31%;
+    --destructive: 357 76% 43%;
+    --destructive-foreground: 0% 0% 100%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 262.1 83.3% 57.8%;
+    --ring: 29 63% 44%;
     --radius: 0.75rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --chart-1: 173 58% 39%;
+    --chart-2: 228 58% 39%;
+    --chart-3: 281 58% 39%;
+    --chart-4: 351 58% 39%;
+    --chart-5: 32 58% 39%;
   }
 
   .dark {
