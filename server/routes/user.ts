@@ -1,5 +1,6 @@
 import { JwtTokenInvalid } from 'hono/utils/jwt/types'
 import { findUserWithId } from '../utils/user'
+import type { UserType } from '../types/user'
 import type { Payload } from '../types/auth'
 import { Hono } from 'hono'
 import moment from 'moment'
@@ -10,6 +11,8 @@ export const user = new Hono()
     try {
       const auth = c.req.header('Authorization')
       const payload = c.get('jwtPayload') as Payload
+      if (!payload) return c.json({ success: true, user: {} as UserType, token: '' })
+
       const user = await findUserWithId(payload.sub)
       const flattenedBookings = user?.usersToBookings
         .map(item => item.bookings)

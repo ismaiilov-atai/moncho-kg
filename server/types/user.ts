@@ -1,9 +1,4 @@
-interface Booking {
-  bookingId: string
-  withYou: number
-  status: "pending" | "confirmed" | "failed" | null
-  when: string
-}
+import type { BookingType } from './reservation'
 
 export interface UserType {
   name?: string | undefined
@@ -11,5 +6,5 @@ export interface UserType {
   lastName?: string | undefined
   phoneNumber?: string | undefined
   beenTimes?: number | undefined
-  reservations: Booking[]
+  reservations: BookingType[]
 }
