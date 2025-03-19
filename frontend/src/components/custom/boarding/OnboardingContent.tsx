@@ -18,7 +18,7 @@ const OnboardingContent = ({ boardingPage }: PageProps) => {
     <motion.div
       key={`_${boardingPage}`}
       className='h-full w-full flex max-xs:h-dvh items-center flex-col justify-center p-6 gap-16'
-      initial={{ x: 300, opacity: 0 }}
+      initial={boardingPage !== 0 ? { x: 300, opacity: 0 } : {}}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: -500, opacity: 0 }}
       transition={{
