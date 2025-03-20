@@ -16,5 +16,20 @@
 
   "next": "NEXT",
   "gotit": "GOT IT",
-  "skip": "SKIP"
+  "skip": "SKIP",
+
+  "Home": "Home",
+  "Book a session": "Book a session",
+  "Login": "Login",
+  "Signup": "Signup",
+
+  "Menu": "Menu",
+  "Language": "Language",
+  "Theme": "Theme",
+
+  "Auto": "Auto",
+  "Light": "Light",
+  "Dark": "Light",
+
+  "Preferences": "Preferences"
 }
