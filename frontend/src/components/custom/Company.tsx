@@ -6,9 +6,9 @@ const Company = () => {
       <img
         src={Logo}
         alt=' logo of the MonchoKG'
-        className=' h-6'
-        height={24}
-        width={24}
+        className='h-6'
+        height={32}
+        width={32}
       />
       <span className=' tracking-wide text-lg text-primary font-arbutus'>
         MonchoKG
