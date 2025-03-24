@@ -24,6 +24,7 @@ export const ContentLocal = () => {
       <DropdownMenuLabel>{t('Language')}</DropdownMenuLabel>
       {LOCALES.map(({ name, flag, key }) => (
         <DropdownMenuItem
+          key={name + key}
           onClick={() => i18n.changeLanguage(key)}
           className={cn({
             'bg-accent': key === i18n.language,
