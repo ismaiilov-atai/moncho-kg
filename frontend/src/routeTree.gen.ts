@@ -11,17 +11,12 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as OnboardingImport } from './routes/onboarding'
 import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
+import { Route as BookSessionIndexImport } from './routes/book-session/index'
+import { Route as onboardingOnboardingImport } from './routes/(onboarding)/onboarding'
 
 // Create/Update Routes
-
-const OnboardingRoute = OnboardingImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/onboarding.lazy').then((d) => d.Route))
 
 const AuthRouteRoute = AuthRouteImport.update({
   id: '/auth',
@@ -34,6 +29,24 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const BookSessionIndexRoute = BookSessionIndexImport.update({
+  id: '/book-session/',
+  path: '/book-session/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/book-session/index.lazy').then((d) => d.Route),
+)
+
+const onboardingOnboardingRoute = onboardingOnboardingImport
+  .update({
+    id: '/(onboarding)/onboarding',
+    path: '/onboarding',
+    getParentRoute: () => rootRoute,
+  } as any)
+  .lazy(() =>
+    import('./routes/(onboarding)/onboarding.lazy').then((d) => d.Route),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -53,11 +66,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRoute
     }
-    '/onboarding': {
-      id: '/onboarding'
+    '/(onboarding)/onboarding': {
+      id: '/(onboarding)/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingImport
+      preLoaderRoute: typeof onboardingOnboardingImport
+      parentRoute: typeof rootRoute
+    }
+    '/book-session/': {
+      id: '/book-session/'
+      path: '/book-session'
+      fullPath: '/book-session'
+      preLoaderRoute: typeof BookSessionIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -68,41 +88,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
-  '/onboarding': typeof OnboardingRoute
+  '/onboarding': typeof onboardingOnboardingRoute
+  '/book-session': typeof BookSessionIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
-  '/onboarding': typeof OnboardingRoute
+  '/onboarding': typeof onboardingOnboardingRoute
+  '/book-session': typeof BookSessionIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
-  '/onboarding': typeof OnboardingRoute
+  '/(onboarding)/onboarding': typeof onboardingOnboardingRoute
+  '/book-session/': typeof BookSessionIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/onboarding'
+  fullPaths: '/' | '/auth' | '/onboarding' | '/book-session'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/onboarding'
-  id: '__root__' | '/' | '/auth' | '/onboarding'
+  to: '/' | '/auth' | '/onboarding' | '/book-session'
+  id: '__root__' | '/' | '/auth' | '/(onboarding)/onboarding' | '/book-session/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRoute
-  OnboardingRoute: typeof OnboardingRoute
+  onboardingOnboardingRoute: typeof onboardingOnboardingRoute
+  BookSessionIndexRoute: typeof BookSessionIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRoute,
-  OnboardingRoute: OnboardingRoute,
+  onboardingOnboardingRoute: onboardingOnboardingRoute,
+  BookSessionIndexRoute: BookSessionIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +142,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/auth",
-        "/onboarding"
+        "/(onboarding)/onboarding",
+        "/book-session/"
       ]
     },
     "/": {
@@ -126,8 +152,11 @@ export const routeTree = rootRoute
     "/auth": {
       "filePath": "auth/route.tsx"
     },
-    "/onboarding": {
-      "filePath": "onboarding.tsx"
+    "/(onboarding)/onboarding": {
+      "filePath": "(onboarding)/onboarding.tsx"
+    },
+    "/book-session/": {
+      "filePath": "book-session/index.tsx"
     }
   }
 }

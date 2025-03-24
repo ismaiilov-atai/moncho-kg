@@ -9,11 +9,10 @@ export const Route = createLazyFileRoute('/')({
 });
 
 function RouteComponent() {
-  const days = Route.useLoaderData();
   const { isMobile } = useDeviceStore.getState();
   const onboardingCompleted = localStorage.getItem(ONBOARDING_COMPLETED);
   return (
-    <div className=' flex flex-col gap-10 pt-3'>
+    <div className=' flex flex-col gap-10 px-3 '>
       <Home />
       {!onboardingCompleted && !isMobile && <OnboardingModal />}
     </div>

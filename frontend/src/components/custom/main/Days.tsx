@@ -3,6 +3,7 @@ import { useSlotsStore } from '@/stores/slots-store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DaysType } from '@/types/day';
 import moment from 'moment-timezone';
+import { cn } from '@/lib/utils';
 
 interface Props {
   days: DaysType[];
@@ -22,21 +23,32 @@ const Days = ({ days, isPending }: Props) => {
   const selectDay = (dayId: string): boolean => selectedDayId === dayId;
 
   return (
-    <div className='flex w-24'>
-      <div className='w-20 justify-between gap-2 flex flex-col border-r-2 pl-2 pr-2 '>
+    <div className='flex w-full'>
+      <div className='w-full justify-around gap-2 flex'>
         {days.map((day, index) => {
           return isPending ? (
             <Skeleton
-              className={buttonVariants({ variant: 'secondary' })}
+              className={buttonVariants({ variant: 'link' })}
               key={`${index}-${day.dayId}`}
             />
           ) : (
             <Button
               id={`_${day.dayId}`}
               key={day.dayId}
-              variant={selectDay(day.dayId) ? 'default' : 'secondary'}
+              className={cn(
+                'flex flex-col gap-0 text-pretty max-w-11 p-1 text-foreground text-xs hover:no-underline hover:bg-accent-foreground/10 rounded-xs [&>p]:m-0 ',
+                {
+                  'bg-accent-foreground/10 text-primary': selectDay(day.dayId),
+                }
+              )}
+              variant={selectDay(day.dayId) ? 'default' : 'link'}
               onClick={() => onClick(day)}>
-              {moment(day.day).utcOffset(0).format('DD MMM')}
+              <span className=' max-xxs:hidden'>
+                {moment(day.day).format('ddd')}
+              </span>
+              <span className='text-nowrap max-xxs:text-wrap'>
+                {moment(day.day).format('DD MMM')}
+              </span>
             </Button>
           );
         })}

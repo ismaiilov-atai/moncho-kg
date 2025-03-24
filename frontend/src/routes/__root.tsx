@@ -45,7 +45,7 @@ function Root() {
       <header className='sticky top-0 w-screen'>
         {showNavbar() || <NavBar />}
       </header>
-      <main className='w-full desktop:max-w-[60%]'>
+      <main className='w-full desktop:max-w-[60%] pt-9'>
         <Outlet />
         <aside className='fixed bottom-8 left-0 ml-[80%] lg:ml-[90%]'>
           <FAB />
