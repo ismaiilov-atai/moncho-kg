@@ -23,36 +23,34 @@ const Days = ({ days, isPending }: Props) => {
   const selectDay = (dayId: string): boolean => selectedDayId === dayId;
 
   return (
-    <div className='flex w-full'>
-      <div className='w-full justify-around gap-2 flex'>
-        {days.map((day, index) => {
-          return isPending ? (
-            <Skeleton
-              className={buttonVariants({ variant: 'link' })}
-              key={`${index}-${day.dayId}`}
-            />
-          ) : (
-            <Button
-              id={`_${day.dayId}`}
-              key={day.dayId}
-              className={cn(
-                'flex flex-col gap-0 text-pretty max-w-11 p-1 text-foreground text-xs hover:no-underline hover:bg-accent-foreground/10 rounded-xs [&>p]:m-0 ',
-                {
-                  'bg-accent-foreground/10 text-primary': selectDay(day.dayId),
-                }
-              )}
-              variant={selectDay(day.dayId) ? 'default' : 'link'}
-              onClick={() => onClick(day)}>
-              <span className=' max-xxs:hidden'>
-                {moment(day.day).format('ddd')}
-              </span>
-              <span className='text-nowrap max-xxs:text-wrap'>
-                {moment(day.day).format('DD MMM')}
-              </span>
-            </Button>
-          );
-        })}
-      </div>
+    <div className='w-full md:w-[80%] self-center justify-around max-xs:gap-0 gap-2 flex'>
+      {days.map((day, index) => {
+        return isPending ? (
+          <Skeleton
+            className={buttonVariants({ variant: 'link' })}
+            key={`${index}-${day.dayId}`}
+          />
+        ) : (
+          <Button
+            id={`_${day.dayId}`}
+            key={day.dayId}
+            className={cn(
+              'flex flex-col gap-0 text-pretty max-w-11 p-1 text-foreground text-xs hover:no-underline hover:bg-accent-foreground/10 rounded-xs [&>span]:m-0  ',
+              {
+                'bg-accent-foreground/10 text-primary': selectDay(day.dayId),
+              }
+            )}
+            variant={selectDay(day.dayId) ? 'default' : 'link'}
+            onClick={() => onClick(day)}>
+            <span className=' max-xxs:hidden'>
+              {moment(day.day).format('ddd')}
+            </span>
+            <span className='text-nowrap max-xxs:text-wrap'>
+              {moment(day.day).format('DD MMM')}
+            </span>
+          </Button>
+        );
+      })}
     </div>
   );
 };

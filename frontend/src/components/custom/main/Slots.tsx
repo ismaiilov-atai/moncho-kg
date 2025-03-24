@@ -3,7 +3,6 @@ import ReservationDialogHeader from '@/components/custom/resorvations/Reservatio
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useRescheduleStore } from '@/stores/reschedule-store';
 import { rescheduleReservation } from '@/helpers/resorvation';
-import { Button, buttonVariants } from '../../ui/button';
 import CheckoutStatus from '@/components/CheckoutStatus';
 import { FormEvent, useEffect, useState } from 'react';
 import { useStripeStore } from '@/stores/stripe-store';
@@ -11,9 +10,12 @@ import { useSlotsStore } from '@/stores/slots-store';
 import { useMutation } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useUserStore } from '@/stores/user-store';
+import { buttonVariants } from '../../ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { Card } from '@/components/ui/card';
 import { SlotsType } from '@/types/day';
 import moment from 'moment-timezone';
+import { Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { api } from '@/lib/api';
 
@@ -70,7 +72,6 @@ const Slots = ({ slots, isPending }: Props) => {
       },
     });
     const data = await resp.json();
-
     if (data.clientSecret) updateClientSecret(data.clientSecret);
   };
 
@@ -104,7 +105,7 @@ const Slots = ({ slots, isPending }: Props) => {
   };
 
   return (
-    <div className=' pl-2 pr-2 grid grid-cols-3 md:grid-cols-4 gap-5 justify-between w-full '>
+    <div className=' pl-2 pr-2 grid grid-cols-1 sm:grid-cols-2 gap-2 justify-between w-full h-full'>
       {slots.map((slot, index) => {
         return isPending ? (
           <Skeleton
@@ -117,17 +118,26 @@ const Slots = ({ slots, isPending }: Props) => {
             onOpenChange={setReserveDialog}
             open={reserveDialogOpen || stripeStatus.length > 0}>
             <DialogTrigger asChild>
-              <Button
+              <Card
                 key={`_${slot.slotId}`}
                 id={`_${slot.slotId}`}
-                className={cn(`text-wrap`, {
-                  'pointer-events-none bg-secondary text-gray-300': timePassed(
-                    slot.time
-                  ),
-                })}
-                onClick={() => onClickTimeSlot(slot)}>
-                {moment(slot.time).format('HH:mm DD')}
-              </Button>
+                onClick={() => onClickTimeSlot(slot)}
+                className={cn(
+                  'h-16 justify-center flex flex-col p-3 border-muted rounded-sm shadow-sm',
+                  {
+                    'pointer-events-none hidden': timePassed(slot.time),
+                  }
+                )}>
+                <p className=' font-roboto text-lg'>
+                  {moment(slot.time).format('HH:mm')}
+                  <span> - </span>
+                  {moment(slot.time).add(1.25, 'hours').format('HH:mm')}
+                </p>
+                <p className='text-muted-foreground text-sm flex items-center space-x-2'>
+                  <Users size={16} />
+                  <p>10 of 10</p>
+                </p>
+              </Card>
             </DialogTrigger>
 
             <DialogContent className='w-3/4 max-h-fit rounded-sm h-1/2 '>

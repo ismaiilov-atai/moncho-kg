@@ -1,7 +1,7 @@
 import { MonitorCog, Moon, Sun } from 'lucide-react'
 
 export const PATHS = [
-  { displayName: 'Home', pathName: '' },
+  { displayName: 'Home', pathName: '/' },
   { displayName: 'Book a session', pathName: '/book-session' },
   { displayName: 'Login', pathName: '/login' },
   { displayName: 'Signup', pathName: '/signup' }
