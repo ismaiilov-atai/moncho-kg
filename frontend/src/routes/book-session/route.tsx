@@ -6,7 +6,7 @@ import { useSlotsStore } from '@/stores/slots-store';
 import { DaysType } from '@/types/day';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/book-session/')({
+export const Route = createFileRoute('/book-session')({
   loader: async ({ context: { queryClient } }) => {
     const days = await queryClient.ensureQueryData(daysQueryOptions);
     const { updateSelectedDayId, updateSlots, selectedDayId } =

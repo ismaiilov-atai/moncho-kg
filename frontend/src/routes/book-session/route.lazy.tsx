@@ -2,13 +2,16 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import Days from '@/components/custom/main/Days';
 import moment from 'moment-timezone';
+import { useTranslation } from 'react-i18next';
 
-export const Route = createLazyFileRoute('/book-session/')({
+export const Route = createLazyFileRoute('/book-session')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const days = Route.useLoaderData();
+  const { i18n } = useTranslation();
+  moment.locale(i18n.language);
   return (
     <section className='p-2'>
       <Card>
