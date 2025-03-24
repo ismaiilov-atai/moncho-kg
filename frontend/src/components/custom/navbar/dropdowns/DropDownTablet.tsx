@@ -1,7 +1,7 @@
 import { ContentLocal } from './DropDownLocal';
 import { ContentTheme } from './DropDownTheme';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
-import { t } from 'i18next';
 
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const DropDownTablet = () => {
+  const { t } = useTranslation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className=' text-xs space-x-1 rounded-xs px-2 border h-9 flex justify-around items-center'>

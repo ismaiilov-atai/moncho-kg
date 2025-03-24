@@ -1,13 +1,14 @@
-import { PATHS } from '@/lib/constants';
-import { Link } from '@tanstack/react-router';
-import { t } from 'i18next';
 import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import DropDownLocal from './dropdowns/DropDownLocal';
 import DropDownTheme from './dropdowns/DropDownTheme';
 import DropDownTablet from './dropdowns/DropDownTablet';
+import { useTranslation } from 'react-i18next';
+import { Link } from '@tanstack/react-router';
+import { PATHS } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 
 const LargeMenu = () => {
+  const { t } = useTranslation();
   return (
     <section className='flex justify-between w-[90%] h-full ml-8 max-md:hidden md:visible items-center'>
       <section className='space-x-3 w-[65%] md:w-full overflow-hidden'>
@@ -26,7 +27,7 @@ const LargeMenu = () => {
         <DropDownLocal />
         <DropDownTheme />
       </section>
-      <div className='lg:hidden  '>
+      <div className='lg:hidden'>
         <DropDownTablet />
       </div>
     </section>

@@ -1,8 +1,8 @@
 import { Theme, useTheme } from '@/components/theme-provider';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
 import { THEMES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-import { t } from 'i18next';
 
 import {
   DropdownMenu,
@@ -20,6 +20,7 @@ const THEME_NUMBERING: { [key: string]: number } = {
 
 export const ContentTheme = () => {
   const { theme, setTheme } = useTheme();
+  const { t } = useTranslation();
   return (
     <section className=' space-y-1'>
       <DropdownMenuLabel>{t('Theme')}</DropdownMenuLabel>
@@ -27,6 +28,7 @@ export const ContentTheme = () => {
         const Icon = icon;
         return (
           <DropdownMenuItem
+            key={displayName + name}
             onClick={() => setTheme(name as Theme)}
             className={cn({
               'bg-accent': theme === name,
@@ -42,6 +44,7 @@ export const ContentTheme = () => {
 
 const DropDownTheme = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const ThemeIcon = THEMES[THEME_NUMBERING[theme]].icon;
   return (
     <DropdownMenu>

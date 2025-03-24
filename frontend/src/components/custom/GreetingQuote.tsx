@@ -1,10 +1,10 @@
 import { useUserStore } from '@/stores/user-store';
+import { useTranslation } from 'react-i18next';
 import { greeting } from '@/lib/utils';
-import { t } from 'i18next';
 
 const GreetingQuote = () => {
   const { name } = useUserStore((state) => state);
-
+  const { t } = useTranslation();
   return (
     <section className=' space-y-[8px] '>
       <span className=' h-7 text-xl font-arbutus'>
