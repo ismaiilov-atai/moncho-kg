@@ -31,5 +31,11 @@
   "Light": "Light",
   "Dark": "Light",
 
-  "Preferences": "Preferences"
+  "Preferences": "Preferences",
+
+  "upcoming_reso_title": "Upcoming sauna reservations",
+  "no_reso_text": "You have no upcoming reservations",
+  "reward_title": "Reward",
+  "start_journey": "Start your journey!",
+  "start_jorney_description": "You can enjoy a free sauna session after every 4 reservations."
 }

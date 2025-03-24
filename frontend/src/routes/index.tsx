@@ -2,27 +2,27 @@ import { JwtTokenExpired, JwtTokenInvalid } from 'hono/utils/jwt/types';
 import { api, daysQueryOptions, userQueryOptions } from '@/lib/api';
 import { useStripeStore } from '@/stores/stripe-store';
 import { ACCESS_TOKEN } from '@server/types/constants';
+import { useDeviceStore } from '@/stores/device-store';
+import { ONBOARDING_COMPLETED } from '@/lib/constants';
 import { useSlotsStore } from '@/stores/slots-store';
 import { useUserStore } from '@/stores/user-store';
-import { useDeviceStore } from '@/stores/device-store';
 import { StripeQueryResult } from '@/types/stripe';
 import Home from '@/components/custom/main/Home';
 import { findSlotsByDayId } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
-import { fakeDays } from '@/lib/fakers';
 import { DaysType } from '@/types/day';
+
 import {
   createFileRoute,
   Navigate,
   redirect,
   stripSearchParams,
 } from '@tanstack/react-router';
-import { ONBOARDING_COMPLETED } from '@/lib/constants';
 
 const searchDefaultValues = { session_id: '', guest: 0, slotId: '' };
 
 export const Route = createFileRoute('/')({
-  pendingComponent: () => <Home days={fakeDays} isPending />,
+  pendingComponent: () => <Home />,
   beforeLoad: async ({ context: { queryClient }, search }) => {
     try {
       const {
