@@ -4,6 +4,14 @@
   "afternoon": "Кутман күн",
   "morning": "Кутман таң",
 
+  "name": "Атыңыз",
+  "last-name": "Фамилия",
+  "submit": "кийинки",
+
+  "signup-toast-description": "Ээлеп коюу үчүн катталууңуз абзел!",
+
+  "0-signup-description": "MonchoKG-ге кош келиңиз! Бизге кошулуп өзгөчө мүмкүнчүлүктөргө ээ болуңуз!",
+
   "board-welcome-title": "MonchoKG-ге кош келиңиз",
   "board-effortless-title": "Оңой брондоо",
   "board-group-title": "Топтук жыйналыш",
@@ -37,5 +45,7 @@
   "no_reso_text": "Алдыдагы ээлеген убактылар жок",
   "reward_title": "Сыйлоо бурчу",
   "start_journey": "Кадамыңыды баштаңыз!",
-  "start_jorney_description": "Ар бир 4 резервациядан кийин, 1 акысыз мончо бизден белек."
+  "start_jorney_description": "Ар бир 4 резервациядан кийин, 1 акысыз мончо бизден белек.",
+
+  "of": "киши"
 }

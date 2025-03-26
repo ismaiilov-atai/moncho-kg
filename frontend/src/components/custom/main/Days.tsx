@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 interface Props {
   days: DaysType[];
-  isPending: boolean;
+  isPending?: boolean;
 }
 
 const Days = ({ days, isPending }: Props) => {
@@ -27,7 +27,7 @@ const Days = ({ days, isPending }: Props) => {
       {days.map((day, index) => {
         return isPending ? (
           <Skeleton
-            className={buttonVariants({ variant: 'link' })}
+            className={cn(buttonVariants({ variant: 'link' }), 'w-6')}
             key={`${index}-${day.dayId}`}
           />
         ) : (

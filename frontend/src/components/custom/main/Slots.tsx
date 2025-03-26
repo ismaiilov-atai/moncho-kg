@@ -6,11 +6,13 @@ import { rescheduleReservation } from '@/helpers/resorvation';
 import CheckoutStatus from '@/components/CheckoutStatus';
 import { FormEvent, useEffect, useState } from 'react';
 import { useStripeStore } from '@/stores/stripe-store';
+import { useNavigate } from '@tanstack/react-router';
 import { useSlotsStore } from '@/stores/slots-store';
-import { useMutation } from '@tanstack/react-query';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
 import { buttonVariants } from '../../ui/button';
+import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
 import { Card } from '@/components/ui/card';
 import { SlotsType } from '@/types/day';
@@ -21,13 +23,14 @@ import { api } from '@/lib/api';
 
 interface Props {
   slots: SlotsType[];
-  isPending: boolean;
+  isPending?: boolean;
 }
 
 const Slots = ({ slots, isPending }: Props) => {
+  const { t } = useTranslation();
   const { stripeStatus, updateClientSecret } = useStripeStore((state) => state);
   const { selectedSlot, updateSelectedSlot } = useSlotsStore((state) => state);
-
+  const { name, lastName, phoneNumber } = useUserStore((state) => state);
   const { bookingToReschedule, isRescheduling, updateIsRescheduling } =
     useRescheduleStore((state) => state);
   const { updateRescheduledResorvation } = useUserStore((state) => state);
@@ -40,7 +43,7 @@ const Slots = ({ slots, isPending }: Props) => {
   } = useMutation({
     mutationFn: rescheduleReservation,
   });
-
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [reserveDialogOpen, setReserveDialog] = useState(false);
   const [guest, setGuest] = useState(0);
@@ -55,8 +58,9 @@ const Slots = ({ slots, isPending }: Props) => {
   };
 
   const onClickTimeSlot = (slot: SlotsType) => {
-    setReserveDialog(true);
     updateSelectedSlot(slot);
+    if (name && phoneNumber) setReserveDialog(true);
+    else navigate({ to: '/auth' });
   };
 
   const timePassed = (time: string): boolean => {
@@ -99,34 +103,39 @@ const Slots = ({ slots, isPending }: Props) => {
       });
   };
 
+  const onOpenChangeListener = (dialogState: boolean) => {
+    name && lastName && setReserveDialog(dialogState);
+  };
+
   const onCancel = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setReserveDialog(false);
   };
 
   return (
-    <div className=' pl-2 pr-2 grid grid-cols-1 sm:grid-cols-2 gap-2 justify-between w-full h-full'>
+    <div className=' pl-2 pr-2 grid grid-cols-1 sm:grid-cols-2 gap-4 justify-between w-full h-full'>
       {slots.map((slot, index) => {
         return isPending ? (
           <Skeleton
-            className={buttonVariants({ variant: 'secondary' })}
+            className={cn(buttonVariants({ variant: 'link' }))}
             key={`${slot.slotId} - ${index}`}
           />
         ) : (
           <Dialog
             key={slot.slotId}
-            onOpenChange={setReserveDialog}
-            open={reserveDialogOpen || stripeStatus.length > 0}>
+            onOpenChange={onOpenChangeListener}
+            open={
+              (Object.hasOwn(selectedSlot, 'time') && reserveDialogOpen) ||
+              stripeStatus.length > 0
+            }>
             <DialogTrigger asChild>
               <Card
                 key={`_${slot.slotId}`}
                 id={`_${slot.slotId}`}
                 onClick={() => onClickTimeSlot(slot)}
                 className={cn(
-                  'h-16 justify-center flex flex-col p-3 border-muted rounded-sm shadow-sm',
-                  {
-                    'pointer-events-none hidden': timePassed(slot.time),
-                  }
+                  'h-16 justify-center flex flex-col p-3 border-muted rounded-sm shadow-sm hover:bg-accent/30',
+                  { 'pointer-events-none hidden': timePassed(slot.time) }
                 )}>
                 <p className=' font-roboto text-lg'>
                   {moment(slot.time).format('HH:mm')}
@@ -135,7 +144,7 @@ const Slots = ({ slots, isPending }: Props) => {
                 </p>
                 <p className='text-muted-foreground text-sm flex items-center space-x-2'>
                   <Users size={16} />
-                  <p>10 of 10</p>
+                  <span>10 {t('of')} 10</span>
                 </p>
               </Card>
             </DialogTrigger>

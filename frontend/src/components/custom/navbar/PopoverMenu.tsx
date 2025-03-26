@@ -60,6 +60,7 @@ const PopoverMenu = () => {
             {PATHS.map(({ displayName, pathName }) => (
               <Link
                 to={`${pathName}`}
+                preload='intent'
                 className={` p-2 rounded-xs text-left content-start items-start [&.active]:bg-accent hover:bg-accent/50`}
                 key={pathName}>
                 {t(displayName)}

@@ -36,3 +36,13 @@ export interface ValidatorsType {
   onChangeAsyncDebounceMs: number
   onChangeAsync: z.ZodEffects<z.ZodString>
 }
+
+export interface AuthPageState {
+  authPageCount: number
+  isComingBack: boolean
+}
+
+export interface AuthPageStateActions {
+  forwardAuthPageCount: (number: AuthPageState['authPageCount']) => void
+  backwordAuthPageCount: (number: AuthPageState['authPageCount']) => void
+}

@@ -15,6 +15,7 @@ const LargeMenu = () => {
         {PATHS.map(({ displayName, pathName }) => (
           <Link
             to={`${pathName}`}
+            preload='intent'
             className={cn(
               `${buttonVariants({ variant: 'link' })}  [&.active]:text-foreground p-0 py-2   text-sm text-muted-foreground hover:text-foreground hover:no-underline items-end`
             )}

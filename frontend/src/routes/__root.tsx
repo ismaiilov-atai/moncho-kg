@@ -1,3 +1,4 @@
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { NavBar } from '@/components/custom/navbar/NavBar';
 import RootPending from '@/components/custom/RootPending';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
@@ -34,10 +35,7 @@ function Root() {
   useDeviceDetect();
 
   const showNavbar = (): boolean => {
-    return (
-      location.pathname.startsWith('/auth') ||
-      location.pathname.startsWith('/onboarding')
-    );
+    return location.pathname.startsWith('/onboarding');
   };
 
   return (
@@ -45,13 +43,14 @@ function Root() {
       <header className='sticky top-0 w-screen'>
         {showNavbar() || <NavBar />}
       </header>
-      <main className='w-full desktop:max-w-[60%] pt-9'>
+      <main className='w-full desktop:max-w-[60%] md:mt-9'>
         <Outlet />
         <aside className='fixed bottom-8 left-0 ml-[80%] lg:ml-[90%]'>
           <FAB />
         </aside>
         <Toaster />
       </main>
+      <TanStackRouterDevtools />
     </div>
   );
 }

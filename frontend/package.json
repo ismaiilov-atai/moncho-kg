@@ -53,6 +53,7 @@
     "@stripe/react-stripe-js": "^3.0.0",
     "@stripe/stripe-js": "^5.2.0",
     "@tanstack/eslint-plugin-query": "^5.61.4",
+    "@tanstack/react-router-devtools": "^1.114.27",
     "@tanstack/router-devtools": "^1.84.0",
     "@tanstack/router-plugin": "^1.114.17",
     "@types/node": "^22.9.3",

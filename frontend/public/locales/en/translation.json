@@ -4,6 +4,14 @@
   "afternoon": "Good afternoon",
   "morning": "Good morning",
 
+  "name": "name",
+  "last-name": "Last name",
+  "submit": "submit",
+
+  "signup-toast-description": "Please sign-up to make a reservation!",
+
+  "0-signup-description": "Welcome to Moncho-KG! Join Us and Unlock Exclusive Features!",
+
   "board-welcome-title": "Welcome to MonchoKG",
   "board-effortless-title": "Effortless booking",
   "board-group-title": "Group gathering",
@@ -37,5 +45,7 @@
   "no_reso_text": "You have no upcoming reservations",
   "reward_title": "Reward",
   "start_journey": "Start your journey!",
-  "start_jorney_description": "You can enjoy a free sauna session after every 4 reservations."
+  "start_jorney_description": "You can enjoy a free sauna session after every 4 reservations.",
+
+  "of": "of"
 }
