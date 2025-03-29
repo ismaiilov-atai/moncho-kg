@@ -8,7 +8,7 @@ export default {
     fontFamily: {
       default: [...defaultTheme.fontFamily.sans],
       playfair: ['Playfair'],
-      arbutus: ['Arbutus'],
+      arbutus: ['Arbutus Slab'],
       roboto: ['Roboto'],
     },
     extend: {

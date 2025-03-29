@@ -5,11 +5,11 @@ import { createFileRoute } from '@tanstack/react-router';
 import Phone from '@/components/custom/signup/Phone';
 import { useSlotsStore } from '@/stores/slots-store';
 import { useAuthStore } from '@/stores/signup-store';
+import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks/use-toast';
-import { MoveLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { t } from 'i18next';
 
 const variants = {
   enter: (direction: boolean) => ({
@@ -28,6 +28,7 @@ export const Route = createFileRoute('/auth')({
 });
 
 function AuthComponent() {
+  const { t } = useTranslation();
   const { authPageCount, backwordAuthPageCount, isComingBack } = useAuthStore(
     (state) => state
   );
@@ -49,11 +50,11 @@ function AuthComponent() {
       <section
         onClick={() => backwordAuthPageCount(authPageCount)}
         className={cn(
-          ' sm:absolute max-sm:mt-2 max-sm:ml-2 self-start left-3 lg:left-[10%] top-[8%] flex gap-3 items-center hover:bg-accent/40 p-2 rounded-sm visible text-muted-foreground',
+          ' sm:absolute max-sm:mt-2 max-sm:bg-muted/20 max-sm:ml-2 self-start left-3 lg:left-[10%] top-[8%] flex gap-2 items-center hover:bg-accent/40 p-2 rounded-sm visible text-muted-foreground',
           { ' hidden ': authPageCount === 0 }
         )}>
-        <MoveLeft />
-        <p>Back</p>
+        <ArrowLeft />
+        <p>{t('back')}</p>
       </section>
       <AnimatePresence mode='wait' custom={isComingBack}>
         <motion.div

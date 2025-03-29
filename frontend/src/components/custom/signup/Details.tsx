@@ -41,11 +41,13 @@ function Details() {
   const { authPageCount, forwardAuthPageCount } = useAuthStore(
     (state) => state
   );
-  const { updateFirstName, updateLastName } = useUserStore((state) => state);
+  const { updateFirstName, updateLastName, name, lastName } = useUserStore(
+    (state) => state
+  );
   const form = useForm({
     defaultValues: {
-      name: '',
-      lastName: '',
+      name: name || '',
+      lastName: lastName || '',
     } as User,
     onSubmit: async (value) => {
       updateFirstName(value.name);
@@ -77,7 +79,9 @@ function Details() {
   return (
     <Card className=' h-full max-sm:w-screen w-full max-sm:border-none max-sm:rounded-none max-sm:shadow-none'>
       <CardHeader>
-        <CardTitle>{t(`Signup`)}</CardTitle>
+        <CardTitle className=' font-arbutus font-normal'>
+          {t(`Signup`)}
+        </CardTitle>
         <CardDescription className='text-balance'>
           {separateDescription(t(`${authPageCount}-signup-description`))}
         </CardDescription>

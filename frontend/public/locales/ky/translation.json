@@ -8,9 +8,14 @@
   "last-name": "Фамилия",
   "submit": "кийинки",
 
+  "back": "Артка",
+  "enter-phone": "Телефон номериңизди жазыңыз",
+  "get-otp": "ОТP кодун ал",
+
   "signup-toast-description": "Ээлеп коюу үчүн катталууңуз абзел!",
 
   "0-signup-description": "MonchoKG-ге кош келиңиз! Бизге кошулуп өзгөчө мүмкүнчүлүктөргө ээ болуңуз!",
+  "1-signup-description": "Жарактуу уюлдук телефон номерин киргизиңиз. Бул номерге OTP коду жөнөтүлөт.",
 
   "board-welcome-title": "MonchoKG-ге кош келиңиз",
   "board-effortless-title": "Оңой брондоо",

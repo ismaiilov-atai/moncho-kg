@@ -4,13 +4,18 @@
   "afternoon": "Good afternoon",
   "morning": "Good morning",
 
-  "name": "name",
+  "name": "Name",
   "last-name": "Last name",
   "submit": "submit",
+
+  "back": "Back",
+  "enter-phone": "Enter phone number",
+  "get-otp": "Get OTP",
 
   "signup-toast-description": "Please sign-up to make a reservation!",
 
   "0-signup-description": "Welcome to Moncho-KG! Join Us and Unlock Exclusive Features!",
+  "1-signup-description": "Enter a valid mobile phone number. A confirmation code will be sent to this number.",
 
   "board-welcome-title": "Welcome to MonchoKG",
   "board-effortless-title": "Effortless booking",
