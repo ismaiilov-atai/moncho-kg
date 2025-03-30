@@ -11,7 +11,10 @@ interface Props {
 
 const SubmitButton = ({ disabled, title, loading, className }: Props) => {
   return (
-    <Button type='submit' disabled={disabled} className={cn(className)}>
+    <Button
+      type='submit'
+      disabled={disabled}
+      className={cn(className, 'tracking-widest')}>
       {loading ? <LoaderCircle className=' animate-spin' /> : title}
     </Button>
   );

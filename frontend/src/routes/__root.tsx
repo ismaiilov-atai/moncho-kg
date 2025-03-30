@@ -14,11 +14,19 @@ import '@/lib/moment_locals';
 
 import {
   createRootRouteWithContext,
+  HeadContent,
   Outlet,
   useLocation,
 } from '@tanstack/react-router';
+import { t } from 'i18next';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  head: () => ({
+    meta: [
+      { title: t('MonchoKG') },
+      { name: 'description', content: t('board-welcome-description') },
+    ],
+  }),
   component: Root,
   notFoundComponent: () => <>404 not found</>,
   pendingComponent: () => <RootPending />,
@@ -40,6 +48,9 @@ function Root() {
 
   return (
     <div className={cn(' relative flex flex-col items-center')}>
+      <head>
+        <HeadContent />
+      </head>
       <header className='sticky top-0 w-screen'>
         {showNavbar() || <NavBar />}
       </header>

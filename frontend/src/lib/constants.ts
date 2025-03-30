@@ -19,6 +19,7 @@ export const THEMES = [
 ]
 
 export const ONBOARDING_COMPLETED = 'onboarding-completed'
+export const ONLY_ALPHABET_REGEX = /^[a-zA-Z]+([-'’][a-zA-Z]+)*(\s[a-zA-Z]+([-'’][a-zA-Z]+)*)*$/
 
 export const REWARD_PROGRESS_COLORS: { [key: string]: string } = {
   light: '#B75D2A',

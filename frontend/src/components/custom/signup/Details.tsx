@@ -90,7 +90,7 @@ function Details() {
         <form
           className='flex flex-col justify-between h-full'
           onSubmit={(e) => onFormSubmit(e, form)}>
-          <div className='flex flex-col space-y-6 mt-auto mb-auto'>
+          <div className='flex flex-col space-y-10 mt-auto mb-auto'>
             <form.Field
               name='name'
               validators={createValidators('name')}
@@ -114,7 +114,6 @@ function Details() {
             ]}
             children={([canSubmit, isSubmitting, isFieldsValid]) => (
               <SubmitButton
-                className=' tracking-widest'
                 title={t('submit')}
                 disabled={!isFieldsValid || !canSubmit}
                 loading={isSubmitting}

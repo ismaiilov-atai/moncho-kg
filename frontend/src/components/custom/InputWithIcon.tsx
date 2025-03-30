@@ -11,9 +11,16 @@ interface InputWithIconProps {
 export function FieldInfo({ field }: InputWithIconProps) {
   return (
     <div className='h-2 p-1'>
-      <em className={`text-red-600 font-thin text-[10px]`}>
+      <em className={`text-red-600 font-thin text-[10px] flex flex-col`}>
         {field.state.meta.isTouched && field.state.meta.errors.length
-          ? field.state.meta.errors.join(',')
+          ? field.state.meta.errors.map((error) => {
+              if (error) {
+                return error.split(',').map((err) => {
+                  return err ? <li key={err}> {err} </li> : null;
+                });
+              }
+              return <p>{error}</p>;
+            })
           : ''}
       </em>
     </div>

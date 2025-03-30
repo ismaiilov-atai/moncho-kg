@@ -11,11 +11,18 @@
   "back": "Back",
   "enter-phone": "Enter phone number",
   "get-otp": "Get OTP",
+  "enter-confirm-code": "Enter confirmation code",
+  "verify": "Verify",
+
+  "min-chars-input": "Should at least be 3 characters long.",
+  "only-alphabets": "Should be only alphabets.",
+  "start-phone-ex": "Start typing with Mobile Operator Codes. Ex:",
 
   "signup-toast-description": "Please sign-up to make a reservation!",
 
   "0-signup-description": "Welcome to Moncho-KG! Join Us and Unlock Exclusive Features!",
   "1-signup-description": "Enter a valid mobile phone number. A confirmation code will be sent to this number.",
+  "2-signup-description": "We have sent a text message with your confirmation code. Enter code below.",
 
   "board-welcome-title": "Welcome to MonchoKG",
   "board-effortless-title": "Effortless booking",

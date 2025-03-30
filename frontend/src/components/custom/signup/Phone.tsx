@@ -3,7 +3,7 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { useUserStore } from '@/stores/user-store';
 import { useMutation } from '@tanstack/react-query';
 import { useMask } from '@react-input/mask';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, InfoIcon } from 'lucide-react';
 import SubmitButton from '../SubmitButton';
 import { onFormSubmit } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
@@ -61,7 +61,8 @@ function Phone() {
   const regionClick = () => {
     toast({
       title: 'Coming soon!',
-      description: 'For now we support only locales with +996 code',
+      description:
+        'At the moment, only phone numbers with the country code +996 are supported.',
       duration: 2000,
     });
   };
@@ -83,25 +84,34 @@ function Phone() {
           <form.Field
             name='phoneNumber'
             children={(field) => (
-              <div className='flex focus-within:ring-2 ring-primary focus-within:focus-visible:ring-ring focus-within:ring-offset-2 rounded-sm '>
-                <div
-                  onClick={regionClick}
-                  className=' flex bg-muted/60 items-center p-2 rounded-tl-sm rounded-bl-sm gap-1 '>
-                  🇰🇬
-                  <ChevronDown className=' text-muted-foreground' />
+              <section className=' space-y-4'>
+                <div className='flex focus-within:ring-2 ring-primary focus-within:focus-visible:ring-ring focus-within:ring-offset-2 rounded-sm '>
+                  <div
+                    onClick={regionClick}
+                    className=' flex bg-muted/60 items-center p-2 rounded-tl-sm rounded-bl-sm gap-1 '>
+                    🇰🇬
+                    <ChevronDown className=' text-muted-foreground' />
+                  </div>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    className='rounded-sm rounded-l-none border-l-0 text-black focus-visible:ring-0 focus-visible:border-none'
+                    placeholder='+996 ( _ _ _ ) _ _-_ _-_ _'
+                    maxLength={20}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    ref={inputRef}
+                  />
                 </div>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  className='rounded-sm rounded-l-none border-l-0 text-black focus-visible:ring-0 focus-visible:border-none'
-                  placeholder='+996 ( _ _ _ ) _ _-_ _-_ _'
-                  maxLength={20}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  ref={inputRef}
-                />
-              </div>
+                <section className=' flex items-center space-x-2 [&>*]:text-muted-foreground'>
+                  <InfoIcon size={24} />
+                  <em className=' text-[12px] text-pretty'>
+                    {t('start-phone-ex')}
+                    <b> 77X, 50X, 70X, 55X, 99X</b>
+                  </em>
+                </section>
+              </section>
             )}
           />
         </div>
