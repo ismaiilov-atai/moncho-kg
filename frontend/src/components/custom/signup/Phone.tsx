@@ -1,23 +1,24 @@
-import { numberSchema, PhoneType } from '@/types/form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
-import { useUserStore } from '@/stores/user-store';
-import { useMutation } from '@tanstack/react-query';
-import { useMask } from '@react-input/mask';
+import { numberSchema, PhoneType } from '@/types/form';
+import { useAuthStore } from '@/stores/signup-store';
 import { ChevronDown, InfoIcon } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { useUserStore } from '@/stores/user-store';
+import { useTranslation } from 'react-i18next';
+import { useMask } from '@react-input/mask';
 import SubmitButton from '../SubmitButton';
 import { onFormSubmit } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { useForm } from '@/hooks/useForm';
 import { Input } from '../../ui/input';
 import { authApi } from '@/lib/api';
-import { useAuthStore } from '@/stores/signup-store';
+import { useEffect } from 'react';
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useTranslation } from 'react-i18next';
 
 const filterNumber = (phoneNumber: string): string => {
   const filteredNumber = phoneNumber.replaceAll(/[()-]/g, '');
@@ -35,6 +36,8 @@ function Phone() {
     mask: '+996(___) __-__-__',
     replacement: { _: /\d/ },
   });
+
+  useEffect(() => inputRef.current.focus(), []);
 
   const { mutateAsync } = useMutation({
     mutationFn: authApi.initOtpCode,
@@ -60,9 +63,8 @@ function Phone() {
 
   const regionClick = () => {
     toast({
-      title: 'Coming soon!',
-      description:
-        'At the moment, only phone numbers with the country code +996 are supported.',
+      title: t('area-click-title'),
+      description: t('area-click-description'),
       duration: 2000,
     });
   };

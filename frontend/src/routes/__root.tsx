@@ -18,15 +18,22 @@ import {
   Outlet,
   useLocation,
 } from '@tanstack/react-router';
-import { t } from 'i18next';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  head: () => ({
-    meta: [
-      { title: t('MonchoKG') },
-      { name: 'description', content: t('board-welcome-description') },
-    ],
-  }),
+  head: (ctx) => {
+    const { translation } = ctx.match.context;
+    return {
+      meta: [
+        { title: translation ? translation('MonchoKG') : 'MonchoKG' },
+        {
+          name: 'description',
+          content: translation
+            ? translation('board-welcome-description')
+            : 'Welcome to MonchoKG',
+        },
+      ],
+    };
+  },
   component: Root,
   notFoundComponent: () => <>404 not found</>,
   pendingComponent: () => <RootPending />,
@@ -48,9 +55,7 @@ function Root() {
 
   return (
     <div className={cn(' relative flex flex-col items-center')}>
-      <head>
-        <HeadContent />
-      </head>
+      <HeadContent />
       <header className='sticky top-0 w-screen'>
         {showNavbar() || <NavBar />}
       </header>

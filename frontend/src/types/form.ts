@@ -3,7 +3,6 @@ import { t } from 'i18next'
 import { z } from 'zod'
 
 
-
 export const userInfoSchema = z.object({
   name: z.string()
     .min(3, t('min-chars-input'))

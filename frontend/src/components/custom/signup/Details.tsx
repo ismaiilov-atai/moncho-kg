@@ -5,11 +5,10 @@ import { useUserStore } from '@/stores/user-store';
 import { useTranslation } from 'react-i18next';
 import { ValidatorsType } from '@/types/auth';
 import InputWithIcon from '../InputWithIcon';
-import SubmitButton from '../SubmitButton';
 import { onFormSubmit } from '@/lib/utils';
+import SubmitButton from '../SubmitButton';
 import { useForm } from '@/hooks/useForm';
 import { z } from 'zod';
-
 import {
   Card,
   CardContent,
@@ -17,19 +16,6 @@ import {
   CardHeader,
   CardTitle,
 } from '../../ui/card';
-
-const createValidators = (fieldName: string): ValidatorsType => {
-  return {
-    onChange:
-      fieldName === 'name'
-        ? userInfoSchema.shape.name
-        : userInfoSchema.shape.lastName,
-    onChangeAsyncDebounceMs: 500,
-    onChangeAsync: z.string().refine(resolveSleeper, {
-      message: `Please provide valid input.`,
-    }),
-  };
-};
 
 const resolveSleeper = async (value: string): Promise<boolean> => {
   await new Promise((resolve) => setTimeout(resolve, 100));
@@ -59,6 +45,19 @@ function Details() {
       onChange: userInfoSchema,
     },
   });
+
+  const createValidators = (fieldName: string): ValidatorsType => {
+    return {
+      onChange:
+        fieldName === 'name'
+          ? userInfoSchema.shape.name
+          : userInfoSchema.shape.lastName,
+      onChangeAsyncDebounceMs: 500,
+      onChangeAsync: z.string().refine(resolveSleeper, {
+        message: `Please provide valid input.`,
+      }),
+    };
+  };
 
   const separateDescription = (description: string): React.ReactNode => {
     const descrArray = description.split(' ');
