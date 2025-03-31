@@ -8,13 +8,14 @@ export default {
     fontFamily: {
       default: [...defaultTheme.fontFamily.sans],
       playfair: ['Playfair'],
-      arbutus: ['Arbutus'],
+      arbutus: ['Arbutus Slab'],
       roboto: ['Roboto'],
     },
     extend: {
       screens: {
         desktop: '1280px',
         xs: '600px',
+        xxs: '400px',
       },
       borderRadius: {
         lg: 'var(--radius)',

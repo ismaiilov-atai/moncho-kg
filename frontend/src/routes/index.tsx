@@ -1,16 +1,13 @@
 import { JwtTokenExpired, JwtTokenInvalid } from 'hono/utils/jwt/types';
-import { api, daysQueryOptions, userQueryOptions } from '@/lib/api';
 import { useStripeStore } from '@/stores/stripe-store';
 import { ACCESS_TOKEN } from '@server/types/constants';
 import { useDeviceStore } from '@/stores/device-store';
 import { ONBOARDING_COMPLETED } from '@/lib/constants';
-import { useSlotsStore } from '@/stores/slots-store';
 import { useUserStore } from '@/stores/user-store';
 import { StripeQueryResult } from '@/types/stripe';
+import { api, userQueryOptions } from '@/lib/api';
 import Home from '@/components/custom/main/Home';
-import { findSlotsByDayId } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
-import { DaysType } from '@/types/day';
 
 import {
   createFileRoute,
@@ -72,14 +69,6 @@ export const Route = createFileRoute('/')({
     } catch (error) {
       throw error;
     }
-  },
-  loader: async ({ context: { queryClient } }) => {
-    const days = await queryClient.ensureQueryData(daysQueryOptions);
-    const { updateSelectedDayId, updateSlots, selectedDayId } =
-      useSlotsStore.getState();
-    updateSelectedDayId(selectedDayId || days[0].dayId);
-    updateSlots(findSlotsByDayId(selectedDayId, days as DaysType[]));
-    return days;
   },
   errorComponent: ({ error }) => {
     if (error instanceof JwtTokenExpired || JwtTokenInvalid) {

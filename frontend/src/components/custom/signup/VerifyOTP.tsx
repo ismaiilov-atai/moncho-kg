@@ -13,11 +13,21 @@ import { api, authApi } from '@/lib/api';
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { useTranslation } from 'react-i18next';
+import { useAuthStore } from '@/stores/signup-store';
 
 function VerifyOTP() {
+  const { t } = useTranslation();
+  const { authPageCount } = useAuthStore((state) => state);
   const { mutateAsync, isPending } = useMutation({
     mutationFn: authApi.verifyOtpCode,
   });
@@ -65,46 +75,59 @@ function VerifyOTP() {
   });
 
   return (
-    <div className='flex flex-col'>
-      <form
-        className='flex flex-col justify-center gap-5'
-        onSubmit={(e) => onFormSubmit<OTP_CODE>(e, form)}>
-        <form.Field
-          name='otpCode'
-          children={(field) => (
-            <InputOTP
-              maxLength={6}
-              pattern={REGEXP_ONLY_DIGITS}
-              value={field.state.value}
-              id={field.name}
-              name={field.name}
-              onBlur={field.handleBlur}
-              onChange={(val) => field.handleChange(val)}>
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={2} />
-                <InputOTPSlot index={3} />
-              </InputOTPGroup>
-            </InputOTP>
-          )}
-        />
-        <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => (
-            <SubmitButton
-              title='Verify'
-              disabled={!canSubmit}
-              loading={isSubmitting || isPending}
-              className='bg-green-500 hover:bg-green-400'
-            />
-          )}
-        />
-      </form>
-    </div>
+    <Card className='w-[85%] h-full ml-auto mr-auto max-sm:border-none max-sm:shadow-none flex flex-col px-4 gap-[10%]'>
+      <CardHeader>
+        <CardTitle className=' font-playfair font-normal'>
+          {t('enter-confirm-code')}
+        </CardTitle>
+        <CardDescription>
+          {t(`${authPageCount}-signup-description`)}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form
+          className='flex flex-col justify-center gap-20'
+          onSubmit={(e) => onFormSubmit<OTP_CODE>(e, form)}>
+          <form.Field
+            name='otpCode'
+            children={(field) => (
+              <InputOTP
+                maxLength={6}
+                pattern={REGEXP_ONLY_DIGITS}
+                value={field.state.value}
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(val) => field.handleChange(val)}>
+                <div className=' w-full flex justify-center items-center gap-5 '>
+                  {Array(4)
+                    .fill(0)
+                    .map((_, index) => {
+                      return (
+                        <InputOTPGroup
+                          key={index}
+                          className='[&>div]:w-12 [&>div]:h-12'>
+                          <InputOTPSlot index={index} />
+                        </InputOTPGroup>
+                      );
+                    })}
+                </div>
+              </InputOTP>
+            )}
+          />
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+            children={([canSubmit, isSubmitting]) => (
+              <SubmitButton
+                title={t('verify')}
+                disabled={!canSubmit}
+                loading={isSubmitting || isPending}
+              />
+            )}
+          />
+        </form>
+      </CardContent>
+    </Card>
   );
 }
 

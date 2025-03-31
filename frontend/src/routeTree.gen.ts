@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as OnboardingImport } from './routes/onboarding'
+import { Route as BookSessionRouteImport } from './routes/book-session/route'
 import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
 
@@ -22,6 +23,14 @@ const OnboardingRoute = OnboardingImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/onboarding.lazy').then((d) => d.Route))
+
+const BookSessionRouteRoute = BookSessionRouteImport.update({
+  id: '/book-session',
+  path: '/book-session',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/book-session/route.lazy').then((d) => d.Route),
+)
 
 const AuthRouteRoute = AuthRouteImport.update({
   id: '/auth',
@@ -53,6 +62,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRoute
     }
+    '/book-session': {
+      id: '/book-session'
+      path: '/book-session'
+      fullPath: '/book-session'
+      preLoaderRoute: typeof BookSessionRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
@@ -68,12 +84,14 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
+  '/book-session': typeof BookSessionRouteRoute
   '/onboarding': typeof OnboardingRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
+  '/book-session': typeof BookSessionRouteRoute
   '/onboarding': typeof OnboardingRoute
 }
 
@@ -81,27 +99,30 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRoute
+  '/book-session': typeof BookSessionRouteRoute
   '/onboarding': typeof OnboardingRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/onboarding'
+  fullPaths: '/' | '/auth' | '/book-session' | '/onboarding'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/onboarding'
-  id: '__root__' | '/' | '/auth' | '/onboarding'
+  to: '/' | '/auth' | '/book-session' | '/onboarding'
+  id: '__root__' | '/' | '/auth' | '/book-session' | '/onboarding'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRoute
+  BookSessionRouteRoute: typeof BookSessionRouteRoute
   OnboardingRoute: typeof OnboardingRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRoute,
+  BookSessionRouteRoute: BookSessionRouteRoute,
   OnboardingRoute: OnboardingRoute,
 }
 
@@ -117,6 +138,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/auth",
+        "/book-session",
         "/onboarding"
       ]
     },
@@ -125,6 +147,9 @@ export const routeTree = rootRoute
     },
     "/auth": {
       "filePath": "auth/route.tsx"
+    },
+    "/book-session": {
+      "filePath": "book-session/route.tsx"
     },
     "/onboarding": {
       "filePath": "onboarding.tsx"

@@ -4,6 +4,26 @@
   "afternoon": "Good afternoon",
   "morning": "Good morning",
 
+  "name": "Name",
+  "last-name": "Last name",
+  "submit": "submit",
+
+  "back": "Back",
+  "enter-phone": "Enter phone number",
+  "get-otp": "Get OTP",
+  "enter-confirm-code": "Enter confirmation code",
+  "verify": "Verify",
+
+  "min-chars-input": "Should at least be 3 characters long.",
+  "only-alphabets": "Should be only alphabets.",
+  "start-phone-ex": "Start typing with Mobile Operator Codes. Ex:",
+
+  "signup-toast-description": "Please sign-up to make a reservation!",
+
+  "0-signup-description": "Welcome to Moncho-KG! Join Us and Unlock Exclusive Features!",
+  "1-signup-description": "Enter a valid mobile phone number. A confirmation code will be sent to this number.",
+  "2-signup-description": "We have sent a text message with your confirmation code. Enter code below.",
+
   "board-welcome-title": "Welcome to MonchoKG",
   "board-effortless-title": "Effortless booking",
   "board-group-title": "Group gathering",
@@ -37,5 +57,10 @@
   "no_reso_text": "You have no upcoming reservations",
   "reward_title": "Reward",
   "start_journey": "Start your journey!",
-  "start_jorney_description": "You can enjoy a free sauna session after every 4 reservations."
+  "start_jorney_description": "You can enjoy a free sauna session after every 4 reservations.",
+
+  "of": "of",
+
+  "area-click-title": "Coming Soon!",
+  "area-click-description": "At the moment, only phone numbers with the country code +996 are supported."
 }
