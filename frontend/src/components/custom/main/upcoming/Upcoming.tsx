@@ -1,8 +1,10 @@
+import { buttonVariants } from '@/components/ui/button';
 import { useUserStore } from '@/stores/user-store';
-import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
+import { Link } from '@tanstack/react-router';
 import { Card } from '@/components/ui/card';
 import UpcomingCard from './UpcomingCard';
-import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils';
 
 const Upcoming = () => {
   const { reservations } = useUserStore((state) => state);
@@ -21,7 +23,12 @@ const Upcoming = () => {
         )}
       </section>
       <section className='h-16 place-content-end text-end'>
-        <Button className=' min-w-32 '> {t('Book a session')}</Button>
+        <Link
+          to='/book-session'
+          preload='intent'
+          className={cn(buttonVariants({ variant: 'default' }), ' min-w-32 ')}>
+          {t('Book a session')}
+        </Link>
       </section>
     </Card>
   );
