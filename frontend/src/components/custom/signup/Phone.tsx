@@ -19,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { auth, RecaptchaVerifier, sendOTP } from '@/helpers/auth';
 
 const filterNumber = (phoneNumber: string): string => {
   const filteredNumber = phoneNumber.replaceAll(/[()-]/g, '');
@@ -37,7 +38,18 @@ function Phone() {
     replacement: { _: /\d/ },
   });
 
-  useEffect(() => inputRef.current.focus(), []);
+  useEffect(() => {
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'g-recaptcha', {
+      size: 'invisible',
+      callback: (response: any) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        // onSignInSubmit()
+        console.log('recapcha- ', response);
+      },
+    });
+
+    inputRef.current.focus();
+  }, []);
 
   const { mutateAsync } = useMutation({
     mutationFn: authApi.initOtpCode,
@@ -48,12 +60,15 @@ function Phone() {
       phoneNumber: '',
     } as PhoneType,
     onSubmit: async (value) => {
+      const confresult = await sendOTP();
+      window.confirmationResult = confresult;
       const filteredPhoneNumber = filterNumber(value.phoneNumber);
       updatePhoneNumber(filteredPhoneNumber);
+      forwardAuthPageCount(authPageCount);
 
-      const response = await mutateAsync(filteredPhoneNumber);
-      if ('errorCode' in response) throw response;
-      else forwardAuthPageCount(authPageCount);
+      // const response = await mutateAsync(filteredPhoneNumber);
+      // if ('errorCode' in response) throw response;
+      // else forwardAuthPageCount(authPageCount);
     },
     validatorAdapter: zodValidator(),
     validators: {
@@ -120,12 +135,17 @@ function Phone() {
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
-            <SubmitButton
-              className='md:w-[70%] w-full self-center'
-              title={t('get-otp')}
-              disabled={!canSubmit}
-              loading={isSubmitting}
-            />
+            <>
+              <div
+                id='g-recaptcha'
+                data-sitekey='6LfcsAYrAAAAADs5uQB8ZJTC3lef0S2J-hAmQD4X'></div>
+              <SubmitButton
+                className='md:w-[70%] w-full self-center'
+                title={t('get-otp')}
+                disabled={!canSubmit}
+                loading={isSubmitting}
+              />
+            </>
           )}
         />
       </form>

@@ -1,6 +1,32 @@
+import { ConfirmationResult, getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
+import { app } from '@/lib/firebase'
+
+const auth = getAuth(app)
+auth.useDeviceLanguage()
+
+
+
+const sendOTP = async (): Promise<ConfirmationResult> => {
+  try {
+    const confirmationResult = await signInWithPhoneNumber(auth, '+996708102030', window.recaptchaVerifier)
+    // Save the confirmationResult to use later for verification
+    window.confirmationResult = confirmationResult
+    return confirmationResult
+  } catch (error) {
+    console.error('Error sending verification code:', error)
+    throw error
+  }
+}
+
+
+export { auth, RecaptchaVerifier, signInWithPhoneNumber, sendOTP }
+
+
+
 const BASIC_AUTHENTICAITON = `${import.meta.env.VITE_SINCH_KEY!}:${import.meta.env.VITE_SINCH_SECRET!}`
 import { InitOtpType, VerificationReport, VerifyError } from '@/types/auth'
 import { Buffer } from 'buffer'
+
 
 const sinchHeaders = {
   'Authorization': `Basic ${Buffer.from(BASIC_AUTHENTICAITON).toString('base64')}`,

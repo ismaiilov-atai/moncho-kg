@@ -1,7 +1,9 @@
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { NavBar } from '@/components/custom/navbar/NavBar';
 import RootPending from '@/components/custom/RootPending';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
+import { ACCESS_TOKEN } from '@server/types/constants';
 import { useStripeStore } from '@/stores/stripe-store';
 import type { RouterContext } from '@/routerContext';
 import StripeClient from '@/components/StripeClient';
@@ -48,6 +50,15 @@ function Root() {
   const { clientSecret } = useStripeStore((state) => state);
   if (clientSecret) return <StripeClient clientSecret={clientSecret} />;
   useDeviceDetect();
+
+  onAuthStateChanged(getAuth(), async (user) => {
+    if (user) {
+      const token = await user.getIdToken();
+      sessionStorage.setItem(ACCESS_TOKEN, token);
+    } else {
+      console.log('Signed out!');
+    }
+  });
 
   const showNavbar = (): boolean => {
     return location.pathname.startsWith('/onboarding');

@@ -1,20 +1,18 @@
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { ACCESS_TOKEN } from '@server/types/constants';
+import { useAuthStore } from '@/stores/signup-store';
 import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
 import { OTP_CODE, otpSchema } from '@/types/form';
 import { useNavHome } from '@/hooks/useNavHome';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { useTranslation } from 'react-i18next';
 import { onFormSubmit } from '@/lib/utils';
 import SubmitButton from '../SubmitButton';
 import { useForm } from '@/hooks/useForm';
-import { api, authApi } from '@/lib/api';
+import { getAuth } from 'firebase/auth';
+import { api } from '@/lib/api';
 
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from '@/components/ui/input-otp';
 import {
   Card,
   CardContent,
@@ -22,14 +20,23 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '@/stores/signup-store';
+
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
 
 function VerifyOTP() {
   const { t } = useTranslation();
   const { authPageCount } = useAuthStore((state) => state);
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: authApi.verifyOtpCode,
+  const {
+    mutateAsync: verifyOtpMutation,
+    isPending,
+    error: otpError,
+  } = useMutation({
+    mutationFn: (otp_code: string) =>
+      window.confirmationResult.confirm(otp_code),
   });
   const { mutateAsync: insertUserMutation } = useMutation({
     mutationFn: api.auth.$post,
@@ -46,24 +53,27 @@ function VerifyOTP() {
     } as OTP_CODE,
     onSubmit: async ({ otpCode }) => {
       try {
-        const resp = await mutateAsync({
-          code: otpCode,
-          phoneNumber,
-        });
-        if ('errorCode' in resp) throw resp;
-        const insertUserResponse = await insertUserMutation({
-          json: {
-            name,
-            lastName,
-            phoneNumber,
-          },
-        });
-        const data = await insertUserResponse.json();
-        if (!data.isSuccess) throw insertUserResponse;
-        sessionStorage.setItem(ACCESS_TOKEN, data.accessToken);
+        await verifyOtpMutation('545454');
+        sessionStorage.setItem(
+          ACCESS_TOKEN,
+          (await getAuth().currentUser?.getIdToken()) || ''
+        );
+        if (!otpError) {
+          const insertUserResponse = await insertUserMutation({
+            json: {
+              userId: getAuth().currentUser?.uid || '',
+              name,
+              lastName,
+              phoneNumber,
+            },
+          });
 
-        updateUserId(data.userId || '');
-        navigateHome();
+          const data = await insertUserResponse.json();
+          if (!data.isSuccess) throw insertUserResponse;
+          updateUserId(data.userId || '');
+
+          navigateHome();
+        }
       } catch (error) {
         throw error;
       }

@@ -1,6 +1,5 @@
 import { JwtTokenExpired, JwtTokenInvalid } from 'hono/utils/jwt/types';
 import { useStripeStore } from '@/stores/stripe-store';
-import { ACCESS_TOKEN } from '@server/types/constants';
 import { useDeviceStore } from '@/stores/device-store';
 import { ONBOARDING_COMPLETED } from '@/lib/constants';
 import { useUserStore } from '@/stores/user-store';
@@ -8,7 +7,6 @@ import { StripeQueryResult } from '@/types/stripe';
 import { api, userQueryOptions } from '@/lib/api';
 import Home from '@/components/custom/main/Home';
 import { toast } from '@/hooks/use-toast';
-
 import {
   createFileRoute,
   Navigate,
@@ -55,11 +53,11 @@ export const Route = createFileRoute('/')({
           updateStripeStatus(payment.status || '');
         }
         if ('err' in result) throw result.err;
-        sessionStorage.setItem(ACCESS_TOKEN, result.token!);
-        updateUserId(result.user?.userId!);
-        const { reservations, name, lastName, phoneNumber, beenTimes } =
+
+        const { reservations, name, lastName, phoneNumber, beenTimes, userId } =
           result.user;
 
+        updateUserId(userId || '');
         updateReservations(reservations || []);
         updateFirstName(name!);
         updateLastName(lastName!);

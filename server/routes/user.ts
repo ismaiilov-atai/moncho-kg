@@ -1,19 +1,22 @@
 import { JwtTokenInvalid } from 'hono/utils/jwt/types'
 import { findUserWithId } from '../utils/user'
 import type { UserType } from '../types/user'
-import type { Payload } from '../types/auth'
+import { decode } from 'hono/jwt'
 import { Hono } from 'hono'
 import moment from 'moment'
-
 
 export const user = new Hono()
   .get('/', async (c) => {
     try {
       const auth = c.req.header('Authorization')
-      const payload = c.get('jwtPayload') as Payload
-      if (!payload) return c.json({ success: true, user: {} as UserType, token: '' })
+      const jwToken = auth?.replace(/^Bearer\s/, '') || ''
 
-      const user = await findUserWithId(payload.sub)
+      const { payload } = decode(jwToken)
+      const userId = payload.user_id as string
+
+      if (!payload) return c.json({ success: true, user: {} as UserType })
+
+      const user = await findUserWithId(userId || '')
       const flattenedBookings = user?.usersToBookings
         .map(item => item.bookings)
         .filter(booking => moment(booking.when).isAfter(moment()) && booking)
@@ -24,9 +27,9 @@ export const user = new Hono()
         reservations: flattenedBookings
       }
 
-      return c.json({ success: true, user: mappedUser, token: auth?.replace(/^Bearer\s/, '') })
+      return c.json({ success: true, user: mappedUser })
     } catch (error) {
-      if (error instanceof JwtTokenInvalid) throw new JwtTokenInvalid('token is not valid')
+      if (error instanceof JwtTokenInvalid) return c.json({ success: true, user: {} as UserType })
       throw error
     }
   })
