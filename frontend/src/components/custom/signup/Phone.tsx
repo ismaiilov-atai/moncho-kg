@@ -43,7 +43,7 @@ function Phone() {
     onSubmit: async (value) => {
       const filteredPhoneNumber = filterNumber(value.phoneNumber);
       updatePhoneNumber(filteredPhoneNumber);
-      sendOTP('+12244937064');
+      sendOTP(filteredPhoneNumber);
     },
     validatorAdapter: zodValidator(),
     validators: {
