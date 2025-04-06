@@ -29,7 +29,11 @@ import {
 
 function VerifyOTP() {
   const { t } = useTranslation();
+  const navigateHome = useNavHome();
   const { authPageCount } = useAuthStore((state) => state);
+  const { mutateAsync: insertUserMutation } = useMutation({
+    mutationFn: api.auth.$post,
+  });
   const {
     mutateAsync: verifyOtpMutation,
     isPending,
@@ -38,14 +42,10 @@ function VerifyOTP() {
     mutationFn: (otp_code: string) =>
       window.confirmationResult.confirm(otp_code),
   });
-  const { mutateAsync: insertUserMutation } = useMutation({
-    mutationFn: api.auth.$post,
-  });
 
   const { name, phoneNumber, lastName, updateUserId } = useUserStore(
     (state) => state
   );
-  const navigateHome = useNavHome();
 
   const form = useForm({
     defaultValues: {
@@ -53,7 +53,7 @@ function VerifyOTP() {
     } as OTP_CODE,
     onSubmit: async ({ otpCode }) => {
       try {
-        await verifyOtpMutation('545454');
+        await verifyOtpMutation(otpCode);
         sessionStorage.setItem(
           ACCESS_TOKEN,
           (await getAuth().currentUser?.getIdToken()) || ''
@@ -109,14 +109,14 @@ function VerifyOTP() {
                 name={field.name}
                 onBlur={field.handleBlur}
                 onChange={(val) => field.handleChange(val)}>
-                <div className=' w-full flex justify-center items-center gap-5 '>
-                  {Array(4)
+                <div className=' w-full flex justify-center items-center max-xs:gap-1 max-lg:gap-3 gap-10 '>
+                  {Array(6)
                     .fill(0)
                     .map((_, index) => {
                       return (
                         <InputOTPGroup
                           key={index}
-                          className='[&>div]:w-12 [&>div]:h-12'>
+                          className='max-sm:[&>div]:w-9 [&>div]:w-12 max-sm:[&>div]:h-11 [&>div]:h-12'>
                           <InputOTPSlot index={index} />
                         </InputOTPGroup>
                       );

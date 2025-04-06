@@ -10,6 +10,7 @@ import StripeClient from '@/components/StripeClient';
 import { Toaster } from '@/components/ui/toaster';
 import FAB from '@/components/custom/main/fab/FAB';
 import { useTranslation } from 'react-i18next';
+import { auth } from '@/lib/firebase';
 import moment from 'moment-timezone';
 import { cn } from '@/lib/utils';
 import '@/lib/moment_locals';
@@ -46,6 +47,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function Root() {
   const location = useLocation();
   const { i18n } = useTranslation();
+  auth.languageCode = i18n.language;
   moment.locale(i18n.language);
   const { clientSecret } = useStripeStore((state) => state);
   if (clientSecret) return <StripeClient clientSecret={clientSecret} />;
@@ -57,6 +59,7 @@ function Root() {
       sessionStorage.setItem(ACCESS_TOKEN, token);
     } else {
       console.log('Signed out!');
+      sessionStorage.removeItem(ACCESS_TOKEN);
     }
   });
 

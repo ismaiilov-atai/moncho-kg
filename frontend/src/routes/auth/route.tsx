@@ -14,12 +14,12 @@ import { t } from 'i18next';
 
 const variants = {
   enter: (direction: boolean) => ({
-    x: direction ? -300 : 300,
+    x: direction ? -100 : 40,
     opacity: 0,
   }),
   exit: (direction: boolean) => ({
     zIndex: 0,
-    x: direction ? 500 : -500,
+    x: direction ? 200 : -200,
     opacity: 0,
   }),
 };

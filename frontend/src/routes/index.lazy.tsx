@@ -12,7 +12,7 @@ function RouteComponent() {
   const { isMobile } = useDeviceStore.getState();
   const onboardingCompleted = localStorage.getItem(ONBOARDING_COMPLETED);
   return (
-    <div className=' flex flex-col gap-10 px-3 max-md:pt-9'>
+    <div className='flex flex-col gap-10 px-3 max-md:pt-9'>
       <Home />
       {!onboardingCompleted && !isMobile && <OnboardingModal />}
     </div>

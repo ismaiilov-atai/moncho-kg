@@ -62,5 +62,7 @@
   "of": "of",
 
   "area-click-title": "Coming Soon!",
-  "area-click-description": "At the moment, only phone numbers with the country code +996 are supported."
+  "area-click-description": "At the moment, only phone numbers with the country code +996 are supported.",
+
+  "firebase-down-auth": "Google Auth Service is down at the moment. Please check back soon."
 }
