@@ -1,4 +1,4 @@
-import { pgTable, primaryKey, uuid } from 'drizzle-orm/pg-core'
+import { foreignKey, pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core'
 import { bookings } from './booking.sch'
 import { relations } from 'drizzle-orm'
 import { number, string, z } from 'zod'
@@ -9,16 +9,18 @@ import { users } from './user.sch'
 export const bookingsToUsers = pgTable(
   'bookings_to_users',
   {
-    userId: uuid('user_id')
-      .references(() => users.userId, { onDelete: 'cascade', onUpdate: 'cascade' })
-      .notNull()
-    ,
-    bookingId: uuid('booking_id')
-      .references(() => bookings.bookingId, { onDelete: 'cascade', onUpdate: 'cascade' })
-      .notNull()
+    userId: text('user_id').notNull(),
+    bookingId: uuid('booking_id').notNull()
   },
   (t) => ({
-    pk: primaryKey({ columns: [t.userId, t.bookingId] })
+    pk: primaryKey({ columns: [t.userId, t.bookingId] }),
+    fk: foreignKey({
+      name: "bookings_to_users_fk",
+      columns: [t.userId],
+      foreignColumns: [users.userId],
+    })
+      .onDelete('cascade')
+      .onUpdate('cascade')
   })
 )
 

@@ -5,7 +5,7 @@ import Reward from '../reward/Reward';
 
 const Home = () => {
   return (
-    <div className=' space-y-3'>
+    <div className='space-y-3'>
       <GreetingQuote />
       <Upcoming />
       <PopularTimes />

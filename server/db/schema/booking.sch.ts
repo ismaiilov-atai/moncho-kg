@@ -1,4 +1,4 @@
-import { integer, pgTable, timestamp, uuid, pgEnum } from 'drizzle-orm/pg-core'
+import { integer, pgTable, timestamp, uuid, pgEnum, varchar, text } from 'drizzle-orm/pg-core'
 import { bookingsToSlots } from './bookings_to_slots'
 import { bookingsToUsers } from './users_to_booking'
 import { number, string, enum as enum_ } from 'zod'
@@ -14,7 +14,7 @@ export const bookings = pgTable('bookings', {
   status: statusEnum(),
   when: timestamp({ mode: 'string' }).notNull(),
   slotBelongsTo: uuid('slot_belongs_to').notNull(),
-  userBelongsTo: uuid('user_belongs_to').notNull()
+  userBelongsTo: text('user_belongs_to').notNull()
 })
 
 export const bookingRelations = relations(bookings, ({ many }) => ({

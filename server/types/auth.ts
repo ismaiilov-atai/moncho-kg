@@ -18,7 +18,6 @@ export type Decoded = {
 }
 
 export const createUserSchema = insertUserSchema.omit({
-  userId: true,
   id: true
 })
 

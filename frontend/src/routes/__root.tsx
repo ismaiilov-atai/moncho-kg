@@ -1,13 +1,16 @@
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { NavBar } from '@/components/custom/navbar/NavBar';
 import RootPending from '@/components/custom/RootPending';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
+import { ACCESS_TOKEN } from '@server/types/constants';
 import { useStripeStore } from '@/stores/stripe-store';
 import type { RouterContext } from '@/routerContext';
 import StripeClient from '@/components/StripeClient';
 import { Toaster } from '@/components/ui/toaster';
 import FAB from '@/components/custom/main/fab/FAB';
 import { useTranslation } from 'react-i18next';
+import { auth } from '@/lib/firebase';
 import moment from 'moment-timezone';
 import { cn } from '@/lib/utils';
 import '@/lib/moment_locals';
@@ -44,10 +47,21 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function Root() {
   const location = useLocation();
   const { i18n } = useTranslation();
+  auth.languageCode = i18n.language;
   moment.locale(i18n.language);
   const { clientSecret } = useStripeStore((state) => state);
   if (clientSecret) return <StripeClient clientSecret={clientSecret} />;
   useDeviceDetect();
+
+  onAuthStateChanged(getAuth(), async (user) => {
+    if (user) {
+      const token = await user.getIdToken();
+      sessionStorage.setItem(ACCESS_TOKEN, token);
+    } else {
+      console.log('Signed out!');
+      sessionStorage.removeItem(ACCESS_TOKEN);
+    }
+  });
 
   const showNavbar = (): boolean => {
     return location.pathname.startsWith('/onboarding');

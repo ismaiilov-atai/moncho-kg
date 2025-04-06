@@ -2,7 +2,6 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { numberSchema, PhoneType } from '@/types/form';
 import { useAuthStore } from '@/stores/signup-store';
 import { ChevronDown, InfoIcon } from 'lucide-react';
-import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
 import { useTranslation } from 'react-i18next';
 import { useMask } from '@react-input/mask';
@@ -10,8 +9,8 @@ import SubmitButton from '../SubmitButton';
 import { onFormSubmit } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { useForm } from '@/hooks/useForm';
+import { sendOTP } from '@/helpers/auth';
 import { Input } from '../../ui/input';
-import { authApi } from '@/lib/api';
 import { useEffect } from 'react';
 import {
   Card,
@@ -26,11 +25,9 @@ const filterNumber = (phoneNumber: string): string => {
 };
 
 function Phone() {
-  const { updatePhoneNumber } = useUserStore((state) => state);
   const { t } = useTranslation();
-  const { authPageCount, forwardAuthPageCount } = useAuthStore(
-    (state) => state
-  );
+  const { updatePhoneNumber } = useUserStore((state) => state);
+  const { authPageCount } = useAuthStore((state) => state);
 
   const inputRef = useMask({
     mask: '+996(___) __-__-__',
@@ -39,10 +36,6 @@ function Phone() {
 
   useEffect(() => inputRef.current.focus(), []);
 
-  const { mutateAsync } = useMutation({
-    mutationFn: authApi.initOtpCode,
-  });
-
   const form = useForm({
     defaultValues: {
       phoneNumber: '',
@@ -50,10 +43,7 @@ function Phone() {
     onSubmit: async (value) => {
       const filteredPhoneNumber = filterNumber(value.phoneNumber);
       updatePhoneNumber(filteredPhoneNumber);
-
-      const response = await mutateAsync(filteredPhoneNumber);
-      if ('errorCode' in response) throw response;
-      else forwardAuthPageCount(authPageCount);
+      sendOTP('+12244937064');
     },
     validatorAdapter: zodValidator(),
     validators: {
@@ -80,7 +70,7 @@ function Phone() {
         </CardDescription>
       </CardHeader>
       <form
-        className=' w-full flex flex-col gap-28 '
+        className=' w-full flex flex-col gap-28'
         onSubmit={(e) => onFormSubmit(e, form)}>
         <div className=' md:w-[70%] w-full self-center'>
           <form.Field
@@ -120,15 +110,20 @@ function Phone() {
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
-            <SubmitButton
-              className='md:w-[70%] w-full self-center'
-              title={t('get-otp')}
-              disabled={!canSubmit}
-              loading={isSubmitting}
-            />
+            <>
+              <SubmitButton
+                className='md:w-[70%] w-full self-center'
+                title={t('get-otp')}
+                disabled={!canSubmit}
+                loading={isSubmitting}
+              />
+            </>
           )}
         />
       </form>
+      <div
+        id='g-recaptcha'
+        data-sitekey={import.meta.env.VITE_RECAPCHA_KEY}></div>
     </Card>
   );
 }

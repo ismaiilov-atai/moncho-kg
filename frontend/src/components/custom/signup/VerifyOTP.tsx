@@ -1,20 +1,18 @@
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { ACCESS_TOKEN } from '@server/types/constants';
+import { useAuthStore } from '@/stores/signup-store';
 import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
 import { OTP_CODE, otpSchema } from '@/types/form';
 import { useNavHome } from '@/hooks/useNavHome';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { useTranslation } from 'react-i18next';
 import { onFormSubmit } from '@/lib/utils';
 import SubmitButton from '../SubmitButton';
 import { useForm } from '@/hooks/useForm';
-import { api, authApi } from '@/lib/api';
+import { getAuth } from 'firebase/auth';
+import { api } from '@/lib/api';
 
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from '@/components/ui/input-otp';
 import {
   Card,
   CardContent,
@@ -22,23 +20,32 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '@/stores/signup-store';
+
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
 
 function VerifyOTP() {
   const { t } = useTranslation();
+  const navigateHome = useNavHome();
   const { authPageCount } = useAuthStore((state) => state);
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: authApi.verifyOtpCode,
-  });
   const { mutateAsync: insertUserMutation } = useMutation({
     mutationFn: api.auth.$post,
+  });
+  const {
+    mutateAsync: verifyOtpMutation,
+    isPending,
+    error: otpError,
+  } = useMutation({
+    mutationFn: (otp_code: string) =>
+      window.confirmationResult.confirm(otp_code),
   });
 
   const { name, phoneNumber, lastName, updateUserId } = useUserStore(
     (state) => state
   );
-  const navigateHome = useNavHome();
 
   const form = useForm({
     defaultValues: {
@@ -46,24 +53,27 @@ function VerifyOTP() {
     } as OTP_CODE,
     onSubmit: async ({ otpCode }) => {
       try {
-        const resp = await mutateAsync({
-          code: otpCode,
-          phoneNumber,
-        });
-        if ('errorCode' in resp) throw resp;
-        const insertUserResponse = await insertUserMutation({
-          json: {
-            name,
-            lastName,
-            phoneNumber,
-          },
-        });
-        const data = await insertUserResponse.json();
-        if (!data.isSuccess) throw insertUserResponse;
-        sessionStorage.setItem(ACCESS_TOKEN, data.accessToken);
+        await verifyOtpMutation(otpCode);
+        sessionStorage.setItem(
+          ACCESS_TOKEN,
+          (await getAuth().currentUser?.getIdToken()) || ''
+        );
+        if (!otpError) {
+          const insertUserResponse = await insertUserMutation({
+            json: {
+              userId: getAuth().currentUser?.uid || '',
+              name,
+              lastName,
+              phoneNumber,
+            },
+          });
 
-        updateUserId(data.userId || '');
-        navigateHome();
+          const data = await insertUserResponse.json();
+          if (!data.isSuccess) throw insertUserResponse;
+          updateUserId(data.userId || '');
+
+          navigateHome();
+        }
       } catch (error) {
         throw error;
       }
@@ -99,14 +109,14 @@ function VerifyOTP() {
                 name={field.name}
                 onBlur={field.handleBlur}
                 onChange={(val) => field.handleChange(val)}>
-                <div className=' w-full flex justify-center items-center gap-5 '>
-                  {Array(4)
+                <div className=' w-full flex justify-center items-center max-xs:gap-1 max-lg:gap-3 gap-10 '>
+                  {Array(6)
                     .fill(0)
                     .map((_, index) => {
                       return (
                         <InputOTPGroup
                           key={index}
-                          className='[&>div]:w-12 [&>div]:h-12'>
+                          className='max-sm:[&>div]:w-9 [&>div]:w-12 max-sm:[&>div]:h-11 [&>div]:h-12'>
                           <InputOTPSlot index={index} />
                         </InputOTPGroup>
                       );

@@ -1,50 +1,48 @@
-const BASIC_AUTHENTICAITON = `${import.meta.env.VITE_SINCH_KEY!}:${import.meta.env.VITE_SINCH_SECRET!}`
-import { InitOtpType, VerificationReport, VerifyError } from '@/types/auth'
-import { Buffer } from 'buffer'
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
+import { useAuthStore } from '@/stores/signup-store'
+import { FirebaseError } from 'firebase/app'
+import { toast } from '@/hooks/use-toast'
+import { auth } from '@/lib/firebase'
+import { t } from 'i18next'
 
-const sinchHeaders = {
-  'Authorization': `Basic ${Buffer.from(BASIC_AUTHENTICAITON).toString('base64')}`,
-  'Content-Type': 'application/json; charset=utf-8'
-}
-const URL = import.meta.env.VITE_SINCH_BASE_URL
 
-export const initOtpCode = async (phoneNumber: string): Promise<InitOtpType | VerifyError> => {
-  try {
-    const resp = await fetch(URL, {
-      method: 'POST',
-      headers: sinchHeaders,
-      body: JSON.stringify({
-        identity: {
-          type: 'number',
-          endpoint: phoneNumber
-        },
-        method: 'sms'
-      })
+const { authPageCount, forwardAuthPageCount } = useAuthStore.getState()
+
+const setupRecaptcha = () => {
+  if (!window.recaptchaVerifier) {
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'g-recaptcha', {
+      size: 'invisible',
+      callback: (_: any) => {
+        console.log('reCAPTCHA resolved')
+      }
     })
-    const data = await resp.json()
-    if ('errorCode' in data) throw data as VerifyError
-    return data as InitOtpType
-  } catch (error) {
-    throw error as VerifyError
   }
 }
 
-export const verifyOtpCode = async ({ code, phoneNumber }: { code: string, phoneNumber: string }): Promise<VerificationReport | VerifyError> => {
+const sendOTP = async (phoneNumber: string) => {
+  setupRecaptcha()
+  const appVerifier = window.recaptchaVerifier
+
   try {
-    const resp = await fetch(`${URL}/number/${phoneNumber}`, {
-      method: 'PUT',
-      headers: sinchHeaders,
-      body: JSON.stringify({
-        method: 'sms',
-        sms: {
-          code: code
-        }
-      })
-    })
-    const result = await resp.json()
-    if ('errorCode' in result) throw result as VerifyError
-    return result as VerificationReport
+    const confirmation = await signInWithPhoneNumber(
+      auth,
+      phoneNumber,
+      appVerifier
+    )
+    window.confirmationResult = confirmation
+    forwardAuthPageCount(authPageCount)
   } catch (error) {
-    throw error as VerifyError
+    if (error instanceof FirebaseError) {
+      Number(error.code) >= 500 ?
+        toast({ variant: 'destructive', title: 'OOOPS!', description: t('firebase-down-auth') })
+        :
+        toast({ variant: 'destructive', title: 'OOOPS!', description: error.message })
+    } else {
+      window.recaptchaVerifier.render().then((widgetId: string) => {
+        window.grecaptcha.reset(widgetId)
+      })
+    }
   }
 }
+
+export { RecaptchaVerifier, signInWithPhoneNumber, sendOTP }

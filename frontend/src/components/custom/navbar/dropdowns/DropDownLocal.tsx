@@ -13,7 +13,7 @@ import {
 
 const LOCAL_NUMBERING: { [key: string]: number } = {
   ky: 0,
-  en: 1,
+  'en-US': 1,
   ru: 2,
 };
 

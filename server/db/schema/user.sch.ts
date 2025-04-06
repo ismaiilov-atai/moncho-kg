@@ -1,4 +1,4 @@
-import { integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core"
+import { integer, pgTable, text, uuid, varchar } from "drizzle-orm/pg-core"
 import { bookingsToUsers } from './users_to_booking'
 import { createInsertSchema } from 'drizzle-zod'
 import { relations } from 'drizzle-orm'
@@ -6,7 +6,7 @@ import { z } from 'zod'
 
 export const users = pgTable("users", {
   id: integer().generatedAlwaysAsIdentity(),
-  userId: uuid('user_id').defaultRandom().primaryKey().unique().notNull(),
+  userId: text('user_id').primaryKey().unique().notNull(),
   name: varchar({ length: 255 }).notNull(),
   lastName: varchar('last_name', { length: 255 }).notNull(),
   phoneNumber: varchar('phone_number').notNull().unique(),
@@ -18,6 +18,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 }))
 
 export const insertUserSchema = createInsertSchema(users, {
+  userId: z.string(),
   name: z.string().min(3),
   lastName: z.string().min(3),
   phoneNumber: z.string().min(13)
