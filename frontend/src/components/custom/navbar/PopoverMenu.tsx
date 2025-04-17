@@ -3,24 +3,29 @@ import { Theme, useTheme } from '@/components/theme-provider';
 import { Link, useRouter } from '@tanstack/react-router';
 import { LOCALES, PATHS, THEMES } from '@/lib/constants';
 import { PopoverClose } from '@radix-ui/react-popover';
-import { LogOut, MenuIcon, X } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { useUserStore } from '@/stores/user-store';
+import { isLoggedOutPath } from '@/helpers/auth';
+import ToggleGroupMenu from './ToggleGroupMenu';
 import { useTranslation } from 'react-i18next';
+import { MenuIcon, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import moment from 'moment-timezone';
+import Company from '../Company';
 
+import { cn } from '@/lib/utils';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import ToggleGroupMenu from './ToggleGroupMenu';
-import { Separator } from '@/components/ui/separator';
-import Company from '../Company';
+import LogoutButton from './LogoutButton';
 
 const PopoverMenu = () => {
   const { t, i18n } = useTranslation();
   const { invalidate } = useRouter();
   const { theme, setTheme } = useTheme();
+  const { phoneNumber } = useUserStore((state) => state);
 
   const onlanguagechange = (lang: string) => {
     moment.locale(lang);
@@ -61,11 +66,21 @@ const PopoverMenu = () => {
               <Link
                 to={`${pathName}`}
                 preload='intent'
-                className={` p-2 rounded-xs text-left content-start items-start [&.active]:bg-accent hover:bg-accent/50`}
+                className={cn(
+                  ` p-2 rounded-xs text-left content-start items-start [&.active]:bg-accent hover:bg-accent/50`,
+                  {
+                    hidden: isLoggedOutPath(pathName) && phoneNumber,
+                  }
+                )}
                 key={pathName}>
                 {t(displayName)}
               </Link>
             ))}
+            <LogoutButton
+              styles={
+                'p-2 rounded-xs text-left content-start items-start [&.active]:bg-accent hover:bg-accent/50'
+              }
+            />
           </div>
           <Separator />
           <section className=' space-y-4'>

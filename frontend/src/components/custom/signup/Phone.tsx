@@ -11,6 +11,7 @@ import { toast } from '@/hooks/use-toast';
 import { useForm } from '@/hooks/useForm';
 import { sendOTP } from '@/helpers/auth';
 import { Input } from '../../ui/input';
+
 import { useEffect } from 'react';
 import {
   Card,
@@ -20,7 +21,7 @@ import {
 } from '@/components/ui/card';
 
 const filterNumber = (phoneNumber: string): string => {
-  const filteredNumber = phoneNumber.replaceAll(/[()-]/g, '');
+  const filteredNumber = phoneNumber.replaceAll(/[()\s-]/g, '');
   return filteredNumber;
 };
 
@@ -43,7 +44,7 @@ function Phone() {
     onSubmit: async (value) => {
       const filteredPhoneNumber = filterNumber(value.phoneNumber);
       updatePhoneNumber(filteredPhoneNumber);
-      sendOTP(filteredPhoneNumber);
+      await sendOTP(filteredPhoneNumber);
     },
     validatorAdapter: zodValidator(),
     validators: {
@@ -71,7 +72,7 @@ function Phone() {
       </CardHeader>
       <form
         className=' w-full flex flex-col gap-28'
-        onSubmit={(e) => onFormSubmit(e, form)}>
+        onSubmit={(e) => onFormSubmit<PhoneType>(e, form)}>
         <div className=' md:w-[70%] w-full self-center'>
           <form.Field
             name='phoneNumber'
@@ -110,20 +111,16 @@ function Phone() {
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
-            <>
-              <SubmitButton
-                className='md:w-[70%] w-full self-center'
-                title={t('get-otp')}
-                disabled={!canSubmit}
-                loading={isSubmitting}
-              />
-            </>
+            <SubmitButton
+              className='md:w-[70%] w-full self-center'
+              title={t('get-otp')}
+              disabled={!canSubmit}
+              loading={isSubmitting}
+            />
           )}
         />
       </form>
-      <div
-        id='g-recaptcha'
-        data-sitekey={import.meta.env.VITE_RECAPCHA_KEY}></div>
+      <div id='g-recaptcha' />
     </Card>
   );
 }

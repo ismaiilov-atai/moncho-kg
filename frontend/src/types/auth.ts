@@ -43,6 +43,6 @@ export interface AuthPageState {
 }
 
 export interface AuthPageStateActions {
-  forwardAuthPageCount: (number: AuthPageState['authPageCount']) => void
-  backwordAuthPageCount: (number: AuthPageState['authPageCount']) => void
+  forwardAuthPageCount: () => void
+  backwordAuthPageCount: () => void
 }

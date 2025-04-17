@@ -64,5 +64,10 @@
   "area-click-title": "Скоро!",
   "area-click-description": "На данный момент поддерживаются только номера телефонов с кодом страны +996.",
 
-  "firebase-down-auth": "Google Auth Service в данный момент недоступен. Повторите попытку позже."
+  "firebase-down-auth": "Google Auth Service в данный момент недоступен. Повторите попытку позже.",
+
+  "logout": "Выйти",
+
+  "logout-successful": "Вы успешно вышли из аккаунта!",
+  "failed-message": "Не удалось выполнить ваш запрос!"
 }

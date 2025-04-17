@@ -8,7 +8,7 @@ export const insertUser = async (user: NewUser): Promise<NewUser> => {
   const newUser = await db
     .insert(users)
     .values(user)
-    .onConflictDoUpdate({ target: users.phoneNumber, set: user })
+    .onConflictDoUpdate({ target: users.userId, set: user })
     .returning()
 
   return newUser[0]
