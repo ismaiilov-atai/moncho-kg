@@ -12,8 +12,9 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as OnboardingImport } from './routes/onboarding'
+import { Route as SignupRouteImport } from './routes/signup/route'
+import { Route as LoginRouteImport } from './routes/login/route'
 import { Route as BookSessionRouteImport } from './routes/book-session/route'
-import { Route as AuthRouteImport } from './routes/auth/route'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
@@ -24,6 +25,18 @@ const OnboardingRoute = OnboardingImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/onboarding.lazy').then((d) => d.Route))
 
+const SignupRouteRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRouteRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const BookSessionRouteRoute = BookSessionRouteImport.update({
   id: '/book-session',
   path: '/book-session',
@@ -31,12 +44,6 @@ const BookSessionRouteRoute = BookSessionRouteImport.update({
 } as any).lazy(() =>
   import('./routes/book-session/route.lazy').then((d) => d.Route),
 )
-
-const AuthRouteRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -55,18 +62,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRoute
-    }
     '/book-session': {
       id: '/book-session'
       path: '/book-session'
       fullPath: '/book-session'
       preLoaderRoute: typeof BookSessionRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRoute
     }
     '/onboarding': {
@@ -83,46 +97,51 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRouteRoute
   '/book-session': typeof BookSessionRouteRoute
+  '/login': typeof LoginRouteRoute
+  '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRouteRoute
   '/book-session': typeof BookSessionRouteRoute
+  '/login': typeof LoginRouteRoute
+  '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/auth': typeof AuthRouteRoute
   '/book-session': typeof BookSessionRouteRoute
+  '/login': typeof LoginRouteRoute
+  '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/book-session' | '/onboarding'
+  fullPaths: '/' | '/book-session' | '/login' | '/signup' | '/onboarding'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/book-session' | '/onboarding'
-  id: '__root__' | '/' | '/auth' | '/book-session' | '/onboarding'
+  to: '/' | '/book-session' | '/login' | '/signup' | '/onboarding'
+  id: '__root__' | '/' | '/book-session' | '/login' | '/signup' | '/onboarding'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRouteRoute: typeof AuthRouteRoute
   BookSessionRouteRoute: typeof BookSessionRouteRoute
+  LoginRouteRoute: typeof LoginRouteRoute
+  SignupRouteRoute: typeof SignupRouteRoute
   OnboardingRoute: typeof OnboardingRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRouteRoute: AuthRouteRoute,
   BookSessionRouteRoute: BookSessionRouteRoute,
+  LoginRouteRoute: LoginRouteRoute,
+  SignupRouteRoute: SignupRouteRoute,
   OnboardingRoute: OnboardingRoute,
 }
 
@@ -137,19 +156,23 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/auth",
         "/book-session",
+        "/login",
+        "/signup",
         "/onboarding"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/auth": {
-      "filePath": "auth/route.tsx"
-    },
     "/book-session": {
       "filePath": "book-session/route.tsx"
+    },
+    "/login": {
+      "filePath": "login/route.tsx"
+    },
+    "/signup": {
+      "filePath": "signup/route.tsx"
     },
     "/onboarding": {
       "filePath": "onboarding.tsx"

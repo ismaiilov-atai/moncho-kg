@@ -24,7 +24,7 @@ const variants = {
   }),
 };
 
-export const Route = createFileRoute('/auth')({
+export const Route = createFileRoute('/signup')({
   head: () => ({
     meta: [
       { title: `${t('Signup')} MonchoKG` },

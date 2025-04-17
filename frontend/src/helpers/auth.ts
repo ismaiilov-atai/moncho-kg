@@ -44,4 +44,8 @@ const sendOTP = async (phoneNumber: string) => {
   }
 }
 
-export { RecaptchaVerifier, signInWithPhoneNumber, sendOTP }
+const isLoggedOutPath = (path: string) => {
+  return path === '/login' || path === '/signup';
+};
+
+export { RecaptchaVerifier, signInWithPhoneNumber, sendOTP, isLoggedOutPath }
