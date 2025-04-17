@@ -44,7 +44,7 @@ function Phone() {
     onSubmit: async (value) => {
       const filteredPhoneNumber = filterNumber(value.phoneNumber);
       updatePhoneNumber(filteredPhoneNumber);
-      sendOTP(filteredPhoneNumber);
+      await sendOTP(filteredPhoneNumber);
     },
     validatorAdapter: zodValidator(),
     validators: {
@@ -72,7 +72,7 @@ function Phone() {
       </CardHeader>
       <form
         className=' w-full flex flex-col gap-28'
-        onSubmit={(e) => onFormSubmit(e, form)}>
+        onSubmit={(e) => onFormSubmit<PhoneType>(e, form)}>
         <div className=' md:w-[70%] w-full self-center'>
           <form.Field
             name='phoneNumber'
@@ -111,14 +111,12 @@ function Phone() {
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
-            <>
-              <SubmitButton
-                className='md:w-[70%] w-full self-center'
-                title={t('get-otp')}
-                disabled={!canSubmit}
-                loading={isSubmitting}
-              />
-            </>
+            <SubmitButton
+              className='md:w-[70%] w-full self-center'
+              title={t('get-otp')}
+              disabled={!canSubmit}
+              loading={isSubmitting}
+            />
           )}
         />
       </form>
