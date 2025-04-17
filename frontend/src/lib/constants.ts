@@ -8,7 +8,7 @@ export const PATHS = [
 ]
 export const LOCALES = [
   { key: 'ky', flag: '🇰🇬', name: "Кыргыз" },
-  { key: 'en', flag: '🇺🇸', name: "English" },
+  { key: 'en-US', flag: '🇺🇸', name: "English" },
   { key: 'ru', flag: '🇷🇺', name: "Русский" },
 ]
 

@@ -38,7 +38,7 @@ function Details() {
     onSubmit: async (value) => {
       updateFirstName(value.name);
       updateLastName(value.lastName);
-      forwardAuthPageCount(authPageCount);
+      forwardAuthPageCount();
     },
     validatorAdapter: zodValidator(),
     validators: {

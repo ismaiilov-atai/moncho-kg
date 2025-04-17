@@ -71,7 +71,6 @@ function VerifyOTP() {
           const data = await insertUserResponse.json();
           if (!data.isSuccess) throw insertUserResponse;
           updateUserId(data.userId || '');
-
           navigateHome();
         }
       } catch (error) {

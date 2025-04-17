@@ -55,7 +55,7 @@ function AuthComponent() {
   return (
     <div className='w-full flex max-md:flex-col h-[85dvh] items-center max-sm:relative gap-4 max-md:justify-between justify-center p-10 max-sm:p-0 m-0'>
       <section
-        onClick={() => backwordAuthPageCount(authPageCount)}
+        onClick={() => backwordAuthPageCount()}
         className={cn(
           'sm:absolute max-sm:mt-2 max-sm:bg-muted/20 max-sm:ml-2 self-start left-3 lg:left-[10%] top-[8%] flex gap-2 items-center hover:bg-accent/40 p-2 rounded-sm visible text-muted-foreground',
           { ' hidden ': authPageCount === 0 }

@@ -11,6 +11,7 @@ import { toast } from '@/hooks/use-toast';
 import { useForm } from '@/hooks/useForm';
 import { sendOTP } from '@/helpers/auth';
 import { Input } from '../../ui/input';
+
 import { useEffect } from 'react';
 import {
   Card,
@@ -20,7 +21,7 @@ import {
 } from '@/components/ui/card';
 
 const filterNumber = (phoneNumber: string): string => {
-  const filteredNumber = phoneNumber.replaceAll(/[()-]/g, '');
+  const filteredNumber = phoneNumber.replaceAll(/[()\s-]/g, '');
   return filteredNumber;
 };
 
@@ -121,9 +122,7 @@ function Phone() {
           )}
         />
       </form>
-      <div
-        id='g-recaptcha'
-        data-sitekey={import.meta.env.VITE_RECAPCHA_KEY}></div>
+      <div id='g-recaptcha' />
     </Card>
   );
 }
