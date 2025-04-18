@@ -66,7 +66,6 @@ export const rescheduleBookingFromTo = async (fromId: string, toId: string): Pro
     const updatedReso = await findBookingById(fromId)
     return updatedReso
   } catch (error) {
-    console.log(error)
     throw error
   }
 }

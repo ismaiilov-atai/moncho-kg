@@ -1,5 +1,6 @@
 import { ACCESS_TOKEN } from '@server/types/constants'
 import { queryOptions } from '@tanstack/react-query'
+import type { InferResponseType } from 'hono/client'
 import { type ApiRoutes } from '@server/app'
 import { getUser } from '@/helpers/user'
 import { getDays } from '@/helpers/day'
@@ -19,6 +20,7 @@ export const api = client.api
 export const $day = api.days
 export const $user = api.user
 export const $reserve = api.reserve
+export type AuthRespType = InferResponseType<typeof api.auth.$get>
 
 export const daysQueryOptions = queryOptions({
   queryKey: ["days"],

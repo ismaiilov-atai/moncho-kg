@@ -54,3 +54,15 @@ export const DRAW = {
 export const IMAGE: React.CSSProperties = {
   maxWidth: '80vw',
 }
+
+export const VARIANTS = {
+  enter: (direction: boolean) => ({
+    x: direction ? -100 : 40,
+    opacity: 0,
+  }),
+  exit: (direction: boolean) => ({
+    zIndex: 0,
+    x: direction ? 200 : -200,
+    opacity: 0,
+  }),
+}

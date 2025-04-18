@@ -2,8 +2,10 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 import { numberSchema, PhoneType } from '@/types/form';
 import { useAuthStore } from '@/stores/signup-store';
 import { ChevronDown, InfoIcon } from 'lucide-react';
+import { useNavigate } from '@tanstack/react-router';
 import { useUserStore } from '@/stores/user-store';
 import { useTranslation } from 'react-i18next';
+import { api, AuthRespType } from '@/lib/api';
 import { useMask } from '@react-input/mask';
 import SubmitButton from '../SubmitButton';
 import { onFormSubmit } from '@/lib/utils';
@@ -25,9 +27,16 @@ const filterNumber = (phoneNumber: string): string => {
   return filteredNumber;
 };
 
-function Phone() {
+interface PageProps {
+  isLogin?: boolean;
+}
+
+function Phone({ isLogin }: PageProps) {
   const { t } = useTranslation();
-  const { updatePhoneNumber } = useUserStore((state) => state);
+  const { updatePhoneNumber, updateLastName, updateFirstName } = useUserStore(
+    (state) => state
+  );
+  const navigate = useNavigate();
   const { authPageCount } = useAuthStore((state) => state);
 
   const inputRef = useMask({
@@ -44,6 +53,28 @@ function Phone() {
     onSubmit: async (value) => {
       const filteredPhoneNumber = filterNumber(value.phoneNumber);
       updatePhoneNumber(filteredPhoneNumber);
+
+      if (isLogin) {
+        try {
+          const response = await api.auth.$get({
+            query: {
+              phoneNumber: filteredPhoneNumber,
+            },
+          });
+          const data: AuthRespType = await response.json();
+          if (data.msg !== null) {
+            toast({
+              title: 'User does not exist',
+              description: data.msg,
+            });
+            navigate({ to: '/signup' });
+          }
+          updateFirstName(data.user?.name!);
+          updateLastName(data.user?.lastName!);
+        } catch (error) {
+          throw error;
+        }
+      }
       await sendOTP(filteredPhoneNumber);
     },
     validatorAdapter: zodValidator(),

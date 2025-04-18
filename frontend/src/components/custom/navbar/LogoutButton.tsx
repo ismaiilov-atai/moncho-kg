@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 const LogoutButton = ({ styles }: { styles: string }) => {
   const { t } = useTranslation();
-  const { updateFirstName, phoneNumber } = useUserStore((state) => state);
+  const { updateFirstName, userId } = useUserStore((state) => state);
 
   const onLogoutClick = () => {
     signOut(auth)
@@ -27,7 +27,7 @@ const LogoutButton = ({ styles }: { styles: string }) => {
   return (
     <span
       className={cn(`${styles} cursor-pointer`, {
-        hidden: !phoneNumber,
+        hidden: !userId,
       })}
       onClick={onLogoutClick}>
       {t('logout')}

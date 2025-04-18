@@ -7,6 +7,7 @@ import { StripeQueryResult } from '@/types/stripe';
 import { api, userQueryOptions } from '@/lib/api';
 import Home from '@/components/custom/main/Home';
 import { toast } from '@/hooks/use-toast';
+
 import {
   createFileRoute,
   Navigate,
@@ -72,10 +73,10 @@ export const Route = createFileRoute('/')({
     if (error instanceof JwtTokenExpired || JwtTokenInvalid) {
       toast({
         title: 'Unauthorized',
-        description: 'Please sign-up or sign-in in order to use the app!',
+        description: 'Please sign-up or login in order to use the app!',
         variant: 'destructive',
       });
-      return Navigate({ to: '/auth' });
+      return Navigate({ to: '/signup' });
     } else {
       throw error;
     }

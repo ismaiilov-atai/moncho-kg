@@ -25,7 +25,7 @@ const PopoverMenu = () => {
   const { t, i18n } = useTranslation();
   const { invalidate } = useRouter();
   const { theme, setTheme } = useTheme();
-  const { phoneNumber } = useUserStore((state) => state);
+  const { userId } = useUserStore((state) => state);
 
   const onlanguagechange = (lang: string) => {
     moment.locale(lang);
@@ -69,7 +69,7 @@ const PopoverMenu = () => {
                 className={cn(
                   ` p-2 rounded-xs text-left content-start items-start [&.active]:bg-accent hover:bg-accent/50`,
                   {
-                    hidden: isLoggedOutPath(pathName) && phoneNumber,
+                    hidden: isLoggedOutPath(pathName) && userId,
                   }
                 )}
                 key={pathName}>
