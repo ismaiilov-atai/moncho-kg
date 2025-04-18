@@ -2,6 +2,7 @@ import type { AccessTokenUserType, NewUser, RefreshTokenUserType } from '../type
 import { users } from '../db/schema/user.sch'
 import { sign } from 'hono/jwt'
 import { db } from '../db'
+import { eq } from 'drizzle-orm'
 
 
 export const insertUser = async (user: NewUser): Promise<NewUser> => {
@@ -12,6 +13,14 @@ export const insertUser = async (user: NewUser): Promise<NewUser> => {
     .returning()
 
   return newUser[0]
+}
+
+export const findUserByPhoneNumber = async (phoneNumber: string) => {
+  const userFound = await db.query.users.findFirst({
+    where: eq(users.phoneNumber, phoneNumber)
+  })
+
+  return userFound
 }
 
 export const JWTify = async (user: AccessTokenUserType | RefreshTokenUserType, expiresIn: number = Math.floor(Date.now() / 1000) + 60 * 5): Promise<string> => {

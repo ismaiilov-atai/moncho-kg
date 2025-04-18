@@ -1,6 +1,6 @@
 import type { TokenHeader } from 'hono/utils/jwt/jwt'
 import { insertUserSchema } from '../db/schema/user.sch'
-import type { z } from 'zod'
+import { string, z } from 'zod'
 
 export type NewUser = z.infer<typeof insertUserSchema>
 
@@ -16,6 +16,10 @@ export type Decoded = {
   header: TokenHeader,
   payload: Payload
 }
+
+export const PhoneType = z.object({
+  phoneNumber: string()
+})
 
 export const createUserSchema = insertUserSchema.omit({
   id: true

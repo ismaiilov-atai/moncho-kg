@@ -5,8 +5,6 @@ import { auth } from '@/lib/firebase'
 import { toast } from '@/hooks/use-toast'
 import { t } from 'i18next'
 
-
-
 const { forwardAuthPageCount } = useAuthStore.getState()
 
 const setupRecaptcha = async () => {
@@ -44,8 +42,8 @@ const sendOTP = async (phoneNumber: string) => {
   }
 }
 
-const isLoggedOutPath = (path: string) => {
-  return path === '/login' || path === '/signup';
-};
+const isLoggedOutPath = (path: string) => (
+  path === '/login' || path === '/signup'
+)
 
 export { RecaptchaVerifier, signInWithPhoneNumber, sendOTP, isLoggedOutPath }

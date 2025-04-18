@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 
 const LargeMenu = () => {
   const { t } = useTranslation();
-  const { phoneNumber } = useUserStore((state) => state);
+  const { userId } = useUserStore((state) => state);
 
   return (
     <section className='flex justify-between w-[90%] h-full ml-8 max-md:hidden md:visible items-center'>
@@ -24,7 +24,7 @@ const LargeMenu = () => {
             className={cn(
               `${buttonVariants({ variant: 'link' })}  [&.active]:text-foreground p-0 py-2 text-sm text-muted-foreground hover:text-foreground hover:no-underline items-end`,
               {
-                hidden: isLoggedOutPath(pathName) && phoneNumber,
+                hidden: isLoggedOutPath(pathName) && userId,
               }
             )}
             key={pathName}>

@@ -20,7 +20,6 @@ export const reserve = new Hono()
   .put('/', zValidator('json', z.object({ from: string(), to: string() })), async (c) => {
     try {
       const body = c.req.valid('json')
-      console.log(body)
       const updatedBooking = await rescheduleBookingFromTo(body.from, body.to)
       return c.json({ isSuccess: true, reservation: updatedBooking }, 202)
     } catch (e) {
