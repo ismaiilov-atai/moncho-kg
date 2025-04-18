@@ -69,5 +69,8 @@
   "logout": "Logout",
 
   "logout-successful": "Successfully logged out!",
-  "failed-message": "Failed to complete your request!"
+  "failed-message": "Failed to complete your request!",
+
+  "user-not-exist-title": "User does not exist",
+  "user-not-exist-description": "You have not signed up yet, please start fill up your details to signup."
 }
