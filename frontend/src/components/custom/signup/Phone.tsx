@@ -64,8 +64,9 @@ function Phone({ isLogin }: PageProps) {
           const data: AuthRespType = await response.json();
           if (data.msg !== null) {
             toast({
-              title: 'User does not exist',
-              description: data.msg,
+              title: t('user-not-exist-title'),
+              description: t(data.msg),
+              duration: 4500,
             });
             navigate({ to: '/signup' });
           }

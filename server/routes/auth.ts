@@ -10,12 +10,12 @@ export const auth = new Hono()
     async c => {
       try {
         const { phoneNumber } = c.req.valid('query')
-        
+
         const userFound = await findUserByPhoneNumber(phoneNumber)
 
         return c.json({ success: true, user: { name: userFound?.name, lastName: userFound?.lastName }, msg: null }, 200)
       } catch (error) {
-        return c.json({ success: false, user: null, msg: 'User does not exist, sign-up please' }, 404)
+        return c.json({ success: false, user: null, msg: 'user-not-exist-description' }, 404)
       }
     })
   .post('/', zValidator('json', createUserSchema), async c => {
