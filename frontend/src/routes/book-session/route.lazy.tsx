@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Separator } from '@/components/ui/separator';
 import { useSlotsStore } from '@/stores/slots-store';
-import Slots from '@/components/custom/main/Slots';
+import Slots from '@/components/custom/main/slots/Slots';
 import { fakeDays, fakeSlots } from '@/lib/fakers';
 import Days from '@/components/custom/main/Days';
 import { useTranslation } from 'react-i18next';

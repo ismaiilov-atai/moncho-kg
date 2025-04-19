@@ -1,18 +1,12 @@
-import { useRescheduleStore } from '@/stores/reschedule-store';
 import { DialogDescription, DialogHeader, DialogTitle } from '../../ui/dialog';
+import { useTranslation } from 'react-i18next';
 
 const ReservationDialogHeader = () => {
-  const isRescheduling = useRescheduleStore((state) => state.isRescheduling);
+  const { t } = useTranslation();
   return (
     <DialogHeader className='text-left'>
-      <DialogTitle>
-        {isRescheduling ? 'Rescheduling' : 'Reservation'}
-      </DialogTitle>
-      <DialogDescription>
-        {isRescheduling
-          ? 'Complete your rescheduling'
-          : 'Please complete your reservation'}
-      </DialogDescription>
+      <DialogTitle>{t('ready-book')}</DialogTitle>
+      <DialogDescription>{t('ready-book-description')}</DialogDescription>
     </DialogHeader>
   );
 };
