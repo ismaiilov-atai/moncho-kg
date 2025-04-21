@@ -36,6 +36,7 @@ export const checkout = new Hono()
         ui_mode: 'embedded',
         submit_type: 'book',
         payment_method_types: ['card'],
+        locale: 'auto',
         return_url: `${process.env.BASE_URL}/book-session?session_id={CHECKOUT_SESSION_ID}&slotId=${slotId}&guest=${guest}&userId=${userId}`,
       })
 
