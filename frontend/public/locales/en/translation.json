@@ -79,9 +79,13 @@
   "ready-book": "Ready to Book?",
   "ready-book-description": "Please review your selected slot information. Once you're ready, proceed to complete your booking.",
   "availability": "Available spots",
-  "space": "of",
+  "space": "available spots",
   "how-many-guest": "How many guests will accompany you?",
   "up-to-9": "up to 9 people you can bring with you",
   "proceed-payment": "Proceed to Payment",
-  "cancel": "cancel"
+  "cancel": "cancel",
+
+  "reso-success":"Reservation Successful",
+  "reso-success-description":"You're all set! Feel free to reach out if you have any questions."
+  
 }

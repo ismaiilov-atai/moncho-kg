@@ -1,68 +1,43 @@
-import { CircleCheckBig, TriangleAlert } from 'lucide-react';
-import { createResevation } from '@/helpers/resorvation';
-import { BookingType } from '@server/types/reservation';
 import { useStripeStore } from '@/stores/stripe-store';
-import { getRouteApi } from '@tanstack/react-router';
-import { useMutation } from '@tanstack/react-query';
-import { useUserStore } from '@/stores/user-store';
-import { useNavHome } from '@/hooks/useNavHome';
-import { Button } from './ui/button';
-import moment from 'moment';
+import { useNavigate } from '@tanstack/react-router';
+import SubmitButton from './custom/SubmitButton';
+import { useTranslation } from 'react-i18next';
+import { CircleCheckBig } from 'lucide-react';
+import { memo } from 'react';
 
-const apiRoute = getRouteApi('/');
-
-const CheckoutStatus = () => {
-  const navigateHome = useNavHome();
-
-  const { mutateAsync, isPending, isError } = useMutation({
-    mutationFn: createResevation,
-  });
-  const { slotId, guest } = apiRoute.useSearch();
-  const { userId } = useUserStore((state) => state);
-  const { updateStripeStatus } = useStripeStore((state) => state);
-  const { updateReservations, reservations } = useUserStore((state) => state);
-
-  const updateAndSortResoLocally = (reso: BookingType) => {
-    return [reso, ...reservations].sort((a, b) =>
-      moment(a.when).diff(moment(b.when))
-    );
-  };
-
+const CheckoutStatus = memo(() => {
+  const navigate = useNavigate();
+  const { updateStripeStatus, updateClientSecret } = useStripeStore(
+    (state) => state
+  );
+  const { t } = useTranslation();
   const confirmClick = async () => {
+    navigate({ to: '/' });
     updateStripeStatus('');
-    const resp = await mutateAsync({
-      userId,
-      slotId: slotId,
-      withYou: guest || 0,
-    });
-
-    if (resp.isSuccess) {
-      navigateHome();
-      updateReservations(updateAndSortResoLocally(resp.reservation));
-    }
+    updateClientSecret('');
   };
-
-  if (isError) {
-    return (
-      <div className='w-full flex flex-col items-center gap-6'>
-        <TriangleAlert className=' w-10 h-10 text-red-500' />
-        <span>Failed with reservation</span>
-        <span className=' font-extralight text-xs text-pretty text-center'>
-          contact with support team or try to book different time
-        </span>
-      </div>
-    );
-  }
 
   return (
-    <div className='w-full flex flex-col items-center gap-6'>
-      <CircleCheckBig className=' w-10 h-10 text-green-500' />
-      <span>Successfully completed!</span>
-      <Button className='w-full' onClick={confirmClick}>
-        {isPending ? 'Loading...' : 'Ok'}
-      </Button>
+    <div className='w-full flex flex-col items-center gap-6 text-center justify-around'>
+      <section className=' text-center flex flex-col justify-center items-center gap-10 '>
+        <CircleCheckBig className=' w-16 h-16 text-green-500' />
+        <div>
+          <div className=' font-bold'>{t('reso-success')}</div>
+          <span className='text-sm font-playfair text-muted-foreground '>
+            {t('reso-success-description')}
+          </span>
+        </div>
+      </section>
+      <form onSubmit={confirmClick} className=' w-full text-center'>
+        <SubmitButton
+          title={t('gotit')}
+          disabled={false}
+          loading={false}
+          className='w-[80%]'
+        />
+      </form>
     </div>
   );
-};
+});
 
 export default CheckoutStatus;

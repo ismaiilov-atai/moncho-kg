@@ -3,9 +3,7 @@ import { NavBar } from '@/components/custom/navbar/NavBar';
 import RootPending from '@/components/custom/RootPending';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
 import { ACCESS_TOKEN } from '@server/types/constants';
-import { useStripeStore } from '@/stores/stripe-store';
 import type { RouterContext } from '@/routerContext';
-import StripeClient from '@/components/StripeClient';
 import { onAuthStateChanged } from 'firebase/auth';
 import FAB from '@/components/custom/main/fab/FAB';
 import { useUserStore } from '@/stores/user-store';
@@ -80,8 +78,6 @@ function Root() {
   const { i18n } = useTranslation();
   auth.languageCode = i18n.language;
   moment.locale(i18n.language);
-  const { clientSecret } = useStripeStore((state) => state);
-  if (clientSecret) return <StripeClient clientSecret={clientSecret} />;
   useDeviceDetect();
 
   onAuthStateChanged(auth, async (user) => {

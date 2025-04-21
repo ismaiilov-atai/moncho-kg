@@ -1,10 +1,11 @@
 import ReservationDialogActions from '@/components/custom/resorvations/ReservationDialogActions';
 import ReservationDialogHeader from '@/components/custom/resorvations/ReservationDialogHeader';
+import { FormEvent, memo, useCallback, useEffect, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import CheckoutStatus from '@/components/CheckoutStatus';
-import { FormEvent, useEffect, useState } from 'react';
 import { useStripeStore } from '@/stores/stripe-store';
 import { useSlotsStore } from '@/stores/slots-store';
+import { getRouteApi } from '@tanstack/react-router';
 import { Skeleton } from '@/components/ui/skeleton';
 import { buttonVariants } from '../../../ui/button';
 import { useUserStore } from '@/stores/user-store';
@@ -18,13 +19,18 @@ interface Props {
   isPending?: boolean;
 }
 
-const Slots = ({ slots, isPending }: Props) => {
+const apiRoute = getRouteApi('/book-session');
+
+const Slots = memo(({ slots, isPending }: Props) => {
+  const search = apiRoute.useSearch();
   const { stripeStatus, updateClientSecret } = useStripeStore((state) => state);
+
   const { selectedSlot } = useSlotsStore((state) => state);
-  const { name, lastName } = useUserStore((state) => state);
+  const { name, lastName, userId } = useUserStore((state) => state);
   const [reserveDialogOpen, setReserveDialogState] = useState(false);
-  useEffect(() => setGuest(0), [selectedSlot]);
   const [guest, setGuest] = useState(0);
+
+  useEffect(() => setGuest(0), [selectedSlot]);
 
   const guestNumberClick = (action: 'up' | 'down') => {
     if (action === 'up' && guest < 9 && selectedSlot.spaceLeft - 1 > guest) {
@@ -34,16 +40,21 @@ const Slots = ({ slots, isPending }: Props) => {
     }
   };
 
+  const fetchClientSecret = useCallback(
+    async (slotId: string, guest: number) => {
+      const res = await api['checkout-session'].$post({
+        query: { slotId, userId, guest },
+      });
+      const data = await res.json();
+      return data.clientSecret;
+    },
+    []
+  );
+
   const onBoookAction = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const resp = await api['checkout-session'].$post({
-      query: {
-        slotId: selectedSlot.slotId,
-        guest,
-      },
-    });
-    const data = await resp.json();
-    if (data.clientSecret) updateClientSecret(data.clientSecret);
+    const clientSecret = await fetchClientSecret(selectedSlot.slotId, guest);
+    if (clientSecret) updateClientSecret(clientSecret);
   };
 
   const onOpenChangeListener = (dialogState: boolean) => {
@@ -69,26 +80,27 @@ const Slots = ({ slots, isPending }: Props) => {
             onOpenChange={onOpenChangeListener}
             open={
               (Object.hasOwn(selectedSlot, 'time') && reserveDialogOpen) ||
-              stripeStatus.length > 0
+              (stripeStatus.length > 0 && !!search.session_id)
             }>
             <SlotTriggerer
               slot={slot}
               setReserveDialogState={setReserveDialogState}
             />
-
             <DialogContent className=' w-[90%] max-h-fit max-xs:h-[80%] rounded-sm h-1/2 '>
-              <ReservationDialogHeader />
-              {stripeStatus ? (
+              {search.session_id ? (
                 <CheckoutStatus />
               ) : (
-                <ReservationDialogActions
-                  onSubmitAction={onBoookAction}
-                  onCancel={onCancel}
-                  guest={guest}
-                  guestNumberClick={guestNumberClick}
-                  selectedTimeSlot={selectedSlot}
-                  isPending={false}
-                />
+                <>
+                  <ReservationDialogHeader />
+                  <ReservationDialogActions
+                    onSubmitAction={onBoookAction}
+                    onCancel={onCancel}
+                    guest={guest}
+                    guestNumberClick={guestNumberClick}
+                    selectedTimeSlot={selectedSlot}
+                    isPending={false}
+                  />
+                </>
               )}
             </DialogContent>
           </Dialog>
@@ -96,6 +108,6 @@ const Slots = ({ slots, isPending }: Props) => {
       })}
     </div>
   );
-};
+});
 
 export default Slots;
