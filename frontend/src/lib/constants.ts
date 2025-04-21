@@ -66,3 +66,10 @@ export const VARIANTS = {
     opacity: 0,
   }),
 }
+
+export const BOOK_SESSION_SEARCH_DEFAULT_VALUES = {
+  session_id: '',
+  guest: 0,
+  slotId: '',
+  userId: '',
+};

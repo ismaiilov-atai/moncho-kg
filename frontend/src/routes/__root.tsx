@@ -3,13 +3,13 @@ import { NavBar } from '@/components/custom/navbar/NavBar';
 import RootPending from '@/components/custom/RootPending';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
 import { ACCESS_TOKEN } from '@server/types/constants';
-import { useStripeStore } from '@/stores/stripe-store';
 import type { RouterContext } from '@/routerContext';
-import StripeClient from '@/components/StripeClient';
 import { onAuthStateChanged } from 'firebase/auth';
 import FAB from '@/components/custom/main/fab/FAB';
+import { useUserStore } from '@/stores/user-store';
 import { Toaster } from '@/components/ui/toaster';
 import { useTranslation } from 'react-i18next';
+import { userQueryOptions } from '@/lib/api';
 import { auth } from '@/lib/firebase';
 import moment from 'moment-timezone';
 import { cn } from '@/lib/utils';
@@ -41,6 +41,35 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   notFoundComponent: () => <>404 not found</>,
   pendingComponent: () => <RootPending />,
   errorComponent: ({ error }) => <div>Failed default: {error.message} </div>,
+  beforeLoad: async ({ context: { queryClient } }) => {
+    try {
+      const {
+        updateUserId,
+        userId,
+        updateReservations,
+        updateFirstName,
+        updatePhoneNumber,
+        updateLastName,
+        updateBeenTimes,
+      } = useUserStore.getState();
+      if (!userId) {
+        const result = await queryClient.ensureQueryData(userQueryOptions);
+
+        if ('err' in result) throw result.err;
+        const { reservations, name, lastName, phoneNumber, beenTimes, userId } =
+          result.user;
+
+        updateUserId(userId || '');
+        updateReservations(reservations || []);
+        updateFirstName(name!);
+        updateLastName(lastName!);
+        updatePhoneNumber(phoneNumber!);
+        updateBeenTimes(beenTimes!);
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
   wrapInSuspense: true,
 });
 
@@ -49,8 +78,6 @@ function Root() {
   const { i18n } = useTranslation();
   auth.languageCode = i18n.language;
   moment.locale(i18n.language);
-  const { clientSecret } = useStripeStore((state) => state);
-  if (clientSecret) return <StripeClient clientSecret={clientSecret} />;
   useDeviceDetect();
 
   onAuthStateChanged(auth, async (user) => {

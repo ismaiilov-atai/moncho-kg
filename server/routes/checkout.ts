@@ -16,27 +16,33 @@ export const checkout = new Hono()
     })
   })
   .post('/', async (c) => {
-    const { guest, slotId } = c.req.query()
-    const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            currency: 'kgs',
-            product_data: {
-              name: 'Moncho Price',
+    try {
+      const { slotId, userId, guest } = c.req.query()
+      const session = await stripe.checkout.sessions.create({
+        line_items: [
+          {
+            price_data: {
+              currency: 'kgs',
+              product_data: {
+                name: 'Moncho Price',
+              },
+
+              unit_amount_decimal: '10000'
             },
-
-            unit_amount_decimal: '10000'
+            quantity: 1,
           },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      ui_mode: 'embedded',
-      submit_type: 'book',
-      payment_method_types: ['card'],
-      return_url: `${process.env.BASE_URL}/?session_id={CHECKOUT_SESSION_ID}&slotId=${slotId}&guest=${guest}`,
-    })
+        ],
+        mode: 'payment',
+        ui_mode: 'embedded',
+        submit_type: 'book',
+        payment_method_types: ['card'],
+        locale: 'auto',
+        return_url: `${process.env.BASE_URL}/book-session?session_id={CHECKOUT_SESSION_ID}&slotId=${slotId}&guest=${guest}&userId=${userId}`,
+      })
 
-    return c.json({ clientSecret: session.client_secret })
+      return c.json({ clientSecret: session.client_secret })
+    } catch (error) {
+      return c.json({ clientSecret: null }, 400)
+    }
+
   })

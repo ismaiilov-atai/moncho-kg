@@ -1,9 +1,11 @@
 import SevenDaysRangeHeader from '@/components/custom/SevenDaysRangeHeader';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { createLazyFileRoute } from '@tanstack/react-router';
+import Slots from '@/components/custom/main/slots/Slots';
+import { useStripeStore } from '@/stores/stripe-store';
 import { Separator } from '@/components/ui/separator';
+import StripeClient from '@/components/StripeClient';
 import { useSlotsStore } from '@/stores/slots-store';
-import Slots from '@/components/custom/main/Slots';
 import { fakeDays, fakeSlots } from '@/lib/fakers';
 import Days from '@/components/custom/main/Days';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +23,10 @@ export function BookSessionComponent({ isPending }: PageProps) {
   const days = Route.useLoaderData();
   const { i18n } = useTranslation();
   const { slots } = useSlotsStore((state) => state);
+  const { clientSecret } = useStripeStore((state) => state);
   moment.locale(i18n.language);
+
+  if (clientSecret) return <StripeClient clientSecret={clientSecret} />;
   return (
     <section className='sm:p-2'>
       <Card className='pb-3 max-sm:fixed max-sm:right-0 max-sm:left-0 max-sm:rounded-none max-sm:border-none max-sm:shadow-none'>

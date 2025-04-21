@@ -1,37 +1,14 @@
+import { createFileRoute, Navigate, redirect } from '@tanstack/react-router';
 import { JwtTokenExpired, JwtTokenInvalid } from 'hono/utils/jwt/types';
-import { useStripeStore } from '@/stores/stripe-store';
 import { useDeviceStore } from '@/stores/device-store';
 import { ONBOARDING_COMPLETED } from '@/lib/constants';
-import { useUserStore } from '@/stores/user-store';
-import { StripeQueryResult } from '@/types/stripe';
-import { api, userQueryOptions } from '@/lib/api';
 import Home from '@/components/custom/main/Home';
 import { toast } from '@/hooks/use-toast';
 
-import {
-  createFileRoute,
-  Navigate,
-  redirect,
-  stripSearchParams,
-} from '@tanstack/react-router';
-
-const searchDefaultValues = { session_id: '', guest: 0, slotId: '' };
-
 export const Route = createFileRoute('/')({
   pendingComponent: () => <Home />,
-  beforeLoad: async ({ context: { queryClient }, search }) => {
+  beforeLoad: async () => {
     try {
-      const {
-        updateUserId,
-        userId,
-        updateReservations,
-        updateFirstName,
-        updatePhoneNumber,
-        updateLastName,
-        updateBeenTimes,
-      } = useUserStore.getState();
-
-      const { updateStripeStatus } = useStripeStore.getState();
       const { isMobile } = useDeviceStore.getState();
       const onboardingCompleted = localStorage.getItem(ONBOARDING_COMPLETED);
 
@@ -39,31 +16,6 @@ export const Route = createFileRoute('/')({
         throw redirect({
           to: '/onboarding',
         });
-      }
-
-      if (!userId) {
-        const result = await queryClient.ensureQueryData(userQueryOptions);
-
-        if (search.session_id) {
-          const resp = await api['checkout-session'].$get({
-            query: {
-              session_id: search.session_id,
-            },
-          });
-          const payment = await resp.json();
-          updateStripeStatus(payment.status || '');
-        }
-        if ('err' in result) throw result.err;
-
-        const { reservations, name, lastName, phoneNumber, beenTimes, userId } =
-          result.user;
-
-        updateUserId(userId || '');
-        updateReservations(reservations || []);
-        updateFirstName(name!);
-        updateLastName(lastName!);
-        updatePhoneNumber(phoneNumber!);
-        updateBeenTimes(beenTimes!);
       }
     } catch (error) {
       throw error;
@@ -80,15 +32,5 @@ export const Route = createFileRoute('/')({
     } else {
       throw error;
     }
-  },
-  validateSearch: (search: Record<string, unknown>): StripeQueryResult => {
-    return {
-      session_id: search.session_id as string,
-      guest: search.guest as number,
-      slotId: search.slotId as string,
-    };
-  },
-  search: {
-    middlewares: [stripSearchParams(searchDefaultValues)],
   },
 });

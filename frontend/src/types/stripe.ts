@@ -13,4 +13,5 @@ export interface StripeQueryResult {
   session_id: string
   guest: number
   slotId: string
+  userId: string
 }
