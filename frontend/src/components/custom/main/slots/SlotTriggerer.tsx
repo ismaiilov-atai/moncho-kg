@@ -1,10 +1,10 @@
 import { DialogTrigger } from '@/components/ui/dialog';
 import { useSlotsStore } from '@/stores/slots-store';
-import { useNavigate } from '@tanstack/react-router';
 import { useUserStore } from '@/stores/user-store';
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
+import { toast } from '@/hooks/use-toast';
 import { SlotsType } from '@/types/day';
 import { Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -18,17 +18,23 @@ interface PageProps {
 const SlotTriggerer = ({ slot, setReserveDialogState }: PageProps) => {
   const { updateSelectedSlot } = useSlotsStore((state) => state);
   const { phoneNumber, userId } = useUserStore((state) => state);
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const onClickTimeSlot = (slot: SlotsType) => {
+    console.log(slot.spaceLeft);
     updateSelectedSlot(slot);
-    if (userId && phoneNumber) setReserveDialogState(true);
-    else navigate({ to: '/signup' });
+    if (userId && phoneNumber && slot.spaceLeft > 0)
+      setReserveDialogState(true);
+    else {
+      toast({
+        title: `${t('full')}!`,
+        description: t('full-description'),
+      });
+    }
   };
 
   const timePassed = (time: string): boolean => {
-    return moment(time).isBefore(moment(), 'hour');
+    return moment(time).isSameOrBefore(moment(), 'hour');
   };
 
   return (
@@ -44,11 +50,19 @@ const SlotTriggerer = ({ slot, setReserveDialogState }: PageProps) => {
         <p className=' font-roboto text-lg'>
           {moment(slot.time).format('HH:mm')}
           <span> - </span>
-          {moment(slot.time).add(1.25, 'hours').format('HH:mm')}
+          {moment(slot.time).add(1, 'hours').format('HH:mm')}
         </p>
         <p className='text-muted-foreground text-sm flex items-center space-x-2'>
           <Users size={16} />
-          <span>10 {t('of')} 10</span>
+          <span>
+            {slot.spaceLeft ? `${slot.spaceLeft} ${t('of')} 10` : t('full')}
+          </span>
+          <span
+            className={cn(
+              `w-2 h-2 rounded-full self-center`,
+              slot.spaceLeft === 0 ? 'bg-red-500' : 'bg-green-600 animate-pulse'
+            )}
+          />
         </p>
       </Card>
     </DialogTrigger>

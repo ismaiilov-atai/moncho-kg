@@ -85,7 +85,9 @@
   "proceed-payment": "Proceed to Payment",
   "cancel": "cancel",
 
-  "reso-success":"Reservation Successful",
-  "reso-success-description":"You're all set! Feel free to reach out if you have any questions."
-  
+  "reso-success": "Reservation Successful",
+  "reso-success-description": "You're all set! Feel free to reach out if you have any questions.",
+
+  "full": "Fully booked",
+  "full-description": "We're sorry, but this time slot has just been filled. Please choose another available option."
 }

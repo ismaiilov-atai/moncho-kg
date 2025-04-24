@@ -27,25 +27,29 @@ const ReservationDialogActions = ({
   return (
     <>
       <div className='flex flex-col gap-5 h-full justify-between'>
-        <section>
+        <section className=' space-y-3'>
           <div className=' text-foreground font-semibold'>{t('date-time')}</div>
-          <span className=' text-muted-foreground text-sm'>
-            {moment(selectedTimeSlot.time).format(
-              `dddd, MMMM DD YYYY ${t('at-moment')} HH:mm`
-            )}
-            <> - </>
+          <div className=' text-muted-foreground text-sm'>
+            {moment(selectedTimeSlot.time).format(`dddd DD-MMMM, YYYY`)}
+          </div>
+          <span className='text-primary text-sm'>
+            {moment(selectedTimeSlot.time).format(`HH:mm`)}
+          </span>
+          <span className='text-primary'> - </span>
+          <span className='text-primary text-sm'>
             {moment(selectedTimeSlot.time).add(1, 'hours').format('HH:mm')}
           </span>
         </section>
-        <section>
+        <section className=' space-y-3'>
           <div className='text-foreground font-semibold'>
             {t('availability')}
           </div>
           <span className='text-muted-foreground text-sm'>
-            {selectedTimeSlot.spaceLeft - (guest + 1)} {t('space')}
+            {selectedTimeSlot.spaceLeft - (guest > 0 ? guest + 1 : 0)}
+            {` ${t('space')}`}
           </span>
         </section>
-        <section className='space-y-2'>
+        <section className='space-y-4'>
           <div>
             <span className='text-foreground font-semibold max-xs:text-[12px] text-xs m-0'>
               {t('how-many-guest')}
@@ -58,14 +62,14 @@ const ReservationDialogActions = ({
           <div className=' flex gap-2 justify-around items-center w-1/2'>
             <Button
               variant={'outline'}
-              className='h-8 w-8 rounded-full'
+              className='h-8 w-8 rounded-full border-foreground'
               onClick={() => guestNumberClick('down')}>
               -
             </Button>
-            <span className='text-muted-foreground text-sm'>{guest}</span>
+            <span className='text-foreground text-sm'>{guest}</span>
             <Button
               variant={'outline'}
-              className='h-8 w-8 rounded-full'
+              className='h-8 w-8 rounded-full border-foreground'
               onClick={() => guestNumberClick('up')}>
               +
             </Button>
@@ -75,7 +79,10 @@ const ReservationDialogActions = ({
       <form
         onSubmit={(e) => onSubmitAction(e)}
         className='w-full flex justify-end gap-2 items-end'>
-        <Button variant={'outline'} onClick={(e) => onCancel(e)}>
+        <Button
+          variant={'outline'}
+          className=' border-gray-300'
+          onClick={(e) => onCancel(e)}>
           {t('cancel')}
         </Button>
 
