@@ -26,7 +26,7 @@ const Slots = memo(({ slots, isPending }: Props) => {
   const { stripeStatus, updateClientSecret } = useStripeStore((state) => state);
 
   const { selectedSlot } = useSlotsStore((state) => state);
-  const { name, lastName, userId } = useUserStore((state) => state);
+  const { userId } = useUserStore((state) => state);
   const [reserveDialogOpen, setReserveDialogState] = useState(false);
   const [guest, setGuest] = useState(0);
 
@@ -57,8 +57,8 @@ const Slots = memo(({ slots, isPending }: Props) => {
     if (clientSecret) updateClientSecret(clientSecret);
   };
 
-  const onOpenChangeListener = (dialogState: boolean) => {
-    name && lastName && setReserveDialogState(dialogState);
+  const onOpenChangeListener = (dialogState: boolean, slot: SlotsType) => {
+    if (slot.spaceLeft > 0) setReserveDialogState(dialogState);
   };
 
   const onCancel = (e: FormEvent<HTMLButtonElement>) => {
@@ -77,7 +77,7 @@ const Slots = memo(({ slots, isPending }: Props) => {
         ) : (
           <Dialog
             key={slot.slotId}
-            onOpenChange={onOpenChangeListener}
+            onOpenChange={(state) => onOpenChangeListener(state, slot)}
             open={
               (Object.hasOwn(selectedSlot, 'time') && reserveDialogOpen) ||
               (stripeStatus.length > 0 && !!search.session_id)
