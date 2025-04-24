@@ -21,7 +21,6 @@ const SlotTriggerer = ({ slot, setReserveDialogState }: PageProps) => {
   const { t } = useTranslation();
 
   const onClickTimeSlot = (slot: SlotsType) => {
-    console.log(slot.spaceLeft);
     updateSelectedSlot(slot);
     if (userId && phoneNumber && slot.spaceLeft > 0)
       setReserveDialogState(true);
