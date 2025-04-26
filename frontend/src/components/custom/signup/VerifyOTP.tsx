@@ -1,10 +1,10 @@
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { ACCESS_TOKEN } from '@server/types/constants';
+import { useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/stores/signup-store';
 import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
 import { OTP_CODE, otpSchema } from '@/types/form';
-import { useNavHome } from '@/hooks/useNavHome';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useTranslation } from 'react-i18next';
 import { onFormSubmit } from '@/lib/utils';
@@ -29,7 +29,7 @@ import {
 
 function VerifyOTP() {
   const { t } = useTranslation();
-  const navigateHome = useNavHome();
+  const navigate = useNavigate();
   const { authPageCount } = useAuthStore((state) => state);
   const { mutateAsync: insertUserMutation } = useMutation({
     mutationFn: api.auth.$post,
@@ -71,7 +71,7 @@ function VerifyOTP() {
           const data = await insertUserResponse.json();
           if (!data.isSuccess) throw insertUserResponse;
           updateUserId(data.userId || '');
-          navigateHome();
+          navigate({ to: '/' });
         }
       } catch (error) {
         throw error;
