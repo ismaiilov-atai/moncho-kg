@@ -1,12 +1,12 @@
 import { ONBOARDING_COMPLETED } from '@/lib/constants';
 import { AnimatePresence, motion } from 'motion/react';
 import { useDeviceStore } from '@/stores/device-store';
+import { useNavigate } from '@tanstack/react-router';
 import OnboardingContent from './OnboardingContent';
 import { Button } from '@/components/ui/button';
-import { useNavHome } from '@/hooks/useNavHome';
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useTranslation } from 'react-i18next';
 
 const progressWidth: { [key: number]: string } = {
   25: 'w-1/4',
@@ -20,7 +20,7 @@ interface PageProps {
 }
 
 const Onboarding = ({ setOpenDialog }: PageProps) => {
-  const navigateHome = useNavHome();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { isMobile } = useDeviceStore((state) => state);
   const [boardingPage, setBoardingPage] = useState(0);
@@ -28,7 +28,7 @@ const Onboarding = ({ setOpenDialog }: PageProps) => {
 
   const skipLanding = () => {
     localStorage.setItem(ONBOARDING_COMPLETED, 'true');
-    isMobile ? navigateHome() : setOpenDialog && setOpenDialog(false);
+    isMobile ? navigate({ to: '/' }) : setOpenDialog && setOpenDialog(false);
   };
 
   const nextOrGotItClick = () => {
