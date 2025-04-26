@@ -1,9 +1,7 @@
+import { useUserStore } from '@/stores/user-store';
+import { Link } from '@tanstack/react-router';
 import { ChevronRight } from 'lucide-react';
 import moment from 'moment';
-
-import { useUserStore } from '@/stores/user-store';
-import { Separator } from '@/components/ui/separator';
-import { Link } from '@tanstack/react-router';
 
 const UpcomingCard = () => {
   const { reservations } = useUserStore((state) => state);
@@ -12,10 +10,10 @@ const UpcomingCard = () => {
     return (
       <Link
         to='/session/$sessionId'
-        params={{ sessionId: 'rema-123e' }}
+        params={{ sessionId: reservation.bookingId || '' }}
         className='space-y-1'
         key={`${reservation.bookingId}_${index}`}>
-        <div className='flex w-full justify-between items-center p-2 bg-accent/25 hover:bg-accent/60 rounded-sm'>
+        <div className='flex w-full justify-between items-center p-2 bg-accent/20 hover:bg-accent/40 rounded-sm'>
           <span>
             <p className='text-lg font-roboto font-semibold'>{`${moment(reservation.when).format('HH:mm')} - ${moment(reservation.when).add(1.15, 'hours').format('HH:mm')} `}</p>
             <span className='text-muted-foreground'>
@@ -24,7 +22,6 @@ const UpcomingCard = () => {
           </span>
           <ChevronRight />
         </div>
-        {index < reservations.length - 1 && <Separator />}
       </Link>
     );
   });

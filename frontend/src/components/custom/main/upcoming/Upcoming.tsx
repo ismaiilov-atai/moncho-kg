@@ -15,7 +15,7 @@ const Upcoming = () => {
       <span className='text-lg h-10 font-roboto px-2 block place-content-center font-semibold'>
         {t('upcoming_reso_title')}
       </span>
-      <section className='space-y-2'>
+      <section className='flex flex-col gap-3 py-2'>
         {reservations.length > 0 && <UpcomingCard />}
         {reservations.length <= 0 && (
           <p className='text-muted-foreground font-roboto text-sm h-11 px-2'>
