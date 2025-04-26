@@ -16,6 +16,7 @@ import { Route as SignupRouteImport } from './routes/signup/route'
 import { Route as LoginRouteImport } from './routes/login/route'
 import { Route as BookSessionRouteImport } from './routes/book-session/route'
 import { Route as IndexImport } from './routes/index'
+import { Route as SessionSessionIdRouteImport } from './routes/session/$sessionId/route'
 
 // Create/Update Routes
 
@@ -50,6 +51,14 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const SessionSessionIdRouteRoute = SessionSessionIdRouteImport.update({
+  id: '/session/$sessionId',
+  path: '/session/$sessionId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/session/$sessionId/route.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -90,6 +99,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingImport
       parentRoute: typeof rootRoute
     }
+    '/session/$sessionId': {
+      id: '/session/$sessionId'
+      path: '/session/$sessionId'
+      fullPath: '/session/$sessionId'
+      preLoaderRoute: typeof SessionSessionIdRouteImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -101,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRouteRoute
   '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
+  '/session/$sessionId': typeof SessionSessionIdRouteRoute
 }
 
 export interface FileRoutesByTo {
@@ -109,6 +126,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRouteRoute
   '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
+  '/session/$sessionId': typeof SessionSessionIdRouteRoute
 }
 
 export interface FileRoutesById {
@@ -118,14 +136,34 @@ export interface FileRoutesById {
   '/login': typeof LoginRouteRoute
   '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
+  '/session/$sessionId': typeof SessionSessionIdRouteRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/book-session' | '/login' | '/signup' | '/onboarding'
+  fullPaths:
+    | '/'
+    | '/book-session'
+    | '/login'
+    | '/signup'
+    | '/onboarding'
+    | '/session/$sessionId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/book-session' | '/login' | '/signup' | '/onboarding'
-  id: '__root__' | '/' | '/book-session' | '/login' | '/signup' | '/onboarding'
+  to:
+    | '/'
+    | '/book-session'
+    | '/login'
+    | '/signup'
+    | '/onboarding'
+    | '/session/$sessionId'
+  id:
+    | '__root__'
+    | '/'
+    | '/book-session'
+    | '/login'
+    | '/signup'
+    | '/onboarding'
+    | '/session/$sessionId'
   fileRoutesById: FileRoutesById
 }
 
@@ -135,6 +173,7 @@ export interface RootRouteChildren {
   LoginRouteRoute: typeof LoginRouteRoute
   SignupRouteRoute: typeof SignupRouteRoute
   OnboardingRoute: typeof OnboardingRoute
+  SessionSessionIdRouteRoute: typeof SessionSessionIdRouteRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -143,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRouteRoute: LoginRouteRoute,
   SignupRouteRoute: SignupRouteRoute,
   OnboardingRoute: OnboardingRoute,
+  SessionSessionIdRouteRoute: SessionSessionIdRouteRoute,
 }
 
 export const routeTree = rootRoute
@@ -159,7 +199,8 @@ export const routeTree = rootRoute
         "/book-session",
         "/login",
         "/signup",
-        "/onboarding"
+        "/onboarding",
+        "/session/$sessionId"
       ]
     },
     "/": {
@@ -176,6 +217,9 @@ export const routeTree = rootRoute
     },
     "/onboarding": {
       "filePath": "onboarding.tsx"
+    },
+    "/session/$sessionId": {
+      "filePath": "session/$sessionId/route.tsx"
     }
   }
 }

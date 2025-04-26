@@ -1,5 +1,5 @@
 import SigninAnimatePresence from '@/components/custom/signup/SigninAnimatePresence';
-import SigninBackArrow from '@/components/custom/signup/SigninBackArrow';
+import BackArrowButton from '@/components/custom/BackArrowButton';
 import VerifyOTP from '@/components/custom/signup/VerifyOTP';
 import Details from '@/components/custom/signup/Details';
 import { createFileRoute } from '@tanstack/react-router';
@@ -39,8 +39,7 @@ function SignupComponent() {
   }, []);
 
   return (
-    <div className='w-full flex max-md:flex-col h-[85dvh] items-center max-sm:relative gap-4 max-md:justify-between justify-center p-10 max-sm:p-0 m-0'>
-      <SigninBackArrow />
+    <div className='w-full flex max-md:flex-col h-[80dvh] items-center max-sm:relative gap-4 max-md:justify-between justify-center px-10 py-4 max-sm:p-0 m-0'>
       <SigninAnimatePresence>
         {componentsToDisplay[componentIndex]}
       </SigninAnimatePresence>

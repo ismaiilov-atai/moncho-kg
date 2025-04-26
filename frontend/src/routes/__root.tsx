@@ -1,4 +1,5 @@
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import BackArrowButton from '@/components/custom/BackArrowButton';
 import { NavBar } from '@/components/custom/navbar/NavBar';
 import RootPending from '@/components/custom/RootPending';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
@@ -100,7 +101,11 @@ function Root() {
       <header className='sticky top-0 w-screen'>
         {showNavbar() || <NavBar />}
       </header>
-      <main className='w-full desktop:max-w-[60%] md:mt-9'>
+      <main
+        className={cn('w-full desktop:max-w-[60%] md:mt-9', {
+          'p-4': !location.pathname.startsWith('/onboarding'),
+        })}>
+        <BackArrowButton />
         <Outlet />
         <aside className='fixed bottom-8 left-0 ml-[80%] lg:ml-[90%]'>
           <FAB />
