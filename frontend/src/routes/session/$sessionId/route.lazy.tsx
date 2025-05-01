@@ -1,5 +1,8 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
-
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { useRescheduleStore } from '@/stores/reschedule-store';
+import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
+import moment from 'moment-timezone';
 import {
   Card,
   CardContent,
@@ -7,9 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import moment from 'moment-timezone';
-import { useTranslation } from 'react-i18next';
 
 export const Route = createLazyFileRoute('/session/$sessionId')({
   component: RouteComponent,
@@ -18,6 +18,14 @@ export const Route = createLazyFileRoute('/session/$sessionId')({
 function RouteComponent() {
   const reservation = Route.useLoaderData();
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { updateIsRescheduling } = useRescheduleStore((state) => state);
+  const onReschedule = () => {
+    updateIsRescheduling(true);
+    navigate({
+      to: '/reschedule',
+    });
+  };
 
   return (
     <Card className='mt-5 '>
@@ -45,7 +53,7 @@ function RouteComponent() {
           <b>{t('how-many-guest')}</b>
           <div className=' text-sm'>{reservation.withYou}</div>
         </section>
-        <form className=' w-full text-right'>
+        <form onSubmit={onReschedule} className=' w-full text-right'>
           <Button className='max-md:[40%] md:w-[30%]'>{t('reschedule')}</Button>
         </form>
       </CardContent>

@@ -91,6 +91,14 @@ function Root() {
     }
   });
 
+  const isBackButtonNeeded = (): boolean => {
+    if (location.pathname === '/login' || location.pathname === '/signup') {
+      return true;
+    }
+    if (location.href.startsWith('/session')) return true;
+    return false;
+  };
+
   const showNavbar = (): boolean => {
     return location.pathname.startsWith('/onboarding');
   };
@@ -102,8 +110,9 @@ function Root() {
         {showNavbar() || <NavBar />}
       </header>
       <main
-        className={cn('w-full desktop:max-w-[60%] md:mt-9', {
+        className={cn('w-full desktop:max-w-[60%] mt-2', {
           'p-4': !location.pathname.startsWith('/onboarding'),
+          'md:mt-9': isBackButtonNeeded(),
         })}>
         <BackArrowButton />
         <Outlet />

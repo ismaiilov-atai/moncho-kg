@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as OnboardingImport } from './routes/onboarding'
 import { Route as SignupRouteImport } from './routes/signup/route'
+import { Route as RescheduleRouteImport } from './routes/reschedule/route'
 import { Route as LoginRouteImport } from './routes/login/route'
 import { Route as BookSessionRouteImport } from './routes/book-session/route'
 import { Route as IndexImport } from './routes/index'
@@ -31,6 +32,14 @@ const SignupRouteRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRoute,
 } as any)
+
+const RescheduleRouteRoute = RescheduleRouteImport.update({
+  id: '/reschedule',
+  path: '/reschedule',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/reschedule/route.lazy').then((d) => d.Route),
+)
 
 const LoginRouteRoute = LoginRouteImport.update({
   id: '/login',
@@ -85,6 +94,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRoute
     }
+    '/reschedule': {
+      id: '/reschedule'
+      path: '/reschedule'
+      fullPath: '/reschedule'
+      preLoaderRoute: typeof RescheduleRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -115,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/book-session': typeof BookSessionRouteRoute
   '/login': typeof LoginRouteRoute
+  '/reschedule': typeof RescheduleRouteRoute
   '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
   '/session/$sessionId': typeof SessionSessionIdRouteRoute
@@ -124,6 +141,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/book-session': typeof BookSessionRouteRoute
   '/login': typeof LoginRouteRoute
+  '/reschedule': typeof RescheduleRouteRoute
   '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
   '/session/$sessionId': typeof SessionSessionIdRouteRoute
@@ -134,6 +152,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/book-session': typeof BookSessionRouteRoute
   '/login': typeof LoginRouteRoute
+  '/reschedule': typeof RescheduleRouteRoute
   '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
   '/session/$sessionId': typeof SessionSessionIdRouteRoute
@@ -145,6 +164,7 @@ export interface FileRouteTypes {
     | '/'
     | '/book-session'
     | '/login'
+    | '/reschedule'
     | '/signup'
     | '/onboarding'
     | '/session/$sessionId'
@@ -153,6 +173,7 @@ export interface FileRouteTypes {
     | '/'
     | '/book-session'
     | '/login'
+    | '/reschedule'
     | '/signup'
     | '/onboarding'
     | '/session/$sessionId'
@@ -161,6 +182,7 @@ export interface FileRouteTypes {
     | '/'
     | '/book-session'
     | '/login'
+    | '/reschedule'
     | '/signup'
     | '/onboarding'
     | '/session/$sessionId'
@@ -171,6 +193,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BookSessionRouteRoute: typeof BookSessionRouteRoute
   LoginRouteRoute: typeof LoginRouteRoute
+  RescheduleRouteRoute: typeof RescheduleRouteRoute
   SignupRouteRoute: typeof SignupRouteRoute
   OnboardingRoute: typeof OnboardingRoute
   SessionSessionIdRouteRoute: typeof SessionSessionIdRouteRoute
@@ -180,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BookSessionRouteRoute: BookSessionRouteRoute,
   LoginRouteRoute: LoginRouteRoute,
+  RescheduleRouteRoute: RescheduleRouteRoute,
   SignupRouteRoute: SignupRouteRoute,
   OnboardingRoute: OnboardingRoute,
   SessionSessionIdRouteRoute: SessionSessionIdRouteRoute,
@@ -198,6 +222,7 @@ export const routeTree = rootRoute
         "/",
         "/book-session",
         "/login",
+        "/reschedule",
         "/signup",
         "/onboarding",
         "/session/$sessionId"
@@ -211,6 +236,9 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login/route.tsx"
+    },
+    "/reschedule": {
+      "filePath": "reschedule/route.tsx"
     },
     "/signup": {
       "filePath": "signup/route.tsx"
