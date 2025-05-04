@@ -110,7 +110,7 @@ function Root() {
         {showNavbar() || <NavBar />}
       </header>
       <main
-        className={cn('w-full desktop:max-w-[60%] mt-2', {
+        className={cn('w-full h-full desktop:max-w-[60%] mt-2', {
           'p-4': !location.pathname.startsWith('/onboarding'),
           'md:mt-9': isBackButtonNeeded(),
         })}>

@@ -94,5 +94,8 @@
   "session-details-desc":"Here are the details of your upcoming session. If you need to make changes, you can easily reschedule to a more convenient time.",
   "duration": "Duration",
   "hour": "hour",
-  "reschedule": "Reschedule"
+  "reschedule": "Reschedule",
+  "reschedule-title": "Reschedule a session",
+  "reschedule-description": "Please select a new time to reschedule your session"
+
 }

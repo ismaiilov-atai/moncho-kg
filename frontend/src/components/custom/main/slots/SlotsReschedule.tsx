@@ -1,10 +1,10 @@
-import { Button, buttonVariants } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { buttonVariants } from '@/components/ui/button';
 import { useSlotsStore } from '@/stores/slots-store';
-import { SlotsType } from '@/types/day';
+import { Skeleton } from '@/components/ui/skeleton';
 import SlotTriggerer from './SlotTriggerer';
+import { SlotsType } from '@/types/day';
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
 interface PageProps {
@@ -16,7 +16,7 @@ const SlotsReschedule = ({ isLoading, slots }: PageProps) => {
   const { selectedSlot } = useSlotsStore((state) => state);
   const [isDialogOpen, onOpenChangeListener] = useState(false);
   return (
-    <div className=' pl-2 pr-2 grid grid-cols-1 sm:grid-cols-2 gap-4 justify-between w-full h-full'>
+    <div className='px-2 grid grid-cols-1 sm:grid-cols-2 gap-4 justify-between w-full max-xxs:h-[40vh] max-sm:h-[50vh] h-[55vh]'>
       {slots.map((slot, index) => {
         return isLoading ? (
           <Skeleton
