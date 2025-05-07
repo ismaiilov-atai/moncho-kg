@@ -76,7 +76,7 @@ function Details() {
   };
 
   return (
-    <Card className=' h-full max-sm:w-screen w-full max-sm:border-none max-sm:rounded-none max-sm:shadow-none'>
+    <Card className='h-full w-full max-sm:border-none max-sm:rounded-none max-sm:shadow-none'>
       <CardHeader>
         <CardTitle className=' font-arbutus font-normal'>
           {t(`Signup`)}

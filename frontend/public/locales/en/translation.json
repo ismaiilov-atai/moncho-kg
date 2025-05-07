@@ -80,7 +80,7 @@
   "ready-book-description": "Please review your selected slot information. Once you're ready, proceed to complete your booking.",
   "availability": "Available spots",
   "space": "available spots",
-  "how-many-guest": "How many guests will accompany you?",
+  "how-many-guest": "How many guests will accompany you",
   "up-to-9": "up to 9 people you can bring with you",
   "proceed-payment": "Proceed to Payment",
   "cancel": "cancel",
@@ -89,5 +89,22 @@
   "reso-success-description": "You're all set! Feel free to reach out if you have any questions.",
 
   "full": "Fully booked",
-  "full-description": "We're sorry, but this time slot has just been filled. Please choose another available option."
+  "full-description": "We're sorry, but this time slot has just been filled. Please choose another available option.",
+  "session-details": "Session Details",
+  "session-details-desc": "Here are the details of your upcoming session. If you need to make changes, you can easily reschedule to a more convenient time.",
+  "duration": "Duration",
+  "hour": "hour",
+  "reschedule": "Reschedule",
+  "reschedule-title": "Reschedule a session",
+  "reschedule-description": "Please select a new time to reschedule your session",
+  "confirm-reschedule-description": "Ensure all information is accurate before confirming your new time and date.",
+  "old":"Old",
+  "new":"New",
+  "guest-number-unchanged":"Time and date are the only changes. Guest number stays as is",
+  "reschedule-success": "Reschedule Successful",
+  "your-new": "Your new reservation is",
+  "smth-went-wrong": "Something went wrong",
+  "try-reschedule-again": "Please try rescheduling again later"
+
+
 }

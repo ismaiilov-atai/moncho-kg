@@ -52,7 +52,7 @@ const ReservationDialogActions = ({
         <section className='space-y-4'>
           <div>
             <span className='text-foreground font-semibold max-xs:text-[12px] text-xs m-0'>
-              {t('how-many-guest')}
+              {t('how-many-guest')} ?
             </span>
             <span className=' text-[10px] text-muted-foreground flex items-center gap-2'>
               {t('up-to-9')}

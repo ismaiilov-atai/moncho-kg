@@ -14,7 +14,7 @@ const SubmitButton = ({ disabled, title, loading, className }: Props) => {
     <Button
       type='submit'
       disabled={disabled}
-      className={cn(className, 'tracking-widest')}>
+      className={cn(className, 'tracking-widest w-full')}>
       {loading ? <LoaderCircle className=' animate-spin' /> : title}
     </Button>
   );

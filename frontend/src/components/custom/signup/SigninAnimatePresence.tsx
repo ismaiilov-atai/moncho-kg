@@ -13,7 +13,7 @@ const SigninAnimatePresence = ({ children }: PageProps) => {
     <AnimatePresence mode='wait' custom={isComingBack}>
       <motion.div
         key={`_${authPageCount}`}
-        className='h-full w-full max-sm:m-0 max-sm:p-0 max-sm:pt-10 max-md:mt-8'
+        className='h-full w-full max-sm:m-0 max-sm:p-0 max-md:mt-8'
         variants={VARIANTS}
         initial='enter'
         exit='exit'

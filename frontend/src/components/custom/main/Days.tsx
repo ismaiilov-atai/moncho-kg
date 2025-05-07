@@ -4,6 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { DaysType } from '@/types/day';
 import moment from 'moment-timezone';
 import { cn } from '@/lib/utils';
+import { useDaysStore } from '@/stores/days-store';
 
 interface Props {
   days: DaysType[];
@@ -11,9 +12,8 @@ interface Props {
 }
 
 const Days = ({ days, isPending }: Props) => {
-  const { updateSlots, updateSelectedDayId, selectedDayId } = useSlotsStore(
-    (state) => state
-  );
+  const { updateSelectedDayId, selectedDayId } = useDaysStore((state) => state);
+  const { updateSlots } = useSlotsStore((state) => state);
 
   const onClick = (day: DaysType) => {
     updateSlots(day.slots);

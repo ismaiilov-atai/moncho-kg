@@ -1,15 +1,13 @@
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 import { BOOK_SESSION_SEARCH_DEFAULT_VALUES } from '@/lib/constants';
 import { createResevation } from '@/helpers/resorvation';
+import { fetchDaysAndSetSelectedId } from '@/lib/utils';
 import { BookingType } from '@server/types/reservation';
 import { useStripeStore } from '@/stores/stripe-store';
-import { useSlotsStore } from '@/stores/slots-store';
 import { BookSessionComponent } from './route.lazy';
-import { StripeQueryResult } from '@/types/stripe';
 import { useUserStore } from '@/stores/user-store';
-import { api, daysQueryOptions } from '@/lib/api';
-import { findSlotsByDayId } from '@/lib/utils';
-import { DaysType } from '@/types/day';
+import { StripeQueryResult } from '@/types/stripe';
+import { api } from '@/lib/api';
 import moment from 'moment';
 
 const updateAndSortResoLocally = (
@@ -22,14 +20,8 @@ const updateAndSortResoLocally = (
 };
 
 export const Route = createFileRoute('/book-session')({
-  loader: async ({ context: { queryClient } }) => {
-    const days = await queryClient.ensureQueryData(daysQueryOptions);
-    const { updateSelectedDayId, updateSlots, selectedDayId } =
-      useSlotsStore.getState();
-    updateSelectedDayId(selectedDayId || days[0].dayId);
-    updateSlots(findSlotsByDayId(selectedDayId, days as DaysType[]));
-    return days;
-  },
+  loader: async ({ context: { queryClient } }) =>
+    fetchDaysAndSetSelectedId(queryClient),
   beforeLoad: async ({ search }) => {
     const { updateReservations, reservations } = useUserStore.getState();
     const { updateStripeStatus } = useStripeStore.getState();

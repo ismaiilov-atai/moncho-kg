@@ -1,11 +1,12 @@
-import { HomeActions, HomeState, SlotsType } from '@/types/day'
+import { SlotsActions, SlotsState } from '@/types/slot'
+import { SlotsType } from '@/types/day'
 import { create } from 'zustand/react'
 
-export const useSlotsStore = create<HomeState & HomeActions>((set) => ({
+export const useSlotsStore = create<SlotsState & SlotsActions>((set) => ({
   slots: [],
-  selectedDayId: '',
+  // selectedDayId: '',
   selectedSlot: {} as SlotsType,
   updateSlots: (slots) => set(() => ({ slots })),
   updateSelectedSlot: (selectedSlot) => set(() => ({ selectedSlot })),
-  updateSelectedDayId: (selectedDayId) => set(() => ({ selectedDayId }))
+  // updateSelectedDayId: (selectedDayId) => set(() => ({ selectedDayId }))
 }))

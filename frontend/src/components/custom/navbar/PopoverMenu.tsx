@@ -9,17 +9,17 @@ import { isLoggedOutPath } from '@/helpers/auth';
 import ToggleGroupMenu from './ToggleGroupMenu';
 import { useTranslation } from 'react-i18next';
 import { MenuIcon, X } from 'lucide-react';
+import LogoutButton from './LogoutButton';
 import { motion } from 'motion/react';
 import moment from 'moment-timezone';
 import Company from '../Company';
-
 import { cn } from '@/lib/utils';
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import LogoutButton from './LogoutButton';
 
 const PopoverMenu = () => {
   const { t, i18n } = useTranslation();

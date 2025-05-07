@@ -13,9 +13,11 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as OnboardingImport } from './routes/onboarding'
 import { Route as SignupRouteImport } from './routes/signup/route'
+import { Route as RescheduleRouteImport } from './routes/reschedule/route'
 import { Route as LoginRouteImport } from './routes/login/route'
 import { Route as BookSessionRouteImport } from './routes/book-session/route'
 import { Route as IndexImport } from './routes/index'
+import { Route as SessionSessionIdRouteImport } from './routes/session/$sessionId/route'
 
 // Create/Update Routes
 
@@ -30,6 +32,14 @@ const SignupRouteRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRoute,
 } as any)
+
+const RescheduleRouteRoute = RescheduleRouteImport.update({
+  id: '/reschedule',
+  path: '/reschedule',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/reschedule/route.lazy').then((d) => d.Route),
+)
 
 const LoginRouteRoute = LoginRouteImport.update({
   id: '/login',
@@ -50,6 +60,14 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const SessionSessionIdRouteRoute = SessionSessionIdRouteImport.update({
+  id: '/session/$sessionId',
+  path: '/session/$sessionId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/session/$sessionId/route.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -76,6 +94,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRoute
     }
+    '/reschedule': {
+      id: '/reschedule'
+      path: '/reschedule'
+      fullPath: '/reschedule'
+      preLoaderRoute: typeof RescheduleRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -90,6 +115,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingImport
       parentRoute: typeof rootRoute
     }
+    '/session/$sessionId': {
+      id: '/session/$sessionId'
+      path: '/session/$sessionId'
+      fullPath: '/session/$sessionId'
+      preLoaderRoute: typeof SessionSessionIdRouteImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -99,16 +131,20 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/book-session': typeof BookSessionRouteRoute
   '/login': typeof LoginRouteRoute
+  '/reschedule': typeof RescheduleRouteRoute
   '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
+  '/session/$sessionId': typeof SessionSessionIdRouteRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/book-session': typeof BookSessionRouteRoute
   '/login': typeof LoginRouteRoute
+  '/reschedule': typeof RescheduleRouteRoute
   '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
+  '/session/$sessionId': typeof SessionSessionIdRouteRoute
 }
 
 export interface FileRoutesById {
@@ -116,16 +152,40 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/book-session': typeof BookSessionRouteRoute
   '/login': typeof LoginRouteRoute
+  '/reschedule': typeof RescheduleRouteRoute
   '/signup': typeof SignupRouteRoute
   '/onboarding': typeof OnboardingRoute
+  '/session/$sessionId': typeof SessionSessionIdRouteRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/book-session' | '/login' | '/signup' | '/onboarding'
+  fullPaths:
+    | '/'
+    | '/book-session'
+    | '/login'
+    | '/reschedule'
+    | '/signup'
+    | '/onboarding'
+    | '/session/$sessionId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/book-session' | '/login' | '/signup' | '/onboarding'
-  id: '__root__' | '/' | '/book-session' | '/login' | '/signup' | '/onboarding'
+  to:
+    | '/'
+    | '/book-session'
+    | '/login'
+    | '/reschedule'
+    | '/signup'
+    | '/onboarding'
+    | '/session/$sessionId'
+  id:
+    | '__root__'
+    | '/'
+    | '/book-session'
+    | '/login'
+    | '/reschedule'
+    | '/signup'
+    | '/onboarding'
+    | '/session/$sessionId'
   fileRoutesById: FileRoutesById
 }
 
@@ -133,16 +193,20 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BookSessionRouteRoute: typeof BookSessionRouteRoute
   LoginRouteRoute: typeof LoginRouteRoute
+  RescheduleRouteRoute: typeof RescheduleRouteRoute
   SignupRouteRoute: typeof SignupRouteRoute
   OnboardingRoute: typeof OnboardingRoute
+  SessionSessionIdRouteRoute: typeof SessionSessionIdRouteRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BookSessionRouteRoute: BookSessionRouteRoute,
   LoginRouteRoute: LoginRouteRoute,
+  RescheduleRouteRoute: RescheduleRouteRoute,
   SignupRouteRoute: SignupRouteRoute,
   OnboardingRoute: OnboardingRoute,
+  SessionSessionIdRouteRoute: SessionSessionIdRouteRoute,
 }
 
 export const routeTree = rootRoute
@@ -158,8 +222,10 @@ export const routeTree = rootRoute
         "/",
         "/book-session",
         "/login",
+        "/reschedule",
         "/signup",
-        "/onboarding"
+        "/onboarding",
+        "/session/$sessionId"
       ]
     },
     "/": {
@@ -171,11 +237,17 @@ export const routeTree = rootRoute
     "/login": {
       "filePath": "login/route.tsx"
     },
+    "/reschedule": {
+      "filePath": "reschedule/route.tsx"
+    },
     "/signup": {
       "filePath": "signup/route.tsx"
     },
     "/onboarding": {
       "filePath": "onboarding.tsx"
+    },
+    "/session/$sessionId": {
+      "filePath": "session/$sessionId/route.tsx"
     }
   }
 }
