@@ -1,5 +1,6 @@
 import { UserActions, UserState } from '@/types/user'
 import { create } from 'zustand/react'
+import moment from 'moment'
 
 export const useUserStore = create<UserState & UserActions>((set) => ({
   userId: '',
@@ -17,7 +18,7 @@ export const useUserStore = create<UserState & UserActions>((set) => ({
   updateRescheduledResorvation: (updatedBooking) => set((state) => ({
     reservations: state.reservations.map(reso =>
       reso.bookingId === updatedBooking.bookingId ? updatedBooking : reso
-    )
+    ).sort((a, b) => moment(a.when).isAfter(moment(b.when)) ? 1 : -1)
   }))
 }))
 

@@ -20,6 +20,7 @@ export const user = new Hono()
       const flattenedBookings = user?.usersToBookings
         .map(item => item.bookings)
         .filter(booking => moment(booking.when).isAfter(moment()) && booking)
+        .sort((a, b) => moment(a.when).isAfter(moment(b.when)) ? 1 : -1)
 
       const { usersToBookings, ...rest } = { ...user }
       const mappedUser = {

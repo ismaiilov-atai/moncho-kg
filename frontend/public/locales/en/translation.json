@@ -100,5 +100,11 @@
   "confirm-reschedule-description": "Ensure all information is accurate before confirming your new time and date.",
   "old":"Old",
   "new":"New",
-  "guest-number-unchanged":"Time and date are the only changes. Guest number stays as is"
+  "guest-number-unchanged":"Time and date are the only changes. Guest number stays as is",
+  "reschedule-success": "Reschedule Successful",
+  "your-new": "Your new reservation is",
+  "smth-went-wrong": "Something went wrong",
+  "try-reschedule-again": "Please try rescheduling again later"
+
+
 }
