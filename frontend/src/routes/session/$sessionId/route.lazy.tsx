@@ -3,6 +3,8 @@ import { useRescheduleStore } from '@/stores/reschedule-store';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
+import { FormEvent } from 'react';
+
 import {
   Card,
   CardContent,
@@ -19,8 +21,12 @@ function RouteComponent() {
   const reservation = Route.useLoaderData();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { updateIsRescheduling } = useRescheduleStore((state) => state);
-  const onReschedule = () => {
+  const { updateIsRescheduling, updateBookingToReschedule } =
+    useRescheduleStore((state) => state);
+
+  const onReschedule = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    updateBookingToReschedule(reservation);
     updateIsRescheduling(true);
     navigate({
       to: '/reschedule',

@@ -91,11 +91,14 @@
   "full": "Fully booked",
   "full-description": "We're sorry, but this time slot has just been filled. Please choose another available option.",
   "session-details": "Session Details",
-  "session-details-desc":"Here are the details of your upcoming session. If you need to make changes, you can easily reschedule to a more convenient time.",
+  "session-details-desc": "Here are the details of your upcoming session. If you need to make changes, you can easily reschedule to a more convenient time.",
   "duration": "Duration",
   "hour": "hour",
   "reschedule": "Reschedule",
   "reschedule-title": "Reschedule a session",
-  "reschedule-description": "Please select a new time to reschedule your session"
-
+  "reschedule-description": "Please select a new time to reschedule your session",
+  "confirm-reschedule-description": "Ensure all information is accurate before confirming your new time and date.",
+  "old":"Old",
+  "new":"New",
+  "guest-number-unchanged":"Time and date are the only changes. Guest number stays as is"
 }
