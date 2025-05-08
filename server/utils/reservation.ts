@@ -59,11 +59,27 @@ export const findBookingById = async (bookingId: string): Promise<BookingType> =
 export const rescheduleBookingFromTo = async (fromId: string, toId: string): Promise<BookingType> => {
   try {
     const toReservation = await findSlotById(toId)
-    await db.update(bookings)
-      .set({ when: toReservation.time })
-      .where(eq(bookings.bookingId, fromId))
+    const oldBooking = await findBookingById(fromId)
 
-    const updatedReso = await findBookingById(fromId)
+    const fromSlot = await db.query.slots.findFirst({
+      where: eq(slots.time, oldBooking.when)
+    })
+
+    if (!fromSlot) throw Error('Not able to find old Reservation slot')
+
+    const [updatedReso] = await db.update(bookings)
+      .set({ when: toReservation.time, })
+      .where(eq(bookings.bookingId, fromId))
+      .returning()
+
+    await db.update(slots)
+      .set({ spaceLeft: toReservation.spaceLeft -= updatedReso.withYou ? (updatedReso.withYou + 1) : 1 })
+      .where(eq(slots.slotId, toId))
+
+    await db.update(slots)
+      .set({ spaceLeft: fromSlot.spaceLeft += updatedReso.withYou ? (updatedReso.withYou + 1) : 1 })
+      .where(eq(slots.slotId, fromSlot.slotId))
+
     return updatedReso
   } catch (error) {
     throw error
