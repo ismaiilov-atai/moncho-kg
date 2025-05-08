@@ -73,3 +73,5 @@ export const BOOK_SESSION_SEARCH_DEFAULT_VALUES = {
   slotId: '',
   userId: '',
 };
+
+export const RESCHEDULE_INTRO_COUNT = 'reschedule-intro-count' as const
