@@ -1,7 +1,7 @@
 import { days } from '../db/schema/day.sch'
 import { asc, gte } from 'drizzle-orm'
 import { feedSlotsTo } from './slot'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { db } from '../db'
 
 
@@ -23,7 +23,7 @@ export const getDaysStartingFromTodayASC = async () => {
       },
       orderBy: asc(days.day)
     })
-    return dayResult
+    return dayResult.filter(day => moment.tz('Asia/Bishkek').isBefore(day.day))
   } catch (error) {
     throw error
   }
