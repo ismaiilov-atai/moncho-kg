@@ -14,6 +14,7 @@ import { motion } from 'motion/react';
 import moment from 'moment-timezone';
 import Company from '../Company';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 import {
   Popover,
@@ -26,6 +27,7 @@ const PopoverMenu = () => {
   const { invalidate } = useRouter();
   const { theme, setTheme } = useTheme();
   const { userId } = useUserStore((state) => state);
+  const [popoverState, setPopoverState] = useState<boolean>();
 
   const onlanguagechange = (lang: string) => {
     moment.locale(lang);
@@ -34,7 +36,7 @@ const PopoverMenu = () => {
   };
 
   return (
-    <Popover>
+    <Popover onOpenChange={setPopoverState} open={popoverState}>
       <PopoverTrigger asChild>
         <MenuIcon className='w-8 rounded-md text-primary p-1 md:hidden h-full items-center' />
       </PopoverTrigger>
@@ -64,6 +66,7 @@ const PopoverMenu = () => {
             <span className=' font-playfair font-extrabold '>{t('Menu')}</span>
             {PATHS.map(({ displayName, pathName }) => (
               <Link
+                onClick={() => setPopoverState(!popoverState)}
                 to={`${pathName}`}
                 preload='intent'
                 className={cn(
