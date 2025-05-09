@@ -116,9 +116,11 @@ function Root() {
         })}>
         <BackArrowButton />
         <Outlet />
-        <aside className='fixed bottom-8 left-0 ml-[80%] lg:ml-[90%]'>
-          <FAB />
-        </aside>
+        {location.pathname === '/' && (
+          <aside className='fixed bottom-8 left-0 ml-[80%] lg:ml-[90%]'>
+            <FAB />
+          </aside>
+        )}
         <Toaster />
       </main>
       <TanStackRouterDevtools />
