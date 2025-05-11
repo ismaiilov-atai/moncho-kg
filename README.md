@@ -9,17 +9,17 @@ Make sure to do this for both frontend and root folders they use separate .env f
 🖥️ Backend (Server)
 Built with:
 
-[Hono](https://hono.dev/) – lightweight, fast web framework for Bun
+- [Hono](https://hono.dev/) – lightweight, fast web framework for Bun
 
-[Bun](https://bun.sh) – blazing fast all-in-one JavaScript runtime
+- [Bun](https://bun.sh) – blazing fast all-in-one JavaScript runtime
 
-[Drizzle ORM](https://orm.drizzle.team/docs/get-started) – type-safe SQL ORM
+- [Drizzle ORM](https://orm.drizzle.team/docs/get-started) – type-safe SQL ORM
 
-[PostgreSQL](http://example.com) – relational database
+- [PostgreSQL](http://example.com) – relational database
 
-[Croner](https://www.npmjs.com/package/croner) - job scheduler
+- [Croner](https://www.npmjs.com/package/croner) - job scheduler
 
-[Moment.js](https://momentjs.com/) – date/time manipulation
+- [Moment.js](https://momentjs.com/) – date/time manipulation
 
 🔄 Cron Job
 A scheduled job runs every day at 12:00 AM using Croner.
