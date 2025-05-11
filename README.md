@@ -2,13 +2,6 @@
 
 A modern full-stack project built with a fast backend using **Hono** on **Bun**, and a responsive frontend using **React** and modern libraries. This app supports scheduling, accessing to building with QR, daily cron tasks, and full localization, theming.
 
-## 📁 Project Structure
-
-/
-├── server/ # Backend using Bun + Hono
-├── frontend/ # Frontend using React + Tailwind
-├── .env.example # Environment variable example file
-└── README.md
 
 All required environment variables for this project are listed in the env.example file.
 Make sure to do this for both frontend and root folders they use separate .env files.
