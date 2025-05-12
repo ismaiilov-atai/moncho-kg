@@ -47,6 +47,8 @@ Built with:
 - [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction) – simple and minimal global state
   
 - [Tailwind CSS](https://tailwindcss.com/) – utility-first styling framework
+
+- [Stripe checkout](https://stripe.com/) - A fully integrated suite of financial and payments products
   
 
 ### 🚀 Run the Frontend
