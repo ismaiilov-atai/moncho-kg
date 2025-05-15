@@ -15,6 +15,20 @@
       "when": 1743551986319,
       "tag": "0001_motionless_la_nuit",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1747262449464,
+      "tag": "0002_fine_sasquatch",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1747263412662,
+      "tag": "0003_chilly_jackpot",
+      "breakpoints": true
     }
   ]
 }

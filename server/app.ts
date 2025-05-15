@@ -15,6 +15,7 @@ import { user } from './routes/user'
 import { home } from './routes/home'
 import { Hono } from 'hono'
 import 'dotenv/config'
+import { saveDayStats } from './utils/stats'
 
 
 type Variables = JwtVariables
@@ -34,9 +35,10 @@ const apiRoutes = app.basePath('/api')
 app.get('*', serveStatic({ root: './frontend/dist' }))
 app.get('*', serveStatic({ path: './frontend/dist/index.html' }))
 
-cronerJobCreator('0 0 * * * *', async () => {
+cronerJobCreator('* * * * * *', async () => {
   await feedDayWithSlots()
-  console.log('here croner at 00:00')
+  await saveDayStats()
+  console.count('here croner at 00:00')
 })
 
 app.onError((err, c) => {
