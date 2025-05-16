@@ -16,6 +16,7 @@ import { home } from './routes/home'
 import { Hono } from 'hono'
 import 'dotenv/config'
 import { saveDayStats } from './utils/stats'
+import { stats } from './routes/stats'
 
 
 type Variables = JwtVariables
@@ -31,6 +32,7 @@ const apiRoutes = app.basePath('/api')
   .route('/days', home)
   .route('/checkout-session', checkout)
   .route('/reserve', reserve)
+  .route('/stats', stats)
 
 app.get('*', serveStatic({ root: './frontend/dist' }))
 app.get('*', serveStatic({ path: './frontend/dist/index.html' }))
