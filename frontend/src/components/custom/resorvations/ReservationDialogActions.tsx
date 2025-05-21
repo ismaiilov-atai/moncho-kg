@@ -28,19 +28,6 @@ const ReservationDialogActions = ({
     <>
       <div className='flex flex-col gap-5 h-full justify-between'>
         <ReservationDetails selectedSlot={selectedTimeSlot} />
-        {/* <section className=' space-y-3'>
-          <div className=' text-foreground font-semibold'>{t('date-time')}</div>
-          <div className=' text-muted-foreground text-sm'>
-            {moment(selectedTimeSlot.time).format(`dddd DD-MMMM, YYYY`)}
-          </div>
-          <span className='text-primary text-sm'>
-            {moment(selectedTimeSlot.time).format(`HH:mm`)}
-          </span>
-          <span className='text-primary'> - </span>
-          <span className='text-primary text-sm'>
-            {moment(selectedTimeSlot.time).add(1, 'hours').format('HH:mm')}
-          </span>
-        </section> */}
         <section className=' space-y-3'>
           <div className='text-foreground font-semibold'>
             {t('availability')}
