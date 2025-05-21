@@ -1,12 +1,12 @@
 import { createFileRoute, Navigate, redirect } from '@tanstack/react-router';
 import { JwtTokenExpired, JwtTokenInvalid } from 'hono/utils/jwt/types';
+import { HomePending } from '@/components/custom/main/home/HomePending';
 import { useDeviceStore } from '@/stores/device-store';
 import { ONBOARDING_COMPLETED } from '@/lib/constants';
-import Home from '@/components/custom/main/Home';
 import { toast } from '@/hooks/use-toast';
 
 export const Route = createFileRoute('/')({
-  pendingComponent: () => <Home />,
+  pendingComponent: () => <HomePending />,
   beforeLoad: async () => {
     try {
       const { isMobile } = useDeviceStore.getState();

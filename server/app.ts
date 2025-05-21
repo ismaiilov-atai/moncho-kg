@@ -6,8 +6,10 @@ import { cronerJobCreator } from './utils/croner-job'
 import { HTTPException } from 'hono/http-exception'
 import { feedDayWithSlots } from './utils/day'
 import type { JwtVariables } from 'hono/jwt'
+import { saveDayStats } from './utils/stats'
 import { checkout } from './routes/checkout'
 import { reserve } from './routes/reserve'
+import { stats } from './routes/stats'
 import { serveStatic } from 'hono/bun'
 import { auth } from './routes/auth'
 import { logger } from 'hono/logger'
@@ -30,13 +32,15 @@ const apiRoutes = app.basePath('/api')
   .route('/days', home)
   .route('/checkout-session', checkout)
   .route('/reserve', reserve)
+  .route('/stats', stats)
 
 app.get('*', serveStatic({ root: './frontend/dist' }))
 app.get('*', serveStatic({ path: './frontend/dist/index.html' }))
 
 cronerJobCreator('0 0 * * * *', async () => {
   await feedDayWithSlots()
-  console.log('here croner at 00:00')
+  await saveDayStats()
+  console.count('here croner at 00:00')
 })
 
 app.onError((err, c) => {

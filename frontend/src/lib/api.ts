@@ -2,9 +2,11 @@ import { ACCESS_TOKEN } from '@server/types/constants'
 import { queryOptions } from '@tanstack/react-query'
 import type { InferResponseType } from 'hono/client'
 import { type ApiRoutes } from '@server/app'
+import { fetchStats } from '@/helpers/stats'
 import { getUser } from '@/helpers/user'
 import { getDays } from '@/helpers/day'
 import { hc } from 'hono/client'
+
 
 const AUTH_TOKEN = `Bearer ${sessionStorage.getItem(ACCESS_TOKEN)}`
 
@@ -30,4 +32,10 @@ export const daysQueryOptions = queryOptions({
 export const userQueryOptions = queryOptions({
   queryKey: ["user"],
   queryFn: getUser,
+})
+
+
+export const statsQueryOptions = queryOptions({
+  queryKey: ['stats'],
+  queryFn: fetchStats
 })

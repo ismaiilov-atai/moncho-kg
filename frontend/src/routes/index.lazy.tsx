@@ -2,7 +2,7 @@ import OnboardingModal from '@/components/custom/boarding/OnboardingModal';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { ONBOARDING_COMPLETED } from '@/lib/constants';
 import { useDeviceStore } from '@/stores/device-store';
-import Home from '@/components/custom/main/Home';
+import Home from '@/components/custom/main/home/Home';
 
 export const Route = createLazyFileRoute('/')({
   component: RouteComponent,
