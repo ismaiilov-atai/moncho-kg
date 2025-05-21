@@ -6,8 +6,10 @@ import { cronerJobCreator } from './utils/croner-job'
 import { HTTPException } from 'hono/http-exception'
 import { feedDayWithSlots } from './utils/day'
 import type { JwtVariables } from 'hono/jwt'
+import { saveDayStats } from './utils/stats'
 import { checkout } from './routes/checkout'
 import { reserve } from './routes/reserve'
+import { stats } from './routes/stats'
 import { serveStatic } from 'hono/bun'
 import { auth } from './routes/auth'
 import { logger } from 'hono/logger'
@@ -15,8 +17,6 @@ import { user } from './routes/user'
 import { home } from './routes/home'
 import { Hono } from 'hono'
 import 'dotenv/config'
-import { saveDayStats } from './utils/stats'
-import { stats } from './routes/stats'
 
 
 type Variables = JwtVariables
@@ -37,7 +37,7 @@ const apiRoutes = app.basePath('/api')
 app.get('*', serveStatic({ root: './frontend/dist' }))
 app.get('*', serveStatic({ path: './frontend/dist/index.html' }))
 
-cronerJobCreator('* * * * * *', async () => {
+cronerJobCreator('0 0 * * * *', async () => {
   await feedDayWithSlots()
   await saveDayStats()
   console.count('here croner at 00:00')
