@@ -1,4 +1,5 @@
 import RewardCirlceContainer from './RewardCirlceContainer';
+import { useTranslation } from 'react-i18next';
 import { LockKeyhole } from 'lucide-react';
 
 import {
@@ -8,8 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useTranslation } from 'react-i18next';
 
 const Reward = () => {
   const { t } = useTranslation();
@@ -38,9 +37,6 @@ const Reward = () => {
 
             <CardDescription>{t('start_jorney_description')}</CardDescription>
           </section>
-        </section>
-        <section className='h-16 place-content-end text-end invisible md:visible absolute bottom-4 right-5'>
-          <Button className=' w-32 '>QR code</Button>
         </section>
       </CardContent>
     </Card>
