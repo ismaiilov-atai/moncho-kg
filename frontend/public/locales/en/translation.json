@@ -112,5 +112,6 @@
   "stats-title": "Daily Statistics",
   "stats-description": "Last weeks {{day}}",
   "no-data": "No data available",
-  "stats-hint": "Review the chart to find out how crowded your selected time was"
+  "stats-hint": "Review the chart to find out how crowded your selected time was",
+  "scan-qr": "scan the QR code by the door for sauna access"
 }

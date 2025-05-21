@@ -1,9 +1,9 @@
+import ReservationDetails from './ReservationDetails';
 import { InfoIcon, Loader2Icon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../ui/button';
 import { SlotsType } from '@/types/day';
 import { FormEvent } from 'react';
-import moment from 'moment';
 
 interface Props {
   onSubmitAction: (e: FormEvent<HTMLFormElement>) => void;
@@ -27,7 +27,8 @@ const ReservationDialogActions = ({
   return (
     <>
       <div className='flex flex-col gap-5 h-full justify-between'>
-        <section className=' space-y-3'>
+        <ReservationDetails selectedSlot={selectedTimeSlot} />
+        {/* <section className=' space-y-3'>
           <div className=' text-foreground font-semibold'>{t('date-time')}</div>
           <div className=' text-muted-foreground text-sm'>
             {moment(selectedTimeSlot.time).format(`dddd DD-MMMM, YYYY`)}
@@ -39,7 +40,7 @@ const ReservationDialogActions = ({
           <span className='text-primary text-sm'>
             {moment(selectedTimeSlot.time).add(1, 'hours').format('HH:mm')}
           </span>
-        </section>
+        </section> */}
         <section className=' space-y-3'>
           <div className='text-foreground font-semibold'>
             {t('availability')}
