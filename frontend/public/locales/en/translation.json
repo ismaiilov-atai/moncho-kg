@@ -108,5 +108,9 @@
   "selct-day": "Select the day",
   "selct-day-description": "Please start by selecting the new date you'd like to reschedule to",
   "selct-slot": "Select the slot",
-  "selct-slot-description": "You can now pick a new time slot for your reservation"
+  "selct-slot-description": "You can now pick a new time slot for your reservation",
+  "stats-title": "Daily Statistics",
+  "stats-description": "Last weeks {{day}}",
+  "no-data": "No data available",
+  "stats-hint": "Review the chart to find out how crowded your selected time was"
 }
