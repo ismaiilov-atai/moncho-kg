@@ -1,6 +1,6 @@
-import RewardCirlceContainer from './RewardCirlceContainer';
+import { useUserStore } from '@/stores/user-store';
 import { useTranslation } from 'react-i18next';
-import { LockKeyhole } from 'lucide-react';
+import RewardProgress from './RewardProgress';
 
 import {
   Card,
@@ -12,6 +12,8 @@ import {
 
 const Reward = () => {
   const { t } = useTranslation();
+  const { beenTimes } = useUserStore((state) => state);
+
   return (
     <Card>
       <CardHeader>
@@ -20,22 +22,17 @@ const Reward = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className=' relative '>
-        <section className='flex gap-3 '>
-          <div className='relative flex h-32 w-32'>
-            <RewardCirlceContainer />
-
-            <LockKeyhole className=' absolute left-[40%] top-[45%]' size={32} />
-            <section className=' bottom-0 left-[39%] text-center absolute'>
-              <span className=' font-bold text-lg'>1</span> / <span>5</span>
-            </section>
-          </div>
-
-          <section className=' items-end md:items-start w-[46%]'>
-            <p className=' text-xl font-roboto font-bold  text-foreground'>
-              {t('start_journey')}
+        <section className='flex gap-3 md:gap-10'>
+          <RewardProgress />
+          <section className=' items-end md:items-start w-[50%]'>
+            <p className=' text-xl font-roboto font-bold  text-foreground max-xxs:text-sm'>
+              {beenTimes < 4 ? t('start_journey') : t('congrats')}
             </p>
-
-            <CardDescription>{t('start_jorney_description')}</CardDescription>
+            <CardDescription>
+              {beenTimes < 4
+                ? t('start_jorney_description')
+                : t('congrats-description')}
+            </CardDescription>
           </section>
         </section>
       </CardContent>
