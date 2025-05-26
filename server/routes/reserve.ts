@@ -1,5 +1,6 @@
 import { insertReservation, rescheduleBookingFromTo } from '../utils/reservation'
 import { createBookingSchema } from '../db/schema/users_to_booking'
+import { findUserWithId, updateUserBeenTimes } from '../utils/user'
 import { zValidator } from '@hono/zod-validator'
 import { z, string } from 'zod'
 import { Hono } from 'hono'
@@ -12,6 +13,11 @@ export const reserve = new Hono()
         const body = c.req.valid('json')
         const validBody = createBookingSchema.parse({ ...body })
         const createdReservation = await insertReservation(validBody)
+
+        const { userId } = body
+        const user = await findUserWithId(userId)
+        updateUserBeenTimes(userId, user!.beenTimes + 1)
+
         return c.json({ isSuccess: true, reservation: createdReservation }, 201)
       } catch (error) {
         throw error

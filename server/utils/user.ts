@@ -1,3 +1,5 @@
+import { users } from '../db/schema/user.sch'
+import { eq } from 'drizzle-orm'
 import { db } from '../db'
 
 export const findUserWithId = async (userId: string) => {
@@ -22,4 +24,11 @@ export const findUserWithId = async (userId: string) => {
       }
     }
   })
+}
+
+
+export const updateUserBeenTimes = async (userId: string, beenTimes: number) => {
+  return await db.update(users)
+    .set({ beenTimes: beenTimes >= 4 ? 0 : beenTimes })
+    .where(eq(users.userId, userId))
 }

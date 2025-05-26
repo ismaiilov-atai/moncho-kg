@@ -115,5 +115,7 @@
   "stats-hint": "Review the chart to find out how crowded your selected time was",
   "scan-qr": "scan the QR code by the door for sauna access",
   "congrats": "Congratulations!",
-  "congrats-description": "A free spa session is now yours – relax and enjoy"
+  "congrats-description": "A free spa session is now yours – relax and enjoy",
+  "book": "Book"
+
 }

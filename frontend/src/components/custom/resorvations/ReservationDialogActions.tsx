@@ -1,5 +1,6 @@
 import ReservationDetails from './ReservationDetails';
 import { InfoIcon, Loader2Icon } from 'lucide-react';
+import { useUserStore } from '@/stores/user-store';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../ui/button';
 import { SlotsType } from '@/types/day';
@@ -23,6 +24,7 @@ const ReservationDialogActions = ({
   isPending,
 }: Props) => {
   const { t } = useTranslation();
+  const { beenTimes } = useUserStore((state) => state);
 
   return (
     <>
@@ -78,7 +80,7 @@ const ReservationDialogActions = ({
           type='submit'
           className='font-playfair tracking-wide'
           disabled={isPending}>
-          {t('proceed-payment')}
+          {beenTimes >= 4 ? t('book') : t('proceed-payment')}
           {isPending && (
             <Loader2Icon className='absolute mx-auto animate-spin text-black' />
           )}

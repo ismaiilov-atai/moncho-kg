@@ -1,11 +1,11 @@
 import ReservationDialogActions from '@/components/custom/resorvations/ReservationDialogActions';
 import ReservationDialogHeader from '@/components/custom/resorvations/ReservationDialogHeader';
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import CheckoutStatus from '@/components/CheckoutStatus';
 import { useStripeStore } from '@/stores/stripe-store';
 import { useSlotsStore } from '@/stores/slots-store';
-import { getRouteApi } from '@tanstack/react-router';
 import { Skeleton } from '@/components/ui/skeleton';
 import { buttonVariants } from '../../../ui/button';
 import { useUserStore } from '@/stores/user-store';
@@ -24,11 +24,13 @@ const apiRoute = getRouteApi('/book-session');
 const Slots = memo(({ slots, isPending }: Props) => {
   const search = apiRoute.useSearch();
   const { stripeStatus, updateClientSecret } = useStripeStore((state) => state);
-
+  const { reservations, updateReservations, updateBeenTimes, beenTimes } =
+    useUserStore((state) => state);
   const { selectedSlot } = useSlotsStore((state) => state);
   const { userId } = useUserStore((state) => state);
   const [reserveDialogOpen, setReserveDialogState] = useState(false);
   const [guest, setGuest] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => setGuest(0), [selectedSlot]);
 
@@ -45,8 +47,23 @@ const Slots = memo(({ slots, isPending }: Props) => {
       const res = await api['checkout-session'].$post({
         query: { slotId, userId, guest },
       });
+
       const data = await res.json();
-      return data.clientSecret;
+      if (data.clientSecret) return data.clientSecret;
+
+      if (data.bookingParams) {
+        updateReservations([...reservations, data.newReso]);
+        updateBeenTimes(beenTimes >= 4 ? 0 : beenTimes + 1);
+        navigate({
+          to: '/book-session',
+          search: {
+            session_id: data.bookingParams.session_id,
+            guest: Number(data.bookingParams.guest),
+            slotId: data.bookingParams.slotId,
+            userId: data.bookingParams.userId,
+          },
+        });
+      }
     },
     []
   );
@@ -86,7 +103,7 @@ const Slots = memo(({ slots, isPending }: Props) => {
               slot={slot}
               setReserveDialogState={setReserveDialogState}
             />
-            <DialogContent className=' w-[90%] max-h-fit max-xs:h-[80%] rounded-sm h-1/2 '>
+            <DialogContent className=' w-[90%] max-h-fit max-xs:h-[80%] rounded-sm h-2/3 '>
               {search.session_id ? (
                 <CheckoutStatus />
               ) : (

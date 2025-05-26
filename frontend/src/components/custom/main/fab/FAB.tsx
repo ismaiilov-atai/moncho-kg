@@ -64,7 +64,7 @@ const FAB = () => {
               </span>
               <span className=' flex items-center gap-2 text-primary'>
                 <Users size={16} />
-                {reservations[0].withYou}
+                {reservations.length > 0 && reservations[0].withYou} 
               </span>
             </div>
           </motion.div>
