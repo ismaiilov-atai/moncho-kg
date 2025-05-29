@@ -43,6 +43,8 @@ const findDayOrInsert = async (day: string, slots: SlotStatsType[]) => {
       }
     })
     if (!statsDay) throw Error(EXEPTION_MESSAGE)
+    if (!statsDay.hourlyStats.length) feedStats(slots, statsDay)
+
     slots.forEach(async (slot) => {
       await db.update(hourlyStats)
         .set({
@@ -54,15 +56,22 @@ const findDayOrInsert = async (day: string, slots: SlotStatsType[]) => {
   } catch (error) {
     if ((error as Error).message === EXEPTION_MESSAGE) {
       const [statsDay] = await db.insert(statistics).values({ day }).returning()
-      slots.forEach(async (slot) => {
-        await db.insert(hourlyStats).values({
-          hour: moment(slot.time).format('HH:mm'),
-          dayBelongTo: statsDay.statsId,
-          stats: 10 - slot.spaceLeft,
-        })
-      })
+      await feedStats(slots, statsDay)
     }
-
     throw error
   }
+}
+
+const feedStats = async (slots: SlotStatsType[], statsDay: {
+  day: string
+  id: number
+  statsId: string
+}) => {
+  slots.forEach(async (slot) => {
+    await db.insert(hourlyStats).values({
+      hour: moment(slot.time).format('HH:mm'),
+      dayBelongTo: statsDay.statsId,
+      stats: 10 - slot.spaceLeft,
+    })
+  })
 }

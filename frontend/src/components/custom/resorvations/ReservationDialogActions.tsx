@@ -39,32 +39,34 @@ const ReservationDialogActions = ({
             {` ${t('space')}`}
           </span>
         </section>
-        <section className='space-y-4'>
-          <div>
-            <span className='text-foreground font-semibold max-xs:text-[12px] text-xs m-0'>
-              {t('how-many-guest')} ?
-            </span>
-            <span className=' text-[10px] text-muted-foreground flex items-center gap-2'>
-              {t('up-to-9')}
-              <InfoIcon size={14} />
-            </span>
-          </div>
-          <div className=' flex gap-2 justify-around items-center w-1/2'>
-            <Button
-              variant={'outline'}
-              className='h-8 w-8 rounded-full border-foreground'
-              onClick={() => guestNumberClick('down')}>
-              -
-            </Button>
-            <span className='text-foreground text-sm'>{guest}</span>
-            <Button
-              variant={'outline'}
-              className='h-8 w-8 rounded-full border-foreground'
-              onClick={() => guestNumberClick('up')}>
-              +
-            </Button>
-          </div>
-        </section>
+        {beenTimes < 4 && (
+          <section className='space-y-4'>
+            <div>
+              <span className='text-foreground font-semibold max-xs:text-[12px] text-xs m-0'>
+                {t('how-many-guest')} ?
+              </span>
+              <span className=' text-[10px] text-muted-foreground flex items-center gap-2'>
+                {t('up-to-9')}
+                <InfoIcon size={14} />
+              </span>
+            </div>
+            <div className=' flex gap-2 justify-around items-center w-1/2'>
+              <Button
+                variant={'outline'}
+                className='h-8 w-8 rounded-full border-foreground'
+                onClick={() => guestNumberClick('down')}>
+                -
+              </Button>
+              <span className='text-foreground text-sm'>{guest}</span>
+              <Button
+                variant={'outline'}
+                className='h-8 w-8 rounded-full border-foreground'
+                onClick={() => guestNumberClick('up')}>
+                +
+              </Button>
+            </div>
+          </section>
+        )}
       </div>
       <form
         onSubmit={(e) => onSubmitAction(e)}

@@ -8,6 +8,7 @@ import { useStripeStore } from '@/stores/stripe-store';
 import { useSlotsStore } from '@/stores/slots-store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { buttonVariants } from '../../../ui/button';
+import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
 import SlotTriggerer from './SlotTriggerer';
 import { SlotsType } from '@/types/day';
@@ -17,6 +18,11 @@ import { api } from '@/lib/api';
 interface Props {
   slots: SlotsType[];
   isPending?: boolean;
+}
+
+interface MutationParams {
+  slotId: string;
+  guest: number;
 }
 
 const apiRoute = getRouteApi('/book-session');
@@ -31,8 +37,19 @@ const Slots = memo(({ slots, isPending }: Props) => {
   const [reserveDialogOpen, setReserveDialogState] = useState(false);
   const [guest, setGuest] = useState(0);
   const navigate = useNavigate();
-
   useEffect(() => setGuest(0), [selectedSlot]);
+
+  const {
+    mutateAsync,
+    isPending: isMutating,
+    isError,
+  } = useMutation({
+    mutationFn: async ({ slotId, guest }: MutationParams) => {
+      return await api['checkout-session'].$post({
+        query: { slotId, userId, guest },
+      });
+    },
+  });
 
   const guestNumberClick = (action: 'up' | 'down') => {
     if (action === 'up' && guest < 9 && selectedSlot.spaceLeft - 1 > guest) {
@@ -44,23 +61,21 @@ const Slots = memo(({ slots, isPending }: Props) => {
 
   const fetchClientSecret = useCallback(
     async (slotId: string, guest: number) => {
-      const res = await api['checkout-session'].$post({
-        query: { slotId, userId, guest },
-      });
+      const data = await mutateAsync({ slotId, guest });
+      if (isError) throw Error('Failed to fetch client secret ');
+      const result = await data.json();
+      if (result.clientSecret) return result.clientSecret;
 
-      const data = await res.json();
-      if (data.clientSecret) return data.clientSecret;
-
-      if (data.bookingParams) {
-        updateReservations([...reservations, data.newReso]);
+      if (result.bookingParams) {
+        updateReservations([...reservations, result.newReso]);
         updateBeenTimes(beenTimes >= 4 ? 0 : beenTimes + 1);
         navigate({
           to: '/book-session',
           search: {
-            session_id: data.bookingParams.session_id,
-            guest: Number(data.bookingParams.guest),
-            slotId: data.bookingParams.slotId,
-            userId: data.bookingParams.userId,
+            session_id: result.bookingParams.session_id,
+            guest: Number(result.bookingParams.guest),
+            slotId: result.bookingParams.slotId,
+            userId: result.bookingParams.userId,
           },
         });
       }
@@ -115,7 +130,7 @@ const Slots = memo(({ slots, isPending }: Props) => {
                     guest={guest}
                     guestNumberClick={guestNumberClick}
                     selectedTimeSlot={selectedSlot}
-                    isPending={false}
+                    isPending={isMutating}
                   />
                 </>
               )}

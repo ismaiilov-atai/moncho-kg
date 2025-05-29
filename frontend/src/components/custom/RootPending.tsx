@@ -3,9 +3,11 @@ import { NavBar } from './navbar/NavBar';
 
 const RootPending = () => {
   return (
-    <div className=' space-y-16'>
+    <div className=' space-y-16 mx-auto'>
       <NavBar />
-      <Outlet />
+      <div className=' md:max-w-[70%] mx-auto'>
+        <Outlet />
+      </div>
     </div>
   );
 };

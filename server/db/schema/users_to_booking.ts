@@ -14,13 +14,22 @@ export const bookingsToUsers = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.userId, t.bookingId] }),
-    fk: foreignKey({
-      name: "bookings_to_users_fk",
+
+    userFk: foreignKey({
+      name: "bookings_to_users_user_fk",
       columns: [t.userId],
       foreignColumns: [users.userId],
     })
       .onDelete('cascade')
-      .onUpdate('cascade')
+      .onUpdate('cascade'),
+
+    bookingFk: foreignKey({
+      name: "bookings_to_users_booking_fk",
+      columns: [t.bookingId],
+      foreignColumns: [bookings.bookingId],
+    })
+      .onDelete('cascade')
+      .onUpdate('cascade'),
   })
 )
 
@@ -32,7 +41,9 @@ export const bookingsToUsersRelations = relations(bookingsToUsers, ({ one }) => 
   bookings: one(bookings, {
     fields: [bookingsToUsers.bookingId],
     references: [bookings.bookingId],
-  })
+  }),
+
+
 }))
 
 export const createBookingSchema = z.object({

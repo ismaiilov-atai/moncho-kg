@@ -62,10 +62,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
         updateUserId(userId || '');
         updateReservations(reservations || []);
-        updateFirstName(name!);
-        updateLastName(lastName!);
-        updatePhoneNumber(phoneNumber!);
-        updateBeenTimes(beenTimes!);
+        updateFirstName(name || '');
+        updateLastName(lastName || '');
+        updatePhoneNumber(phoneNumber || '');
+        updateBeenTimes(beenTimes || 0);
       }
     } catch (error) {
       throw error;
@@ -104,7 +104,7 @@ function Root() {
   };
 
   return (
-    <div className={cn(' relative flex flex-col items-center')}>
+    <div className={cn(' relative flex flex-col items-center ')}>
       <HeadContent />
       <header className='sticky top-0 w-screen'>
         {showNavbar() || <NavBar />}
