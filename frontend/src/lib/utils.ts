@@ -38,13 +38,19 @@ export const findSlotsByDayId = (dayId: string, days: DaysType[]): SlotsType[] =
 }
 
 
-export const fetchDaysAndSetSelectedId = async (queryClient: QueryClient): Promise<DaysType[]> => {
-  const days = await queryClient.ensureQueryData(daysQueryOptions)
-  const { updateSlots } = useSlotsStore.getState()
-  const { updateSelectedDayId, selectedDayId, updateDays } =
-    useDaysStore.getState()
-  updateSelectedDayId(selectedDayId || days[0].dayId)
-  updateSlots(findSlotsByDayId(selectedDayId, days as DaysType[]))
-  updateDays(days)
-  return days
+export const fetchDaysAndSetSelectedId = async (queryClient: QueryClient): Promise<{ days: DaysType[], error: Error | null }> => {
+  try {
+    const days = await queryClient.fetchQuery(daysQueryOptions)
+    if (!days.length) throw Error()
+
+    const { updateSlots } = useSlotsStore.getState()
+    const { updateSelectedDayId, selectedDayId, updateDays } =
+      useDaysStore.getState()
+    updateSelectedDayId(selectedDayId || days[0].dayId || '')
+    updateSlots(findSlotsByDayId(selectedDayId, days as DaysType[]))
+    updateDays(days)
+    return { days, error: null }
+  } catch (error) {
+    return { days: [], error: new Error('days-failed') }
+  }
 }

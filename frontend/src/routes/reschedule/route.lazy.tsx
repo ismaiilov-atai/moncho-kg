@@ -13,16 +13,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import NoData from '@/components/custom/NoData';
 
 export const Route = createLazyFileRoute('/reschedule')({
   component: RescheduleComponent,
 });
 
 export function RescheduleComponent({ isLoading }: { isLoading: boolean }) {
-  const days = Route.useLoaderData();
+  const { days = [], error } = Route.useLoaderData();
   const { slots } = useSlotsStore((state) => state);
   const { t } = useTranslation();
-
+  if (error) return <NoData />;
   return (
     <section className='sm:p-2 h-full w-full'>
       <section>

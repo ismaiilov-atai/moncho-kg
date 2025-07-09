@@ -1,5 +1,5 @@
-import { DaysType } from '@/types/day';
 import { Skeleton } from '../ui/skeleton';
+import { DaysType } from '@/types/day';
 import moment from 'moment-timezone';
 
 interface PageProps {
@@ -8,6 +8,9 @@ interface PageProps {
 }
 
 const SevenDaysRangeHeader = ({ isPending, days }: PageProps) => {
+  if (!days || !days.length || days === undefined)
+    return <Skeleton className=' w-[50%] h-8 self-center' />;
+
   return (
     <div className=' w-full flex justify-center'>
       {isPending ? (

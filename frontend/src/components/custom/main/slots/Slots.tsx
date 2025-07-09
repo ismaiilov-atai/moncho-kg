@@ -99,7 +99,7 @@ const Slots = memo(({ slots, isPending }: Props) => {
   };
 
   return (
-    <div className=' pl-2 pr-2 grid grid-cols-1 sm:grid-cols-2 gap-4 justify-between w-full h-full'>
+    <div className='pl-2 pr-2 grid grid-cols-1 sm:grid-cols-2 gap-4 justify-between w-full'>
       {slots.map((slot, index) => {
         return isPending ? (
           <Skeleton
