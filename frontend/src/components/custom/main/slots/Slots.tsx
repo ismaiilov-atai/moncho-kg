@@ -89,10 +89,6 @@ const Slots = memo(({ slots, isPending }: Props) => {
     if (clientSecret) updateClientSecret(clientSecret);
   };
 
-  const onOpenChangeListener = (dialogState: boolean, slot: SlotsType) => {
-    if (slot.spaceLeft > 0) setReserveDialogState(dialogState);
-  };
-
   const onCancel = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setReserveDialogState(false);
@@ -109,7 +105,6 @@ const Slots = memo(({ slots, isPending }: Props) => {
         ) : (
           <Dialog
             key={slot.slotId}
-            onOpenChange={(state) => onOpenChangeListener(state, slot)}
             open={
               (Object.hasOwn(selectedSlot, 'time') && reserveDialogOpen) ||
               (stripeStatus.length > 0 && !!search.session_id)

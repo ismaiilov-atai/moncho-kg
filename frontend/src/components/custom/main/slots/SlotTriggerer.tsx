@@ -26,8 +26,11 @@ const SlotTriggerer = ({ slot, setReserveDialogState }: PageProps) => {
       setReserveDialogState(true);
     else {
       toast({
-        title: `${t('full')}!`,
-        description: t('full-description'),
+        title: slot.spaceLeft <= 0 ? `${t('full')}!` : t('start_journey'),
+        description:
+          slot.spaceLeft <= 0
+            ? t('full-description')
+            : t('signup-toast-description'),
       });
     }
   };
