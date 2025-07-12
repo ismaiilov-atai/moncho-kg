@@ -5,6 +5,7 @@ import RootPending from '@/components/custom/RootPending';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
 import { ACCESS_TOKEN } from '@server/types/constants';
 import type { RouterContext } from '@/routerContext';
+import NotFound from '@/components/custom/NotFound';
 import { onAuthStateChanged } from 'firebase/auth';
 import FAB from '@/components/custom/main/fab/FAB';
 import { useUserStore } from '@/stores/user-store';
@@ -39,7 +40,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     };
   },
   component: Root,
-  notFoundComponent: () => <>404 not found</>,
+  notFoundComponent: () => <NotFound />,
   pendingComponent: () => <RootPending />,
   errorComponent: ({ error }) => <div>Failed default: {error.message} </div>,
   beforeLoad: async ({ context: { queryClient } }) => {
