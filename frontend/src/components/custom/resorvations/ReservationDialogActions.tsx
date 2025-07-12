@@ -26,6 +26,10 @@ const ReservationDialogActions = ({
   const { t } = useTranslation();
   const { beenTimes } = useUserStore((state) => state);
 
+  const howManyCanBring = () => {
+    return selectedTimeSlot.spaceLeft > 1 ? selectedTimeSlot.spaceLeft - 1 : 0;
+  };
+
   return (
     <>
       <div className='flex flex-col gap-5 h-full justify-between'>
@@ -46,7 +50,7 @@ const ReservationDialogActions = ({
                 {t('how-many-guest')} ?
               </span>
               <span className=' text-[10px] text-muted-foreground flex items-center gap-2'>
-                {t('up-to-9')}
+                {t('up-to-count', { guest: `${howManyCanBring()}` })}
                 <InfoIcon size={14} />
               </span>
             </div>

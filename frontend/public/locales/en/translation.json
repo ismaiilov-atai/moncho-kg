@@ -81,7 +81,7 @@
   "availability": "Available spots",
   "space": "available spots",
   "how-many-guest": "How many guests will accompany you",
-  "up-to-9": "up to 9 people you can bring with you",
+  "up-to-count": "up to {{guest}} people you can bring with you",
   "proceed-payment": "Proceed to Payment",
   "cancel": "cancel",
 
