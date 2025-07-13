@@ -19,6 +19,16 @@ export const useUserStore = create<UserState & UserActions>((set) => ({
     reservations: state.reservations.map(reso =>
       reso.bookingId === updatedBooking.bookingId ? updatedBooking : reso
     ).sort((a, b) => moment(a.when).isAfter(moment(b.when)) ? 1 : -1)
+  })),
+
+  logoutUser: () => set(() => ({
+    userId: '',
+    name: '',
+    lastName: '',
+    phoneNumber: '',
+    beenTimes: 0,
+    reservations: [],
   }))
+
 }))
 

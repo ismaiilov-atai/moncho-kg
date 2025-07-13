@@ -104,6 +104,7 @@
   "reschedule-success": "Reschedule Successful",
   "your-new": "Your new reservation is",
   "smth-went-wrong": "Something went wrong",
+  "smth-went-wrong-description": "Something went wrong. Please try again later.",
   "try-reschedule-again": "Please try rescheduling again later",
   "selct-day": "Select the day",
   "selct-day-description": "Please start by selecting the new date you'd like to reschedule to",
@@ -118,5 +119,6 @@
   "congrats-description": "A free spa session is now yours – relax and enjoy",
   "book": "Book",
   "not-found": "Page not found",
-  "not-found-description": "The page you are looking for doesn&apos;t exist or has been moved. Please check the URL or return to the homepage."
+  "not-found-description": "The page you are looking for doesn&apos;t exist or has been moved. Please check the URL or return to the homepage.",
+  "refresh-page": "Refresh page"
 }

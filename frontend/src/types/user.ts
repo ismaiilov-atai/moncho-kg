@@ -21,4 +21,5 @@ export type UserActions = {
   updateReservations: (slot: UserState['reservations']) => void
   updateBeenTimes: (number: UserState['beenTimes']) => void
   updateRescheduledResorvation: (updatedBooking: BookingType) => void
+  logoutUser: () => void
 }

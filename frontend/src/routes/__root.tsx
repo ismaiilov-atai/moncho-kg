@@ -4,6 +4,7 @@ import { NavBar } from '@/components/custom/navbar/NavBar';
 import RootPending from '@/components/custom/RootPending';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
 import { ACCESS_TOKEN } from '@server/types/constants';
+import WentWrong from '@/components/custom/WentWrong';
 import type { RouterContext } from '@/routerContext';
 import NotFound from '@/components/custom/NotFound';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -42,7 +43,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: Root,
   notFoundComponent: () => <NotFound />,
   pendingComponent: () => <RootPending />,
-  errorComponent: ({ error }) => <div>Failed default: {error.message} </div>,
+  errorComponent: () => <WentWrong />,
   beforeLoad: async ({ context: { queryClient } }) => {
     try {
       const {
@@ -56,7 +57,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       } = useUserStore.getState();
       if (!userId) {
         const result = await queryClient.ensureQueryData(userQueryOptions);
-
         if ('err' in result) throw result.err;
         const { reservations, name, lastName, phoneNumber, beenTimes, userId } =
           result.user;

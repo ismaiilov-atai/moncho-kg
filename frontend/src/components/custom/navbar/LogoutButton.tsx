@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import { useUserStore } from '@/stores/user-store';
 import { useTranslation } from 'react-i18next';
 import { toast } from '@/hooks/use-toast';
@@ -7,13 +8,16 @@ import { cn } from '@/lib/utils';
 
 const LogoutButton = ({ styles }: { styles: string }) => {
   const { t } = useTranslation();
-  const { updateFirstName, userId } = useUserStore((state) => state);
+  const { userId, logoutUser } = useUserStore((state) => state);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const onLogoutClick = () => {
     signOut(auth)
-      .then(() => {
+      .then(async () => {
+        logoutUser();
+        navigate({ to: location.pathname, replace: true });
         toast({ title: t('logout-successful') });
-        updateFirstName('');
       })
       .catch((error) => {
         toast({
