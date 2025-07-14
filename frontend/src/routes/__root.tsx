@@ -24,6 +24,7 @@ import {
   Outlet,
   useLocation,
 } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: (ctx) => {
@@ -45,31 +46,29 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   pendingComponent: () => <RootPending />,
   errorComponent: () => <WentWrong />,
   beforeLoad: async ({ context: { queryClient } }) => {
+    const {
+      updateUserId,
+      userId,
+      updateReservations,
+      updateFirstName,
+      updatePhoneNumber,
+      updateLastName,
+      updateBeenTimes,
+      logoutSetDefaultUser,
+    } = useUserStore.getState();
     try {
-      const {
-        updateUserId,
-        userId,
-        updateReservations,
-        updateFirstName,
-        updatePhoneNumber,
-        updateLastName,
-        updateBeenTimes,
-      } = useUserStore.getState();
       if (!userId) {
         const result = await queryClient.ensureQueryData(userQueryOptions);
-        if ('err' in result) throw result.err;
-        const { reservations, name, lastName, phoneNumber, beenTimes, userId } =
-          result.user;
-
-        updateUserId(userId || '');
-        updateReservations(reservations || []);
-        updateFirstName(name || '');
-        updateLastName(lastName || '');
-        updatePhoneNumber(phoneNumber || '');
-        updateBeenTimes(beenTimes || 0);
+        if ('err' in result || !result.success) throw result;
+        updateUserId(result?.user?.userId || '');
+        updateReservations(result?.user?.reservations || []);
+        updateFirstName(result?.user?.name || '');
+        updateLastName(result?.user?.lastName || '');
+        updatePhoneNumber(result?.user?.phoneNumber || '');
+        updateBeenTimes(result?.user?.beenTimes || 0);
       }
     } catch (error) {
-      throw error;
+      logoutSetDefaultUser();
     }
   },
   wrapInSuspense: true,
@@ -81,16 +80,25 @@ function Root() {
   auth.languageCode = i18n.language;
   moment.locale(i18n.language);
   useDeviceDetect();
+  const logoutSetDefaultUser = useUserStore(
+    (state) => state.logoutSetDefaultUser
+  );
 
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const token = await user.getIdToken();
-      sessionStorage.setItem(ACCESS_TOKEN, token);
-    } else {
-      console.log('Signed out!');
-      sessionStorage.removeItem(ACCESS_TOKEN);
-    }
-  });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user && auth.currentUser) {
+        const token = await user.getIdToken();
+        sessionStorage.setItem(ACCESS_TOKEN, token);
+      } else {
+        console.log('Signed out!');
+        logoutSetDefaultUser();
+        sessionStorage.removeItem(ACCESS_TOKEN);
+      }
+    });
+    return unsubscribe();
+  }, [auth]);
+
+  // onAuthStateChanged(auth, async (user) => {});
 
   const isBackButtonNeeded = (): boolean => {
     if (location.pathname === '/login' || location.pathname === '/signup') {

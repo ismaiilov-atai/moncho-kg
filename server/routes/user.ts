@@ -14,7 +14,7 @@ export const user = new Hono()
       const { payload } = decode(jwToken)
       const userId = payload.user_id as string
 
-      if (!payload) return c.json({ success: true, user: {} as UserType })
+      if (!payload) return c.json({ success: false, user: {} as UserType })
 
       const user = await findUserWithId(userId || '')
       const flattenedBookings = user?.usersToBookings
@@ -30,7 +30,6 @@ export const user = new Hono()
 
       return c.json({ success: true, user: mappedUser })
     } catch (error) {
-      if (error instanceof JwtTokenInvalid) return c.json({ success: true, user: {} as UserType })
-      throw error
+      return c.json({ success: false, user: {} as UserType })
     }
   })

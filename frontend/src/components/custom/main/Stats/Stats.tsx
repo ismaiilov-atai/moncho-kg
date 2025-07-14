@@ -55,7 +55,7 @@ const Stats = () => {
         <span className='text-lg h-10 font-roboto block place-content-center font-semibold'>
           {t('stats-title')}
         </span>
-        {data.stats.length && (
+        {data.stats?.length && (
           <CardDescription className='text-xs '>
             {t('stats-description', {
               day: moment().utc(false).format('dddd'),
@@ -65,7 +65,7 @@ const Stats = () => {
         )}
       </CardHeader>
       <CardContent>
-        {!data.stats.length ? (
+        {!data.stats?.length ? (
           <NoData />
         ) : (
           <ChartContainer config={chartConfig} className='min-h-[200px] w-full'>
