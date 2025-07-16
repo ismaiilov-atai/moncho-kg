@@ -4,19 +4,17 @@ import { NavBar } from '@/components/custom/navbar/NavBar';
 import RootPending from '@/components/custom/RootPending';
 import { useDeviceDetect } from '@/hooks/useDeviceDetect';
 import { ACCESS_TOKEN } from '@server/types/constants';
+import { BeforeLoad, cn, MetaHead } from '@/lib/utils';
 import WentWrong from '@/components/custom/WentWrong';
 import type { RouterContext } from '@/routerContext';
 import NotFound from '@/components/custom/NotFound';
 import { onAuthStateChanged } from 'firebase/auth';
 import FAB from '@/components/custom/main/fab/FAB';
-import { useUserStore } from '@/stores/user-store';
 import { Toaster } from '@/components/ui/toaster';
 import { useTranslation } from 'react-i18next';
-import { userQueryOptions } from '@/lib/api';
 import { auth } from '@/lib/firebase';
 import moment from 'moment-timezone';
 import { useEffect } from 'react';
-import { cn } from '@/lib/utils';
 import '@/lib/moment_locals';
 
 import {
@@ -27,49 +25,13 @@ import {
 } from '@tanstack/react-router';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  head: (ctx) => {
-    const { translation } = ctx.match.context;
-    return {
-      meta: [
-        { title: translation ? translation('MonchoKG') : 'MonchoKG' },
-        {
-          name: 'description',
-          content: translation
-            ? translation('board-welcome-description')
-            : 'Welcome to MonchoKG',
-        },
-      ],
-    };
-  },
+  head: MetaHead,
+  beforeLoad: BeforeLoad,
   component: Root,
+  wrapInSuspense: true,
   notFoundComponent: () => <NotFound />,
   pendingComponent: () => <RootPending />,
   errorComponent: () => <WentWrong />,
-  beforeLoad: async ({ context: { queryClient } }) => {
-    const { userId, logoutSetDefaultUser, signinUser } =
-      useUserStore.getState();
-
-    try {
-      if (!userId) {
-        const result = await queryClient.ensureQueryData(userQueryOptions);
-        if ('err' in result || !result.success) throw result;
-        const { userId, phoneNumber, name, lastName, beenTimes, reservations } =
-          result.user;
-
-        signinUser({
-          userId: userId || '',
-          phoneNumber: phoneNumber || '',
-          name: name || '',
-          lastName: lastName || '',
-          beenTimes: beenTimes || 0,
-          reservations: reservations || [],
-        });
-      }
-    } catch (error) {
-      logoutSetDefaultUser();
-    }
-  },
-  wrapInSuspense: true,
 });
 
 function Root() {
