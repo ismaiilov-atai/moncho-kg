@@ -1,7 +1,7 @@
-import { integer, pgTable, timestamp, uuid, pgEnum, varchar, text } from 'drizzle-orm/pg-core'
+import { integer, pgTable, timestamp, uuid, pgEnum, text } from 'drizzle-orm/pg-core'
 import { bookingsToSlots } from './bookings_to_slots'
 import { bookingsToUsers } from './users_to_booking'
-import { number, string, enum as enum_ } from 'zod'
+import { number, string, enum as enum_, ZodOptional, ZodNullable, ZodEnum } from 'zod'
 import { createInsertSchema } from 'drizzle-zod'
 import { relations } from 'drizzle-orm'
 

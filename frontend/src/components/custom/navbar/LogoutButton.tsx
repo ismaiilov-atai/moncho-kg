@@ -37,7 +37,7 @@ const LogoutButton = ({ styles }: { styles: string }) => {
         type='submit'
         variant='link'
         className={cn(
-          `${styles} cursor-pointer max-sm:w-full justify-start no-underline hover:no-underline`,
+          `${styles} cursor-pointer max-md:w-full justify-start no-underline hover:no-underline`,
           {
             hidden: !userId,
           }

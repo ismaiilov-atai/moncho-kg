@@ -22,4 +22,5 @@ export type UserActions = {
   updateBeenTimes: (number: UserState['beenTimes']) => void
   updateRescheduledResorvation: (updatedBooking: BookingType) => void
   logoutSetDefaultUser: () => void
+  signinUser: (user: UserState) => void
 }

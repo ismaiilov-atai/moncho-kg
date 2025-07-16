@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { userQueryOptions } from '@/lib/api';
 import { auth } from '@/lib/firebase';
 import moment from 'moment-timezone';
+import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import '@/lib/moment_locals';
 
@@ -24,7 +25,6 @@ import {
   Outlet,
   useLocation,
 } from '@tanstack/react-router';
-import { useEffect } from 'react';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: (ctx) => {
@@ -46,26 +46,24 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   pendingComponent: () => <RootPending />,
   errorComponent: () => <WentWrong />,
   beforeLoad: async ({ context: { queryClient } }) => {
-    const {
-      updateUserId,
-      userId,
-      updateReservations,
-      updateFirstName,
-      updatePhoneNumber,
-      updateLastName,
-      updateBeenTimes,
-      logoutSetDefaultUser,
-    } = useUserStore.getState();
+    const { userId, logoutSetDefaultUser, signinUser } =
+      useUserStore.getState();
+
     try {
       if (!userId) {
         const result = await queryClient.ensureQueryData(userQueryOptions);
         if ('err' in result || !result.success) throw result;
-        updateUserId(result?.user?.userId || '');
-        updateReservations(result?.user?.reservations || []);
-        updateFirstName(result?.user?.name || '');
-        updateLastName(result?.user?.lastName || '');
-        updatePhoneNumber(result?.user?.phoneNumber || '');
-        updateBeenTimes(result?.user?.beenTimes || 0);
+        const { userId, phoneNumber, name, lastName, beenTimes, reservations } =
+          result.user;
+
+        signinUser({
+          userId: userId || '',
+          phoneNumber: phoneNumber || '',
+          name: name || '',
+          lastName: lastName || '',
+          beenTimes: beenTimes || 0,
+          reservations: reservations || [],
+        });
       }
     } catch (error) {
       logoutSetDefaultUser();
@@ -80,9 +78,6 @@ function Root() {
   auth.languageCode = i18n.language;
   moment.locale(i18n.language);
   useDeviceDetect();
-  const logoutSetDefaultUser = useUserStore(
-    (state) => state.logoutSetDefaultUser
-  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -91,20 +86,19 @@ function Root() {
         sessionStorage.setItem(ACCESS_TOKEN, token);
       } else {
         console.log('Signed out!');
-        logoutSetDefaultUser();
         sessionStorage.removeItem(ACCESS_TOKEN);
       }
     });
     return unsubscribe();
   }, [auth]);
 
-  // onAuthStateChanged(auth, async (user) => {});
-
   const isBackButtonNeeded = (): boolean => {
     if (location.pathname === '/login' || location.pathname === '/signup') {
       return true;
     }
-    if (location.href.startsWith('/session')) return true;
+    if (location.href.startsWith('/session')) {
+      return true;
+    }
     return false;
   };
 

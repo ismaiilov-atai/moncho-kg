@@ -67,11 +67,10 @@ function VerifyOTP() {
               phoneNumber,
             },
           });
-
           const data = await insertUserResponse.json();
           if (!data.isSuccess) throw insertUserResponse;
           updateUserId(data.userId || '');
-          navigate({ to: '/' });
+          navigate({ to: '/', reloadDocument: true });
         }
       } catch (error) {
         throw error;

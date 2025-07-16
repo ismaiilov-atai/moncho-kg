@@ -16,9 +16,17 @@ export const useUserStore = create<UserState & UserActions>((set) => ({
   updateReservations: (reservations) => set(() => ({ reservations })),
   updateBeenTimes: (number) => set(() => ({ beenTimes: number })),
   updateRescheduledResorvation: (updatedBooking) => set((state) => ({
-    reservations: state.reservations.map(reso =>
+    reservations: state.reservations?.map(reso =>
       reso.bookingId === updatedBooking.bookingId ? updatedBooking : reso
     ).sort((a, b) => moment(a.when).isAfter(moment(b.when)) ? 1 : -1)
+  })),
+  signinUser: (user) => set(() => ({
+    userId: user.userId || '',
+    name: user.name || '',
+    lastName: user.lastName || '',
+    phoneNumber: user.phoneNumber || '',
+    beenTimes: user.beenTimes || 0,
+    reservations: user.reservations || [],
   })),
   logoutSetDefaultUser: () => set(() => ({
     userId: '',
