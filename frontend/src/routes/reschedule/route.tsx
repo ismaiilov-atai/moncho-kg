@@ -4,8 +4,9 @@ import { RescheduleComponent } from './route.lazy';
 import { useRescheduleStore } from '@/stores/reschedule-store';
 
 export const Route = createFileRoute('/reschedule')({
-  loader: async ({ context: { queryClient } }) =>
-    await fetchDaysAndSetSelectedId(queryClient),
+  loader: async ({ context: { queryClient } }) => {
+    return await fetchDaysAndSetSelectedId(queryClient);
+  },
   pendingComponent: () => <RescheduleComponent isLoading={true} />,
   beforeLoad: () => {
     const { isRescheduling } = useRescheduleStore.getState();

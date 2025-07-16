@@ -5,6 +5,7 @@ import { Separator } from '@radix-ui/react-dropdown-menu';
 import { useSlotsStore } from '@/stores/slots-store';
 import { fakeDays, fakeSlots } from '@/lib/fakers';
 import Days from '@/components/custom/main/Days';
+import NoData from '@/components/custom/NoData';
 import { useTranslation } from 'react-i18next';
 import {
   Card,
@@ -13,14 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import NoData from '@/components/custom/NoData';
 
 export const Route = createLazyFileRoute('/reschedule')({
   component: RescheduleComponent,
 });
 
 export function RescheduleComponent({ isLoading }: { isLoading: boolean }) {
-  const { days = [], error } = Route.useLoaderData();
+  const { days = [], error } = Route.useLoaderData() ?? {};
   const { slots } = useSlotsStore((state) => state);
   const { t } = useTranslation();
   if (error) return <NoData />;
