@@ -11,6 +11,7 @@ import { checkout } from './routes/checkout'
 import { reserve } from './routes/reserve'
 import { stats } from './routes/stats'
 import { serveStatic } from 'hono/bun'
+import { quote } from './routes/quote'
 import { auth } from './routes/auth'
 import { logger } from 'hono/logger'
 import { user } from './routes/user'
@@ -22,7 +23,6 @@ import 'dotenv/config'
 type Variables = JwtVariables
 
 const app = new Hono<{ Variables: Variables }>()
-
 const apiRoutes = app.basePath('/api')
   .all(logger())
   // .use('/*', except(['/api/auth'], refreshToken, jwtMiddleware))
@@ -33,6 +33,7 @@ const apiRoutes = app.basePath('/api')
   .route('/checkout-session', checkout)
   .route('/reserve', reserve)
   .route('/stats', stats)
+  .route('/quote/:lang', quote)
 
 app.get('*', serveStatic({ root: './frontend/dist' }))
 app.get('*', serveStatic({ path: './frontend/dist/index.html' }))

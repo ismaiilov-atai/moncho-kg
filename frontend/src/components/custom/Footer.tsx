@@ -1,7 +1,7 @@
 import BookSessionButton from './BookSessionButton';
 import { Mail, MapPin, Phone } from 'lucide-react';
-import Company from './Company';
 import { useTranslation } from 'react-i18next';
+import Company from './Company';
 
 const Footer = () => {
   const { t } = useTranslation();
