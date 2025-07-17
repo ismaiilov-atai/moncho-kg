@@ -1,11 +1,8 @@
-import { BOOK_SESSION_SEARCH_DEFAULT_VALUES } from '@/lib/constants';
-import { buttonVariants } from '@/components/ui/button';
+import BookSessionButton from '../../BookSessionButton';
 import { useUserStore } from '@/stores/user-store';
 import { useTranslation } from 'react-i18next';
-import { Link } from '@tanstack/react-router';
 import { Card } from '@/components/ui/card';
 import UpcomingCard from './UpcomingCard';
-import { cn } from '@/lib/utils';
 
 const Upcoming = () => {
   const { reservations } = useUserStore((state) => state);
@@ -24,13 +21,7 @@ const Upcoming = () => {
         )}
       </section>
       <section className='h-16 place-content-end text-end'>
-        <Link
-          to='/book-session'
-          preload='intent'
-          search={BOOK_SESSION_SEARCH_DEFAULT_VALUES}
-          className={cn(buttonVariants({ variant: 'default' }), ' min-w-32 ')}>
-          {t('Book a session')}
-        </Link>
+        <BookSessionButton />
       </section>
     </Card>
   );

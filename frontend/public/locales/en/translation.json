@@ -120,5 +120,7 @@
   "book": "Book",
   "not-found": "Page not found",
   "not-found-description": "The page you are looking for doesn&apos;t exist or has been moved. Please check the URL or return to the homepage.",
-  "refresh-page": "Refresh page"
+  "refresh-page": "Refresh page",
+  "contact": "Contact",
+  "studio-hrs": "Working hours"
 }

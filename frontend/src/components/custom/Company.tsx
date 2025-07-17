@@ -1,8 +1,17 @@
 import Logo from '@/assets/logo.svg';
+import { cn } from '@/lib/utils';
 
-const Company = () => {
+interface PageProps {
+  showingFooter?: boolean;
+}
+
+const Company = ({ showingFooter }: PageProps) => {
   return (
-    <section className=' flex space-x-2 h-[32] items-center justify-center '>
+    <section
+      className={cn(
+        { 'flex-col': showingFooter },
+        'flex space-x-2 h-[32] items-center justify-center '
+      )}>
       <img
         src={Logo}
         alt=' logo of the MonchoKG'

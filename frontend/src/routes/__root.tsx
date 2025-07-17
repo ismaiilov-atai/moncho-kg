@@ -11,6 +11,7 @@ import NotFound from '@/components/custom/NotFound';
 import { onAuthStateChanged } from 'firebase/auth';
 import FAB from '@/components/custom/main/fab/FAB';
 import { Toaster } from '@/components/ui/toaster';
+import Footer from '@/components/custom/Footer';
 import { useTranslation } from 'react-i18next';
 import { auth } from '@/lib/firebase';
 import moment from 'moment-timezone';
@@ -88,6 +89,7 @@ function Root() {
         )}
         <Toaster />
       </main>
+      <Footer />
       <TanStackRouterDevtools />
     </div>
   );
