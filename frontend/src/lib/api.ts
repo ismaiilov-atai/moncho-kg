@@ -22,6 +22,7 @@ export const api = client.api
 export const $day = api.days
 export const $user = api.user
 export const $reserve = api.reserve
+export const $quote = api.quote[':lang']
 export type AuthRespType = InferResponseType<typeof api.auth.$get>
 
 export const daysQueryOptions = queryOptions({

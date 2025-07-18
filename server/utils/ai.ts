@@ -7,7 +7,7 @@ const geminiAI = new GoogleGenAI({})
 const schema = {
   type: "object",
   properties: {
-    quoute: { type: "string" },
+    quote: { type: "string" },
     author: { type: "string" },
   },
 }

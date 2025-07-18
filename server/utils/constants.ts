@@ -1,4 +1,4 @@
 export const LANG: { [key: string]: string } = {
   ru: 'Russian',
-  kg: 'Kyrgyz',
+  ky: 'Kyrgyz',
 } as const

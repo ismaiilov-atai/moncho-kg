@@ -72,8 +72,24 @@ export default {
         'quote-slide-down': 'quote-slide-down 400ms ease-in',
         'spin-once': 'spin-once linear infinite',
         shake: 'shake 0.90s cubic-bezier(.36, .07, .19, .97) both',
+        typewriter: 'typewriter 2s steps(100) forwards',
       },
       keyframes: {
+        typewriter: {
+          from: { width: 0, height: 30, alignSelf: 'end', overflow: 'clip' },
+          '50%, 80%, 90%': {
+            width: '50%',
+            height: 30,
+            alignSelf: 'end',
+            overflow: 'clip',
+          },
+          to: {
+            width: '100%',
+            height: 'auto',
+            alignSelf: 'end',
+            overflow: 'auto',
+          },
+        },
         'caret-blink': {
           '0%,70%,100%': { opacity: '1' },
           '20%,50%': { opacity: '0' },

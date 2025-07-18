@@ -11,9 +11,9 @@ const Footer = () => {
         <Company showingFooter />
         <BookSessionButton />
       </section>
-      <address className=' w-30%] h-full py-4 space-y-1'>
+      <address className=' w-30%] h-full py-4 space-y-3'>
         <h2>{t('contact')}</h2>
-        <ul className=' space-y-1'>
+        <ul className=' space-y-2 text-sm'>
           <li className='flex gap-2 items-center'>
             <Phone size={16} />
             <a href='tel:+996-707-555-555'>+996-707-555-555</a>
@@ -28,7 +28,7 @@ const Footer = () => {
           </li>
         </ul>
       </address>
-      <address className=' w-[20%] h-full py-4 space-y-1'>
+      <address className='flex flex-col gap-2 w-[20%] h-full py-4  text-sm'>
         <h2>{t('studio-hrs')}</h2>
         <span>7:00 - 22:00</span>
       </address>
