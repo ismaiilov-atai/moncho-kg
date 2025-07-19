@@ -5,7 +5,7 @@ import Stats from '../Stats/Stats';
 
 const Home = () => {
   return (
-    <div className='space-y-3'>
+    <div className='space-y-6'>
       <GreetingQuote />
       <Upcoming />
       <Stats />

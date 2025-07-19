@@ -10,7 +10,7 @@ const GreetingQuote = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
-  const { data, isPending, isError } = useQuery(quoteQueryOptions);
+  const { data: result, isPending, isError } = useQuery(quoteQueryOptions);
   if (isError) return <></>;
 
   return (
@@ -22,18 +22,18 @@ const GreetingQuote = () => {
         className={cn('w-full flex flex-col space-y-2', {
           hidden: isError,
         })}>
-        {isPending || !data ? (
+        {isPending || !result ? (
           <Skeleton className='w-[40%] h-4 self-end' />
-        ) : (
+        ) : result.success ? (
           <>
             <blockquote className='animate-typewriter font-playfair text-muted-foreground text-sm text-end text-balance'>
-              {currentLanguage in data.quote
-                ? data?.quote[currentLanguage as keyof typeof data.quote]
-                : data.quote.en}
+              {currentLanguage in result.quote
+                ? result.quote[currentLanguage as keyof typeof result.quote]
+                : result.quote.en}
             </blockquote>
-            <span className=' text-end text-xs'>- {data?.author}</span>
+            <span className=' text-end text-xs'>- {result.author}</span>
           </>
-        )}
+        ) : null}
       </section>
     </section>
   );
