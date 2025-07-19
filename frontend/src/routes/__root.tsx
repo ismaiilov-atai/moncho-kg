@@ -72,7 +72,7 @@ function Root() {
   return (
     <div className={cn(' relative flex flex-col items-center ')}>
       <HeadContent />
-      <header className='sticky top-0 w-screen'>
+      <header className='sticky top-0 w-screen z-50'>
         {showNavbar() || <NavBar />}
       </header>
       <main

@@ -6,6 +6,7 @@ import { fetchStats } from '@/helpers/stats'
 import { getUser } from '@/helpers/user'
 import { getDays } from '@/helpers/day'
 import { hc } from 'hono/client'
+import { QuoteResponseType } from '@/types/quote'
 
 
 const AUTH_TOKEN = `Bearer ${sessionStorage.getItem(ACCESS_TOKEN)}`
@@ -39,4 +40,12 @@ export const userQueryOptions = queryOptions({
 export const statsQueryOptions = queryOptions({
   queryKey: ['stats'],
   queryFn: fetchStats
+})
+
+export const quoteQueryOptions = queryOptions({
+  queryKey: ['quote'],
+  queryFn: async (): Promise<QuoteResponseType> => {
+    const response = await api['quote'].$get()
+    return await response.json()
+  },
 })

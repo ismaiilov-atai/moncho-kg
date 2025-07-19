@@ -58,7 +58,7 @@ const Stats = () => {
         {data.stats?.length && (
           <CardDescription className='text-xs '>
             {t('stats-description', {
-              day: moment().utc(false).format('dddd'),
+              day: moment().tz('Asia/Bishkek').format('dddd'),
             })}
             <div className='text-[10px]'>{t('stats-hint')}</div>
           </CardDescription>
@@ -71,9 +71,7 @@ const Stats = () => {
           <ChartContainer config={chartConfig} className='min-h-[200px] w-full'>
             <BarChart
               accessibilityLayer
-              data={mapToChartData(
-                moment().utc(false).locale('en').format('dddd')
-              )}>
+              data={mapToChartData(moment().locale('en').format('dddd'))}>
               <CartesianGrid vertical={false} />
               <XAxis dataKey='hour' tickFormatter={(value) => value} />
               <ChartTooltip content={<ChartTooltipContent />} />
