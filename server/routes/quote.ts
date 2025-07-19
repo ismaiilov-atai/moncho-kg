@@ -5,5 +5,5 @@ import { Hono } from 'hono'
 export const quote = new Hono()
   .get('/', async (c) => {
     const response = await getQuote(c)
-    return c.json({ sucess: true, ...JSON.parse(response) })
+    return c.json({ success: true, ...response })
   })

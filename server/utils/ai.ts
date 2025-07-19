@@ -18,19 +18,26 @@ const schema = {
   },
 }
 
+interface QuoteType {
+  quote: {
+    ru: string,
+    ky: string,
+    en: string
+  },
+  author: string
+}
 
-export const getQuote = async (ctx: Context): Promise<string> => {
+export const getQuote = async (ctx: Context): Promise<QuoteType> => {
   try {
     const response = await geminiAI.models.generateContent({
       model: "gemini-1.5-flash",
-      contents: `Give me a quote from world wide that motivates people In 3 languages, Kyrgyz, Russian, English. `,
+      contents: `Give me a quote from famous person in 3 languages.`,
       config: {
         responseMimeType: 'application/json',
-        responseJsonSchema: schema,
-        systemInstruction: `Put Kyrgyz quote in ky property, Russian in ru and English to en property to schema. Protect all the religions and people ethnicity. Make sure it does not repeat itself. Randomize, each time give new ones.`
+        responseJsonSchema: schema
       },
     })
-    return response.text || ''
+    return JSON.parse(response.text!)
   } catch (error) {
     throw error
   }

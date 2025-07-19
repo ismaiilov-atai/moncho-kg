@@ -22,7 +22,7 @@ const GreetingQuote = () => {
         className={cn('w-full flex flex-col space-y-2', {
           hidden: isError,
         })}>
-        {isPending ? (
+        {isPending || !data ? (
           <Skeleton className='w-[40%] h-4 self-end' />
         ) : (
           <>
