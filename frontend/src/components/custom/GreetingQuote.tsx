@@ -1,19 +1,19 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useUserStore } from '@/stores/user-store';
 import { QuoteResponseType } from '@/types/quote';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { cn, greeting } from '@/lib/utils';
 import { api } from '@/lib/api';
 
 const GreetingQuote = () => {
   const { name } = useUserStore((state) => state);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
+
   const { data, isPending, isError } = useSuspenseQuery<QuoteResponseType>({
     queryKey: ['quote'],
     queryFn: async () => {
-      const response = await api['quote'][':lang'].$get({
-        param: { lang: localStorage.getItem('i18nextLng') || 'en' },
-      });
+      const response = await api['quote'].$get();
       return await response.json();
     },
   });
@@ -30,7 +30,9 @@ const GreetingQuote = () => {
       </span>
       <section className='w-full flex flex-col space-y-2'>
         <blockquote className='animate-typewriter font-playfair text-muted-foreground text-sm text-end text-balance'>
-          {data?.quote}
+          {currentLanguage in data?.quote
+            ? data?.quote[currentLanguage as keyof typeof data.quote]
+            : data.quote.en}
         </blockquote>
         <span className=' text-end text-xs'>- {data?.author}</span>
       </section>

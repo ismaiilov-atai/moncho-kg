@@ -33,7 +33,7 @@ const apiRoutes = app.basePath('/api')
   .route('/checkout-session', checkout)
   .route('/reserve', reserve)
   .route('/stats', stats)
-  .route('/quote/:lang', quote)
+  .route('/quote', quote)
 
 app.get('*', serveStatic({ root: './frontend/dist' }))
 app.get('*', serveStatic({ path: './frontend/dist/index.html' }))
