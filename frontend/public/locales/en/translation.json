@@ -57,7 +57,7 @@
   "no_reso_text": "You have no upcoming reservations",
   "reward_title": "Reward",
   "start_journey": "Start your journey!",
-  "start_jorney_description": "You can enjoy a free sauna session after every 4 reservations.",
+  "start_jorney_description": "You can enjoy a 1 free sauna session after every 4 reservations.",
 
   "of": "of",
 
@@ -83,7 +83,7 @@
   "how-many-guest": "How many guests will accompany you",
   "up-to-count": "up to {{guest}} people you can bring with you",
   "proceed-payment": "Proceed to Payment",
-  "cancel": "cancel",
+  "cancel": "Cancel",
 
   "reso-success": "Reservation Successful",
   "reso-success-description": "You're all set! Feel free to reach out if you have any questions.",
