@@ -7,7 +7,7 @@ const Footer = () => {
   const { t } = useTranslation();
   return (
     <footer className='w-full h-[200px] px-4 desktop:w-[85%] mt-20 max-sm:hidden flex desktop:justify-around justify-between items-center border-t-2'>
-      <section className='flex flex-col justify-center w-[25%] space-y-3'>
+      <section className='flex flex-col justify-center w-[25%] space-y-3 [&>a]:max-md:text-xs '>
         <Company showingFooter />
         <BookSessionButton />
       </section>
